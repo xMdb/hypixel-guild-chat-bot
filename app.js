@@ -72,7 +72,7 @@ minebot.on("message", (chatMsg) => {
 
 // Guild chat pattern
 minebot.chatAddPattern(
-  /^Guild > (\[.*?\])*.*? ([\w\d]{2,17}).*?( \[.*?\])*.*?: (\w*[A-z0-9_ \.\,;:\-_\/]{1,10000})*$/i, 'guild_chat', 'Guild chat event'
+  /^Guild > (\[.*?\])*.*? ([\w\d]{2,17}).*?( \[.*?\])*.*?: (\w*.*.{1,10000})*$/i, 'guild_chat', 'Guild chat event'
 )
 
 // In-game to Discord
@@ -85,7 +85,7 @@ minebot.on('guild_chat', (rank, playername, grank, message) => {
 bot.on('message', message => {
   if (message.author.id === bot.user.id) return;
   if (message.channel.id !== config.gchatID || message.author.bot || message.content.startsWith(config.prefix)) return;
-  minebot.chat(`/gc # ${message.author.username}: ${message.content}`)
+  minebot.chat(`/gc ${message.author.username} > ${message.content}`)
   bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<:discord:829596398822883368> **${message.author.username}: ${message.content}**`)
   message.delete()
 })
@@ -97,6 +97,10 @@ minebot.chatAddPattern(
 minebot.on('join_leave', (playername, joinleave) => {
   bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<:hypixel:829640659542867969> **${playername} ${joinleave}**`)
 })
+
+minebot.on('error', (error) => console.log(error))
+minebot.on('end', createBot)
+}
 
 // Discord bot stuff
 bot.on('message', async message => {
@@ -116,10 +120,6 @@ bot.on('message', async message => {
     message.reply('there was an error trying to execute that command! Check the console log for more details.')
   }
 })
-
-minebot.on('error', (err) => console.log(err))
-minebot.on('end', createBot)
-}
 
 // Login the bots (duh)
 createBot()

@@ -53,9 +53,14 @@ module.exports = {
 
       const evalEmbed = new Discord.MessageEmbed().setTitle('Evaluate - Completed').setColor('#3A783F').setDescription(`\`\`\`${clean(evaled)}\`\`\``).setTimestamp().setFooter(footer);
       message.channel.send(evalEmbed);
-    } catch (err) {
+    } finally { process.on('unhandledRejection', error => {
+      console.error('Unhandled promise rejection:', error);
       message.channel.send(`${message.author}, an error has occured.`);
-      const errorEmbed = new Discord.MessageEmbed().setTitle('Evaluate - Error').setColor('#ff0000').setDescription(`\`\`\`${clean(err)}\`\`\``).setTimestamp().setFooter(footer);
+      const errorEmbed = new Discord.MessageEmbed().setTitle('Evaluate - Error').setColor('#ff0000').setDescription(`\`\`\`${clean(error)}\`\`\``).setTimestamp().setFooter(footer);
+      message.channel.send(errorEmbed);
+    });
+      message.channel.send(`${message.author}, an error has occured.`);
+      const errorEmbed = new Discord.MessageEmbed().setTitle('Evaluate - Error').setColor('#ff0000').setDescription(`\`\`\`${clean(error)}\`\`\``).setTimestamp().setFooter(footer);
       message.channel.send(errorEmbed);
     }
   }
