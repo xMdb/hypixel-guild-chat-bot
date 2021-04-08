@@ -9,7 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "colors": "^1.4.0",
     "discord.js": "^12.5.3",
-    "mineflayer": "^3.6.0"
+    "mineflayer": "^3.6.0",
+    "repl": "^0.1.3"
   }
 }
