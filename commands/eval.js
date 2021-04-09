@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const bot = new Discord.Client();
 const config = require('../config.json');
 const auth = require('../auth.json');
+const hastebin = require('hastebin');
 
 module.exports = {
   name: 'eval',
@@ -49,6 +50,17 @@ module.exports = {
     message.channel.send(evalEmbed);
 
     process.on('unhandledRejection', newerror => {
+      // // Upload to HasteBin or something (WIP)
+      // if (newerror(`DiscordAPIError: Invalid Form Body`)) {
+      //   hastebin.createPaste(clean(evaled), {
+      //       raw: true,
+      //       contentType: 'text/plain',
+      //       server: 'https://hastebin.com'
+      //     })
+      //     // .then(url => message.replace(clean(evaled), url))
+      //     .then(url => console.log(url))
+      //     .catch(e => console.log(e));
+      // }
       message.channel.send(`${message.author}, an error has occured.`);
       const errorEmbed = new Discord.MessageEmbed().setTitle('Evaluate - Error').setColor('#ff0000').setDescription(`\`\`\`${clean(newerror)}\`\`\``).setTimestamp().setFooter(footer);
       message.channel.send(errorEmbed);

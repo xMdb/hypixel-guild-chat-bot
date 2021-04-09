@@ -7,8 +7,6 @@ const config = require('./config.json');
 const auth = require('./auth.json');
 const mineflayer = require('mineflayer');
 
-process.on('warning', e => console.warn(e.stack));
-
 // Startup of Discord bot
 bot.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -92,33 +90,14 @@ function createBot() {
     bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<:hypixel:829640659542867969> **${playername} ${joinleave}**`);
   });
 
-  // Discord bot stuff
-  bot.on('message', async message => {
-    const args = message.content.slice(config.prefix.length).trim().split(/ +/);
-    const command = args.shift().toLowerCase();
-    if (message.author.bot) return;
-    if (!message.content.startsWith(config.prefix)) return;
-    if (message.content.includes(auth.token)) {
-      message.replace(bot.token, 'undefined');
-    };
-
-    if (!bot.commands.has(command)) return;
-    try {
-      bot.commands.get(command).execute(message, args);
-    } catch (error) {
-      console.error(error);
-      message.reply('there was an error trying to execute that command! Check the console log for more details.');
-      bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**NEW ERROR!** \`\`\`${error}\`\`\``);
-    };
-  });
-
   // Minebot error logging
   minebot.on('error', (error) => console.log(error));
   minebot.on('end', (error) => console.log(error));
   minebot.on('kicked', (error) => {
     setTimeout(() => {
-      createBot()
+      createBot();
       console.log(error);
+      bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**The bot was kicked!** \`\`\`${error}\`\`\``);
     }, 5000)
   });
 }
@@ -127,4 +106,25 @@ function createBot() {
 setTimeout(() => {
   createBot();
 }, 5000);
+
+// Discord bot stuff
+bot.on('message', async message => {
+  const args = message.content.slice(config.prefix.length).trim().split(/ +/);
+  const command = args.shift().toLowerCase();
+  if (message.author.bot) return;
+  if (!message.content.startsWith(config.prefix)) return;
+  if (message.content.includes(auth.token)) {
+    message.replace(bot.token, 'undefined');
+  };
+
+  if (!bot.commands.has(command)) return;
+  try {
+    bot.commands.get(command).execute(message, args);
+  } catch (error) {
+    console.error(error);
+    message.reply('there was an error trying to execute that command! Check the console log for more details.');
+    bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**General command error:** \`\`\`${error}\`\`\``);
+  };
+});
+
 bot.login(auth.token);
