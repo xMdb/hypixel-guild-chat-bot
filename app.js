@@ -10,7 +10,7 @@ const mineflayer = require('mineflayer')
 process.on('warning', e => console.warn(e.stack))
 
 // Startup of Minecraft bot
-function createBot () {
+function createBot() {
   const minebot = mineflayer.createBot({
     host: config.serverIP,
     username: auth.mcEmail,
@@ -32,7 +32,8 @@ function createBot () {
     console.log(`Bot has started, with ${bot.users.size} users, in ${bot.channels.size} channels of ${bot.guilds.size} guilds.`)
     bot.user.setStatus('online')
     bot.user.setActivity('Horus Goes Shopping on Spotify', {
-       type: 'LISTENING' })
+      type: 'LISTENING'
+    })
     channel = bot.channels.cache.get(config.channelID)
   })
 

@@ -19,39 +19,39 @@ module.exports = {
       message.channel.send(noperms);
       return;
     }
-      // Prevent all token leaking
-      const code = args.join(" ");
-      let evaled = eval(code);
-      if (typeof evaled !== "string")
-        evaled = require("util").inspect(evaled);
+    // Prevent all token leaking
+    const code = args.join(" ");
+    let evaled = eval(code);
+    if (typeof evaled !== "string")
+      evaled = require("util").inspect(evaled);
+    if (evaled.includes(bot.token)) {
+      evaled = evaled.replace(bot.token, "undefined");
       if (evaled.includes(bot.token)) {
         evaled = evaled.replace(bot.token, "undefined");
-        if (evaled.includes(bot.token)) {
-          evaled = evaled.replace(bot.token, "undefined");
-        }
       }
+    }
+    if (evaled.includes(auth.token)) {
+      evaled = evaled.replace(auth.token, "undefined");
+
       if (evaled.includes(auth.token)) {
         evaled = evaled.replace(auth.token, "undefined");
-
-        if (evaled.includes(auth.token)) {
-          evaled = evaled.replace(auth.token, "undefined");
-        }
       }
+    }
+    if (evaled.includes('auth.token')) {
+      evaled = evaled.replace('auth.token', "undefined");
+
       if (evaled.includes('auth.token')) {
         evaled = evaled.replace('auth.token', "undefined");
-
-        if (evaled.includes('auth.token')) {
-          evaled = evaled.replace('auth.token', "undefined");
-        }
       }
+    }
 
-      const evalEmbed = new Discord.MessageEmbed().setTitle('Evaluate - Completed').setColor('#3A783F').setDescription(`\`\`\`${clean(evaled)}\`\`\``).setTimestamp().setFooter(footer);
-      message.channel.send(evalEmbed);
+    const evalEmbed = new Discord.MessageEmbed().setTitle('Evaluate - Completed').setColor('#3A783F').setDescription(`\`\`\`${clean(evaled)}\`\`\``).setTimestamp().setFooter(footer);
+    message.channel.send(evalEmbed);
 
-      process.on('unhandledRejection', newerror => {
+    process.on('unhandledRejection', newerror => {
       message.channel.send(`${message.author}, an error has occured.`);
       const errorEmbed = new Discord.MessageEmbed().setTitle('Evaluate - Error').setColor('#ff0000').setDescription(`\`\`\`${clean(newerror)}\`\`\``).setTimestamp().setFooter(footer);
       message.channel.send(errorEmbed);
-      });
-    }
-  };
+    });
+  }
+};
