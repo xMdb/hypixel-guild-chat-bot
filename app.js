@@ -53,7 +53,7 @@ function createBot() {
       console.log('Logged in.');
       minebot.chat('/ac \u00a7c<3');
     }, 5000);
-    console.log('Success!');
+    console.log('Joining Hypixel...');
   });
 
   // Display chat in console and send to Limbo again if kicked or something
@@ -61,7 +61,7 @@ function createBot() {
     console.log(chatMsg.toAnsi());
     const msg = chatMsg.toString();
     if (msg.endsWith(' joined the lobby!') && msg.includes('[MVP+')) {
-      console.log('Bot ending to Limbo.');
+      console.log('Lobby detected: Sending to Limbo.');
       minebot.chat('/ac \u00a7ca');
     }
   });
