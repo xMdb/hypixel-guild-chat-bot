@@ -47,7 +47,7 @@ function createBot() {
     interval: 5000
   });
 
-  // Send to Limbo on login
+  // Send to Limbo on login (source: https://github.com/mew/discord-hypixel-bridge)
   minebot.on('login', async () => {
     setTimeout(() => {
       console.log('Logged in.');
@@ -56,7 +56,7 @@ function createBot() {
     console.log('Joining Hypixel...');
   });
 
-  // Display chat in console and send to Limbo again if kicked or something
+  // Display chat in console and send to Limbo again if kicked or something (source: https://github.com/mew/discord-hypixel-bridge)
   minebot.on('message', (chatMsg) => {
     console.log(chatMsg.toAnsi());
     const msg = chatMsg.toString();
@@ -76,7 +76,7 @@ function createBot() {
     minebot.chat('/g online');
   }, 10000);
 
-  // Guild chat pattern
+  // Guild chat pattern (source: https://github.com/Myzumi/Guild-Bot)
   minebot.chatAddPattern(
     /^Guild > (\[.*?\])*.*? ([\w\d]{2,17}).*?( \[.*?\])*.*?: (\w*.*.{1,10000})*$/i, 'guild_chat', 'Guild chat event'
   );
@@ -86,7 +86,7 @@ function createBot() {
     /^Online Members: (.+)$/i, 'online', 'Number of online members'
   );
 
-  // Bot reconnection log to Discord
+  // Bot reconnection log to Discord (source: https://github.com/Myzumi/Guild-Bot)
   minebot.on('online', (numOfOnline) => {
     let numOfTrueOnline = numOfOnline - 1;
     bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<:yes:829640052531134464> Bot has reconnected. There are **${numOfTrueOnline}** other members online.`);
@@ -101,6 +101,7 @@ function createBot() {
   // Discord to in-game
   bot.on('message', message => {
     if (message.author.id === bot.user.id) return;
+    // Source: https://github.com/mew/discord-hypixel-bridge
     if (message.channel.id !== config.gchatID || message.author.bot || message.content.startsWith(config.prefix)) return;
     minebot.chat(`/gc ${message.author.username} > ${message.content}`);
     bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<:discord:829596398822883368> **${message.author.username}: ${message.content}**`);
@@ -131,7 +132,6 @@ function createBot() {
   });
 }
 
-// Login the bots (duh)
 setTimeout(() => {
   createBot();
 }, 3000);
