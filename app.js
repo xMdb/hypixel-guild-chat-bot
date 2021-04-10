@@ -50,6 +50,7 @@ function createBot() {
       minebot.chat('/ac \u00a7c<3');
     }, 3000)
     console.log('Success!');
+    minebot.chat('/g online');
   });
 
   // Display chat in console and send to Limbo again if kicked or something
@@ -79,7 +80,11 @@ function createBot() {
     if (message.channel.id !== config.gchatID || message.author.bot || message.content.startsWith(config.prefix)) return;
     minebot.chat(`/gc ${message.author.username} > ${message.content}`);
     bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<:discord:829596398822883368> **${message.author.username}: ${message.content}**`);
-    message.delete();
+    message.delete().catch(error => {
+      if (error.code === 10008) {
+        message.channel.send(`**:warning: ${message.author}, there was an error while performing that task.**`);
+      }
+    });
   });
 
   // On guild member join/leave

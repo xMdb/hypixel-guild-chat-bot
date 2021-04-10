@@ -20,11 +20,12 @@ module.exports = {
       message.channel.send(noperms);
       return;
     }
-    // Prevent all token leaking
     const code = args.join(" ");
     let evaled = eval(code);
     if (typeof evaled !== "string")
       evaled = require("util").inspect(evaled);
+
+      // Prevent all token leaking
     if (evaled.includes(bot.token)) {
       evaled = evaled.replace(bot.token, "undefined");
       if (evaled.includes(bot.token)) {
@@ -46,6 +47,7 @@ module.exports = {
       }
     }
 
+    message.react(`<:yes:829640052531134464>`)
     const evalEmbed = new Discord.MessageEmbed().setTitle('Evaluate - Completed').setColor('#3A783F').setDescription(`\`\`\`${clean(evaled)}\`\`\``).setTimestamp().setFooter(footer);
     message.channel.send(evalEmbed);
 
@@ -62,6 +64,7 @@ module.exports = {
       //     .catch(e => console.log(e));
       // }
       message.channel.send(`${message.author}, an error has occured.`);
+      message.react(`<:nah:829640042334257202>`);
       const errorEmbed = new Discord.MessageEmbed().setTitle('Evaluate - Error').setColor('#ff0000').setDescription(`\`\`\`${clean(newerror)}\`\`\``).setTimestamp().setFooter(footer);
       message.channel.send(errorEmbed);
     });
