@@ -1,16 +1,13 @@
-const fs = require('fs')
-const Discord = require('discord.js')
-const bot = new Discord.Client()
-const config = require('../config.json')
+const Discord = require('discord.js');
 
 module.exports = {
   name: 'ping',
   description: 'To ping or to pong?',
   execute(message, args) {
     message.channel.send(':ping_pong:').then(async (msg) => {
-      msg.delete()
-      const pingcmd = new Discord.MessageEmbed().setTitle('Pong!').setColor('#3A783F').setDescription(`**Latency**: ${msg.createdTimestamp - message.createdTimestamp}ms`).setTimestamp().setFooter('Bot by xMdb#7897')
-      message.channel.send(pingcmd)
-    })
+      msg.delete();
+      const pingcmd = new Discord.MessageEmbed().setTitle('Pong!').setColor('#3A783F').setDescription(`**Latency**: ${msg.createdTimestamp - message.createdTimestamp}ms`).setTimestamp().setFooter('Bot by xMdb#7897');
+      message.channel.send(pingcmd);
+    });
   }
-}
+};

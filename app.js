@@ -13,7 +13,7 @@ const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('
 for (const file of commandFiles) {
   const command = require(`./commands/${file}`);
   bot.commands.set(command.name, command);
-};
+}
 
 bot.on('ready', () => {
   console.log(`Bot has started, with ${bot.users.size} users, in ${bot.channels.size} channels of ${bot.guilds.size} guilds.`);
@@ -21,7 +21,6 @@ bot.on('ready', () => {
   bot.user.setActivity('Horus Goes Shopping on Spotify', {
     type: 'LISTENING'
   });
-  channel = bot.channels.cache.get(config.channelID);
 });
 
 bot.on('guildCreate', guild => {
@@ -48,7 +47,7 @@ function createBot() {
     setTimeout(() => {
       console.log('Logged in.');
       minebot.chat('/ac \u00a7c<3');
-    }, 3000)
+    }, 3000);
     console.log('Success!');
     minebot.chat('/g online');
   });
@@ -60,7 +59,7 @@ function createBot() {
     if (msg.endsWith(' joined the lobby!') && msg.includes('[MVP+')) {
       console.log('Sending to Limbo.');
       minebot.chat('/ac \u00a7ca');
-    };
+    }
   });
 
   // Guild chat pattern
@@ -100,10 +99,10 @@ function createBot() {
   minebot.on('end', (error) => console.log(error));
   minebot.on('kicked', (error) => {
     setTimeout(() => {
-      createBot();
       console.log(error);
       bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**The bot was kicked!** \`\`\`${error}\`\`\``);
-    }, 5000)
+      createBot();
+    }, 5000);
   });
 }
 
@@ -120,7 +119,7 @@ bot.on('message', async message => {
   if (!message.content.startsWith(config.prefix)) return;
   if (message.content.includes(auth.token)) {
     message.replace(bot.token, 'undefined');
-  };
+  }
 
   if (!bot.commands.has(command)) return;
   try {
@@ -129,7 +128,7 @@ bot.on('message', async message => {
     console.error(error);
     message.reply('there was an error trying to execute that command! Check the console log for more details.');
     bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**General command error:** \`\`\`${error}\`\`\``);
-  };
+  }
 });
 
 bot.login(auth.token);
