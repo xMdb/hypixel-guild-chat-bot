@@ -15,7 +15,7 @@ module.exports = {
         return text;
     }
     const footer = (`Command executed by ${message.author.username}#${message.author.discriminator} | Bot by xMdb#7897`);
-    const noperms = new Discord.MessageEmbed().setColor('#FF0000').setDescription(`${message.author}, you do not have the correct permissions to use this command.`).setTimestamp().setFooter(footer);
+    const noperms = new Discord.MessageEmbed().setColor('#FF0000').setDescription(`${message.author}, you do not have the correct permissions to use this command.`).setTimestamp().setImage(message.author.avatarURL).setFooter(footer);
     if (message.author.id !== config.ownerID) {
       message.channel.send(noperms);
       return;
@@ -25,7 +25,7 @@ module.exports = {
     if (typeof evaled !== "string")
       evaled = require("util").inspect(evaled);
 
-      // Prevent all token leaking
+    // Prevent all token leaking
     if (evaled.includes(bot.token)) {
       evaled = evaled.replace(bot.token, "undefined");
       if (evaled.includes(bot.token)) {
@@ -47,26 +47,29 @@ module.exports = {
       }
     }
 
-    message.react(`<:yes:829640052531134464>`)
     const evalEmbed = new Discord.MessageEmbed().setTitle('Evaluate - Completed').setColor('#3A783F').setDescription(`\`\`\`${clean(evaled)}\`\`\``).setTimestamp().setFooter(footer);
     message.channel.send(evalEmbed);
+    message.react(`<:yes:829640052531134464>`);
 
     process.on('unhandledRejection', newerror => {
-      // // Upload to HasteBin or something (WIP)
-      // if (newerror(`DiscordAPIError: Invalid Form Body`)) {
-      //   hastebin.createPaste(clean(evaled), {
-      //       raw: true,
-      //       contentType: 'text/plain',
-      //       server: 'https://hastebin.com'
-      //     })
-      //     // .then(url => message.replace(clean(evaled), url))
-      //     .then(url => console.log(url))
-      //     .catch(e => console.log(e));
-      // }
+      if (newerror.code === 50035) {
+        message.reply("that request is too long! Creating a Hastebin link...")
+        hastebin.createPaste(clean(evaled), {
+          raw: false,
+          contentType: 'text/plain',
+          server: 'https://haste.zneix.eu/'
+        })
+        // const pasteEmbed = new Discord.MessageEmbed().setDescription(` `).setURL(url)
+        // .then(url => message.edit(pasteEmbed))
+        .then(url => message.channel.send("**Result**: " + url))
+        .catch(e => console.log(e));
+     }
+     if (newerror.code !== 50035) {
       message.channel.send(`${message.author}, an error has occured.`);
-      message.react(`<:nah:829640042334257202>`);
       const errorEmbed = new Discord.MessageEmbed().setTitle('Evaluate - Error').setColor('#ff0000').setDescription(`\`\`\`${clean(newerror)}\`\`\``).setTimestamp().setFooter(footer);
       message.channel.send(errorEmbed);
+      message.react(`<:nah:829640042334257202>`);
+     }
     });
   }
 };
