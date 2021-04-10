@@ -55,21 +55,21 @@ module.exports = {
       if (newerror.code === 50035) {
         message.reply("that request is too long! Creating a Hastebin link...")
         hastebin.createPaste(clean(evaled), {
-          raw: false,
-          contentType: 'text/plain',
-          server: 'https://haste.zneix.eu/'
-        })
-        // const pasteEmbed = new Discord.MessageEmbed().setDescription(` `).setURL(url)
-        // .then(url => message.edit(pasteEmbed))
-        .then(url => message.channel.send("**Result**: " + url))
-        .catch(e => console.log(e));
-     }
-     if (newerror.code !== 50035) {
-      message.channel.send(`${message.author}, an error has occured.`);
-      const errorEmbed = new Discord.MessageEmbed().setTitle('Evaluate - Error').setColor('#ff0000').setDescription(`\`\`\`${clean(newerror)}\`\`\``).setTimestamp().setFooter(footer);
-      message.channel.send(errorEmbed);
-      message.react(`<:nah:829640042334257202>`);
-     }
+            raw: false,
+            contentType: 'text/plain',
+            server: 'https://haste.zneix.eu/'
+          })
+          // const pasteEmbed = new Discord.MessageEmbed().setDescription(` `).setURL(url)
+          // .then(url => message.edit(pasteEmbed))
+          .then(url => message.channel.send("**Result**: " + url))
+          .catch(e => console.log(e));
+      }
+      if (newerror.code !== 50035) {
+        message.channel.send(`${message.author}, an error has occured.`);
+        const errorEmbed = new Discord.MessageEmbed().setTitle('Evaluate - Error').setColor('#ff0000').setDescription(`\`\`\`${clean(newerror)}\`\`\``).setTimestamp().setFooter(footer);
+        message.channel.send(errorEmbed);
+        message.react(`<:nah:829640042334257202>`);
+      }
     });
   }
 };
