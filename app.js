@@ -34,7 +34,7 @@ bot.on('guildDelete', guild => {
 // Startup of Minecraft bot
 function createBot() {
   const minebot = mineflayer.createBot({
-    host: config.serverIP,
+    host: 'mc.hypixel.net',
     username: auth.mcEmail,
     password: auth.mcPass,
     version: '1.16.4',
@@ -43,13 +43,12 @@ function createBot() {
   });
 
   // Send to Limbo on login
-  minebot.on('login', () => {
+  minebot.on('login', async () => {
     setTimeout(() => {
       console.log('Logged in.');
       minebot.chat('/ac \u00a7c<3');
-    }, 3000);
+    }, 5000);
     console.log('Success!');
-    minebot.chat('/g online');
   });
 
   // Display chat in console and send to Limbo again if kicked or something
@@ -57,15 +56,31 @@ function createBot() {
     console.log(chatMsg.toAnsi());
     const msg = chatMsg.toString();
     if (msg.endsWith(' joined the lobby!') && msg.includes('[MVP+')) {
-      console.log('Sending to Limbo.');
+      console.log('Bot ending to Limbo.');
       minebot.chat('/ac \u00a7ca');
     }
   });
+
+  // Record online members
+  setTimeout(() => {
+    minebot.chat('/g online');
+  }, 10000);
 
   // Guild chat pattern
   minebot.chatAddPattern(
     /^Guild > (\[.*?\])*.*? ([\w\d]{2,17}).*?( \[.*?\])*.*?: (\w*.*.{1,10000})*$/i, 'guild_chat', 'Guild chat event'
   );
+
+  // Online guild members pattern
+  minebot.chatAddPattern(
+    /^Online Members: (.+)$/i, 'online', 'Number of online members'
+  );
+
+  // Bot reconnection log to Discord
+  minebot.on('online', (numOfOnline) => {
+    let numOfTrueOnline = numOfOnline - 1;
+    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<:yes:829640052531134464> Bot has reconnected. There are **${numOfTrueOnline}** other members online.`);
+  });
 
   // In-game to Discord
   minebot.on('guild_chat', (rank, playername, grank, message) => {
@@ -109,7 +124,7 @@ function createBot() {
 // Login the bots (duh)
 setTimeout(() => {
   createBot();
-}, 5000);
+}, 3000);
 
 // Discord bot stuff
 bot.on('message', async message => {
@@ -126,6 +141,7 @@ bot.on('message', async message => {
     bot.commands.get(command).execute(message, args);
   } catch (error) {
     console.error(error);
+    message.react(`<:nah:829640042334257202>`);
     message.reply('there was an error trying to execute that command! Check the console log for more details.');
     bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**General command error:** \`\`\`${error}\`\`\``);
   }

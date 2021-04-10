@@ -52,8 +52,8 @@ module.exports = {
     message.react(`<:yes:829640052531134464>`);
 
     const longRequestEmbed = new Discord.MessageEmbed().setTitle('Evaluate - Result Too Long').setColor('#338bff').setDescription(`\`\`\`The result from your request was too long. Generating Hastebin link...\`\`\``).setTimestamp().setFooter(footer);
-    process.on('unhandledRejection', newerror => {
-      if (newerror.code === 50035) {
+    process.on('unhandledRejection', APIError => {
+      if (APIError.code === 50035) {
         message.channel.send(longRequestEmbed);
         hastebin.createPaste(clean(evaled), {
             raw: false,
@@ -62,10 +62,11 @@ module.exports = {
           })
           .then(url => message.channel.send("**Result**: " + url))
           .catch(e => console.log(e));
+        message.react('<a:discordload:830394342082347058>');
       }
-      if (newerror.code !== 50035) {
+      if (APIError.code !== 50035) {
         message.channel.send(`${message.author}, an error has occured.`);
-        const errorEmbed = new Discord.MessageEmbed().setTitle('Evaluate - Error').setColor('#ff0000').setDescription(`\`\`\`${clean(newerror)}\`\`\``).setTimestamp().setImage(message.author.avatarURL).setFooter(footer);
+        const errorEmbed = new Discord.MessageEmbed().setTitle('Evaluate - Error').setColor('#ff0000').setDescription(`\`\`\`${clean(APIError)}\`\`\``).setTimestamp().setImage(message.author.avatarURL).setFooter(footer);
         message.channel.send(errorEmbed);
         message.react(`<:nah:829640042334257202>`);
       }
