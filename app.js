@@ -1,4 +1,9 @@
 const fs = require('fs');
+const readline = require("readline");
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
 const Discord = require('discord.js');
 const bot = new Discord.Client({
   disableMentions: 'everyone'
@@ -59,6 +64,11 @@ function createBot() {
       console.log('Bot ending to Limbo.');
       minebot.chat('/ac \u00a7ca');
     }
+  });
+
+  // Console to in-game
+  rl.on('line', (input) => {
+    minebot.chat(input);
   });
 
   // Record online members
