@@ -74,26 +74,27 @@ function spawnBot() {
   // Record online members
   setTimeout(() => {
     minebot.chat('/g online');
+    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<:yes:829640052531134464> Bot has reconnected.`);
   }, 10000);
 
   // Guild chat pattern (source: https://github.com/Myzumi/Guild-Bot)
   minebot.chatAddPattern(
-    /^Guild > (\[.*?\])*.*? ([\w\d]{2,17}).*?( \[.*?\])*.*?: (\w*.*.{1,10000})*$/i, 'guild_chat', 'Guild chat event'
+    /^Guild > (\[.*?\])*.*? ([\w\d]{2,17}).*?( \[.*?\])*.*?: (\w*.*.{1,10000})*$/i, 'guildChat', 'Guild chat event'
   );
 
   // Online guild members pattern
   minebot.chatAddPattern(
-    /^Online Members: (.+)$/i, 'online', 'Number of online members'
+    /^Online Members: (.+)$/i, 'getNumOfOnline', 'Number of online members'
   );
 
   // Bot reconnection log to Discord (source: https://github.com/Myzumi/Guild-Bot)
-  minebot.on('online', (numOfOnline) => {
+  minebot.on('getNumOfOnline', (numOfOnline) => {
     let numOfTrueOnline = numOfOnline - 1;
-    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<:yes:829640052531134464> Bot has reconnected. There are **${numOfTrueOnline}** other members online.`);
+    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<:yes:829640052531134464> There are **${numOfTrueOnline}** other members online.`);
   });
 
   // In-game to Discord
-  minebot.on('guild_chat', (rank, playername, grank, message) => {
+  minebot.on('guildChat', (rank, playername, grank, message) => {
     if (playername === minebot.username) return;
     bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<a:MC:829592987616804867> **${rank} ${playername}: ${message}**`);
   });
