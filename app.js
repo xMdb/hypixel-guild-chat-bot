@@ -71,20 +71,37 @@ function spawnBot() {
     minebot.chat(input);
   });
 
-  // Record online members
+  // Bot reconnection message
   setTimeout(() => {
     minebot.chat('/g online');
     bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<:yes:829640052531134464> Bot has reconnected.`);
   }, 10000);
+
+  // Mineflayer chat patterns
 
   // Guild chat pattern (source: https://github.com/Myzumi/Guild-Bot)
   minebot.chatAddPattern(
     /^Guild > (\[.*?\])*.*? ([\w\d]{2,17}).*?( \[.*?\])*.*?: (\w*.*.{1,10000})*$/i, 'guildChat', 'Guild chat event'
   );
 
-  // Online guild members pattern
+  // On guild member join/leave Hypixel
+  minebot.chatAddPattern(
+    /^Guild > ([\w\d]{2,17}).*? (\w*[A-z0-9_ \.\,;:\-_\/]{1,10000})*$/i, 'join_leave', 'Join leave event'
+  );
+
+  // Get online guild members
   minebot.chatAddPattern(
     /^Online Members: (.+)$/i, 'getNumOfOnline', 'Number of online members'
+  );
+
+  // On new guild member
+  minebot.chatAddPattern(
+    /^(\[.*?\])*.*? ([\w\d]{2,17}).*? joined the guild!$/i, 'newGuildMember', 'New guild member joins'
+  );
+
+  // On member leave guild
+  minebot.chatAddPattern(
+    /^(\[.*?\])*.*? ([\w\d]{2,17}).*? left the guild!$/i, 'byeGuildMember', 'Member leaves the guild'
   );
 
   // Bot reconnection log to Discord (source: https://github.com/Myzumi/Guild-Bot)
@@ -113,17 +130,21 @@ function spawnBot() {
     });
   });
 
-  // On guild member join/leave
-  minebot.chatAddPattern(
-    /^Guild > ([\w\d]{2,17}).*? (\w*[A-z0-9_ \.\,;:\-_\/]{1,10000})*$/i, 'join_leave', 'Join leave event'
-  );
   minebot.on('join_leave', (playername, joinleave) => {
     bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<:hypixel:829640659542867969> **${playername} ${joinleave}**`);
   });
 
+  minebot.on('newGuildMember', (rank, playername) => {
+    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<a:join:830746278680985620> ${rank} ${playername} joined the guild!`);
+  });
+
+  minebot.on('byeGuildMember', (rank, playername) => {
+    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<a:leave:830746292186775592> ${rank} ${playername} left the guild.`);
+  });
+
   // Minebot error logging
   minebot.on('error', (error) => {
-    console.log("Error event fired.")
+    console.log("Error event fired.");
     console.log(error);
     bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**Minebot error!** \`\`\`${error}\`\`\``);
     setTimeout(() => {
