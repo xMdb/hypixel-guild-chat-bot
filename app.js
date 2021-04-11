@@ -37,13 +37,13 @@ bot.on('guildDelete', guild => {
 });
 
 // Startup of Minecraft bot
-function createBot() {
+function spawnBot() {
   const minebot = mineflayer.createBot({
     host: 'mc.hypixel.net',
     username: auth.mcEmail,
     password: auth.mcPass,
     version: '1.16.4',
-    checkTimeoutInterval: 30 * 1000,
+    checkTimeoutInterval: 30000,
     interval: 5000
   });
 
@@ -121,20 +121,28 @@ function createBot() {
   });
 
   // Minebot error logging
-  minebot.on('error', (error) => console.log(error));
+  minebot.on('error', (error) => {
+    setTimeout(() => {
+      console.log(error);
+      bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**Minebot error!** \`\`\`${error}\`\`\``);
+      spawnBot();
+    }, 30000);
+  });
+
   minebot.on('end', (error) => console.log(error));
   minebot.on('kicked', (error) => {
     setTimeout(() => {
       console.log(error);
       bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**The bot was kicked!** \`\`\`${error}\`\`\``);
-      createBot();
+      spawnBot();
     }, 5000);
   });
 }
 
 setTimeout(() => {
-  createBot();
+  spawnBot();
 }, 3000);
+
 
 // Discord bot stuff
 bot.on('message', async message => {
