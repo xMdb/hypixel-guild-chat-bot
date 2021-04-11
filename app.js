@@ -123,9 +123,10 @@ function spawnBot() {
 
   // Minebot error logging
   minebot.on('error', (error) => {
+    console.log("Error event fired.")
+    console.log(error);
+    bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**Minebot error!** \`\`\`${error}\`\`\``);
     setTimeout(() => {
-      console.log(error);
-      bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**Minebot error!** \`\`\`${error}\`\`\``);
       spawnBot();
     }, 30000);
   });
