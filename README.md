@@ -2,6 +2,9 @@
 Discord bot used to connect Minecraft chat to Discord and vice versa.
 
 ## Requirements
+
+[Node.js v15.x.x](https://nodejs.org/en/)
+
 [discordjs/discord.js](https://github.com/discordjs/discord.js)
 
 [rahatarmanahmed/hastebin](https://github.com/rahatarmanahmed/hastebin)
