@@ -86,7 +86,7 @@ function spawnBot() {
 
   // On guild member join/leave Hypixel
   minebot.chatAddPattern(
-    /^Guild > ([\w\d]{2,17}).*? (\w*[A-z0-9_ \.\,;:\-_\/]{1,10000})*$/i, 'join_leave', 'Join leave event'
+    /^Guild > ([\w\d]{2,17}).*? (\w*[A-z0-9_ \.\,;:\-_\/]{1,10000})*$/i, 'memberJoinLeave', 'Join leave event'
   );
 
   // Get online guild members
@@ -102,6 +102,11 @@ function spawnBot() {
   // On member leave guild
   minebot.chatAddPattern(
     /^(\[.*?\])*.*? ([\w\d]{2,17}).*? left the guild!$/i, 'byeGuildMember', 'Member leaves the guild'
+  );
+
+  // On member kicked
+  minebot.chatAddPattern(
+    /^(\[.*?\])*.*? ([\w\d]{2,17}).*? was kicked by (\[.*?\])*.*? ([\w\d]{2,17}).*?!$/i, 'kickedGuildMember', 'Member gets the boot'
   );
 
   // Bot reconnection log to Discord (source: https://github.com/Myzumi/Guild-Bot)
@@ -125,12 +130,13 @@ function spawnBot() {
     bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<:discord:829596398822883368> **${message.author.username}: ${message.content}**`);
     message.delete().catch(error => {
       if (error.code === 10008) {
+        console.log(error);
         message.channel.send(`**:warning: ${message.author}, there was an error while performing that task.**`);
       }
     });
   });
 
-  minebot.on('join_leave', (playername, joinleave) => {
+  minebot.on('memberJoinLeave', (playername, joinleave) => {
     bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<:hypixel:829640659542867969> **${playername} ${joinleave}**`);
   });
 
@@ -140,6 +146,10 @@ function spawnBot() {
 
   minebot.on('byeGuildMember', (rank, playername) => {
     bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<a:leave:830746292186775592> ${rank} ${playername} left the guild.`);
+  });
+
+  minebot.on('kickedGuildMember', (rank1, playername1, rank2, playername2) => {
+    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<a:leave:830746292186775592> ${rank1} ${playername1} was kicked by ${rank2} ${playername2}!`);
   });
 
   // Minebot error logging
@@ -152,7 +162,10 @@ function spawnBot() {
     }, 30000);
   });
 
-  minebot.on('end', (error) => console.log(error));
+  minebot.on('end', (error) => {
+    console.log(error)
+  });
+
   minebot.on('kicked', (error) => {
     setTimeout(() => {
       console.log(error);
