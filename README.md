@@ -2,9 +2,24 @@
 Discord bot used to connect Minecraft chat to Discord and vice versa.
 
 ## Requirements
-discord.js v12, node 15.14.0, Mineflayer, hastebin (optional: for eval)
+
+[Node.js v15.x.x](https://nodejs.org/en/)
+
+[discordjs/discord.js](https://github.com/discordjs/discord.js)
+
+[rahatarmanahmed/hastebin](https://github.com/rahatarmanahmed/hastebin)
+
+[Hypixel-API-Reborn/hypixel-api-reborn](https://github.com/Hypixel-API-Reborn/hypixel-api-reborn)
+
+[PrismarineJS/mineflayer](https://github.com/PrismarineJS/mineflayer)
+
+[frinyvonnick/node-html-to-image](https://github.com/frinyvonnick/node-html-to-image)
+
+
 
 ## Acknowledgements
-Parts of this project are forked from https://github.com/mew/discord-hypixel-bridge under GPL-3.0 License.
+Parts of this project are forked from:
 
-Parts of this project are forked from https://github.com/Myzumi/Guild-Bot under Apache-2.0 License.
+[mew/discord-hypixel-bridge](https://github.com/mew/discord-hypixel-bridge) under GPL-3.0 License.
+
+[Myzumi/Guild-Bot](https://github.com/Myzumi/Guild-Bot) under Apache-2.0 License.
