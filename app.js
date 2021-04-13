@@ -163,7 +163,12 @@ function spawnBot() {
   });
 
   minebot.on('end', (error) => {
-    console.log(error)
+    console.log("End event fired.");
+    console.log(error);
+    bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**Minebot ended!** \`\`\`${error}\`\`\``);
+    setTimeout(() => {
+      spawnBot();
+    }, 60000);
   });
 
   minebot.on('kicked', (error) => {
