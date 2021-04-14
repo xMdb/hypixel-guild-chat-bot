@@ -136,6 +136,8 @@ function spawnBot() {
     });
   });
 
+  // Member join/leave server, join/leave guild, kicked from guild
+
   minebot.on('memberJoinLeave', (playername, joinleave) => {
     bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<:hypixel:829640659542867969> **${playername} ${joinleave}**`);
   });
@@ -166,9 +168,6 @@ function spawnBot() {
     console.log("End event fired.");
     console.log(error);
     bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**Minebot ended!** \`\`\`${error}\`\`\``);
-    setTimeout(() => {
-      spawnBot();
-    }, 60000);
   });
 
   minebot.on('kicked', (error) => {
@@ -176,13 +175,13 @@ function spawnBot() {
       console.log(error);
       bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**The bot was kicked!** \`\`\`${error}\`\`\``);
       spawnBot();
-    }, 5000);
+    }, 15000);
   });
 }
 
 setTimeout(() => {
   spawnBot();
-}, 3000);
+}, 5000);
 
 
 // Discord bot stuff
