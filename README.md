@@ -18,6 +18,7 @@ Discord bot used to connect Minecraft chat to Discord and vice versa by xMdb!
 
 [frinyvonnick/node-html-to-image](https://github.com/frinyvonnick/node-html-to-image)
 
+[Unitech/pm2](https://github.com/Unitech/pm2)
 
 ## Acknowledgements
 Parts of this project are forked from:
