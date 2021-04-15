@@ -1,7 +1,6 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 const config = require('../config.json');
-const auth = require('../auth.json');
 const hastebin = require('hastebin');
 
 module.exports = {
@@ -32,18 +31,18 @@ module.exports = {
         evaled = evaled.replace(bot.token, "undefined");
       }
     }
-    if (evaled.includes(auth.token)) {
-      evaled = evaled.replace(auth.token, "undefined");
+    if (evaled.includes(process.env.BOT_TOKEN)) {
+      evaled = evaled.replace(process.env.BOT_TOKEN, "undefined");
 
-      if (evaled.includes(auth.token)) {
-        evaled = evaled.replace(auth.token, "undefined");
+      if (evaled.includes(process.env.BOT_TOKEN)) {
+        evaled = evaled.replace(process.env.BOT_TOKEN, "undefined");
       }
     }
-    if (evaled.includes('auth.token')) {
-      evaled = evaled.replace('auth.token', "undefined");
+    if (evaled.includes('process.env.BOT_TOKEN')) {
+      evaled = evaled.replace('process.env.BOT_TOKEN', "undefined");
 
-      if (evaled.includes('auth.token')) {
-        evaled = evaled.replace('auth.token', "undefined");
+      if (evaled.includes('process.env.BOT_TOKEN')) {
+        evaled = evaled.replace('process.env.BOT_TOKEN', "undefined");
       }
     }
 

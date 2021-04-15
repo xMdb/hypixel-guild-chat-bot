@@ -1,3 +1,4 @@
+require('dotenv').config();
 const fs = require('fs');
 const readline = require("readline");
 const rl = readline.createInterface({
@@ -9,8 +10,8 @@ const bot = new Discord.Client({
   disableMentions: 'everyone'
 });
 const config = require('./config.json');
-const auth = require('./auth.json');
 const mineflayer = require('mineflayer');
+
 
 // Startup of Discord bot
 bot.commands = new Discord.Collection();
@@ -40,8 +41,8 @@ bot.on('guildDelete', guild => {
 function spawnBot() {
   const minebot = mineflayer.createBot({
     host: 'mc.hypixel.net',
-    username: auth.mcEmail,
-    password: auth.mcPass,
+    username: process.env.MC_USER,
+    password: process.env.MC_PASS,
     version: '1.16.4',
     checkTimeoutInterval: 30000,
     interval: 5000
@@ -75,7 +76,7 @@ function spawnBot() {
   setTimeout(() => {
     minebot.chat('/g online');
     bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<:yes:829640052531134464> Bot has reconnected.`);
-  }, 10000);
+  }, 7000);
 
   // Mineflayer chat patterns
 
@@ -158,24 +159,31 @@ function spawnBot() {
   minebot.on('error', (error) => {
     console.log("Error event fired.");
     console.log(error);
-    bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**Minebot error!** \`\`\`${error}\`\`\``);
+    bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**Minebot: Error** \`\`\`${error}\`\`\``);
+    console.log("Restarting in 10 seconds.");
     setTimeout(() => {
-      spawnBot();
-    }, 30000);
+      process.exit(1);
+    }, 10000);
   });
 
   minebot.on('end', (error) => {
     console.log("End event fired.");
     console.log(error);
-    bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**Minebot ended!** \`\`\`${error}\`\`\``);
+    bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**Minebot: Ended** \`\`\`${error}\`\`\``);
+    console.log("Restarting in 10 seconds.");
+    setTimeout(() => {
+      process.exit(1);
+    }, 10000);
   });
 
-  minebot.on('kicked', (error) => {
+  minebot.on('kicked', (reason) => {
+    console.log("The bot was kicked.")
+    console.log(reason);
+    bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**The bot was kicked. Reason:** \`\`\`${reason}\`\`\``);
+    console.log("Restarting in 10 seconds.");
     setTimeout(() => {
-      console.log(error);
-      bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**The bot was kicked!** \`\`\`${error}\`\`\``);
-      spawnBot();
-    }, 15000);
+      process.exit(1);
+    }, 10000);
   });
 }
 
@@ -183,14 +191,13 @@ setTimeout(() => {
   spawnBot();
 }, 5000);
 
-
 // Discord bot stuff
 bot.on('message', async message => {
   const args = message.content.slice(config.prefix.length).trim().split(/ +/);
   const command = args.shift().toLowerCase();
   if (message.author.bot) return;
   if (!message.content.startsWith(config.prefix)) return;
-  if (message.content.includes(auth.token)) {
+  if (message.content.includes(process.env.BOT_TOKEN)) {
     message.replace(bot.token, 'undefined');
   }
 
@@ -205,4 +212,4 @@ bot.on('message', async message => {
   }
 });
 
-bot.login(auth.token);
+bot.login(process.env.BOT_TOKEN);
