@@ -10,15 +10,9 @@ Discord bot used to connect Minecraft chat to Discord and vice versa by xMdb!
 
 [rahatarmanahmed/hastebin](https://github.com/rahatarmanahmed/hastebin)
 
-[Hypixel-API-Reborn/hypixel-api-reborn](https://github.com/Hypixel-API-Reborn/hypixel-api-reborn)
-
 [PrismarineJS/mineflayer](https://github.com/PrismarineJS/mineflayer)
 
 [RIAEvangelist/node-cmd](https://github.com/RIAEvangelist/node-cmd)
-
-[frinyvonnick/node-html-to-image](https://github.com/frinyvonnick/node-html-to-image)
-
-[Unitech/pm2](https://github.com/Unitech/pm2)
 
 ## Acknowledgements
 Parts of this project are forked from:
