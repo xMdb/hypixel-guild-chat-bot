@@ -44,6 +44,7 @@ function spawnBot() {
     username: process.env.MC_USER,
     password: process.env.MC_PASS,
     version: '1.16.4',
+    auth: 'microsoft',
     checkTimeoutInterval: 30000,
     interval: 5000
   });
