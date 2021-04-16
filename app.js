@@ -22,7 +22,7 @@ for (const file of commandFiles) {
 }
 
 bot.on('ready', () => {
-  console.log(`Bot has started, with ${bot.users.size} users, in ${bot.channels.size} channels of ${bot.guilds.size} guilds.`);
+  console.log(`Success! Discord bot is now online.`);
   bot.user.setStatus('online');
   bot.user.setActivity('Horus Goes Shopping on Spotify', {
     type: 'LISTENING'
@@ -54,7 +54,7 @@ function spawnBot() {
       console.log('Logged in.');
       minebot.chat('/ac \u00a7c<3');
     }, 5000);
-    console.log('Joining Hypixel...');
+    console.log('Successfully joined Hypixel.');
   });
 
   // Display chat in console and send to Limbo again if kicked or something (source: https://github.com/mew/discord-hypixel-bridge)
@@ -113,7 +113,7 @@ function spawnBot() {
   // Bot reconnection log to Discord (source: https://github.com/Myzumi/Guild-Bot)
   minebot.on('getNumOfOnline', (numOfOnline) => {
     let numOfTrueOnline = numOfOnline - 1;
-    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<:yes:829640052531134464> There are **${numOfTrueOnline}** other members online.`);
+    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`:information_source: There are **${numOfTrueOnline}** other members online.`);
   });
 
   // In-game to Discord

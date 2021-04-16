@@ -8,6 +8,9 @@ module.exports = {
       if (error.code == 50006) {
         message.channel.send(`${message.author}, please input something for me to say.`);
       }
+      if (error.code == 50013) {
+        message.channel.send(`${message.author}, I do not have the correct permissions to delete that message. I require the **MANAGE_MESSAGES** permission.`);
+      }
     });
   }
 };
