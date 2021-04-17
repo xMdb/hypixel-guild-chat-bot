@@ -21,12 +21,30 @@ for (const file of commandFiles) {
   bot.commands.set(command.name, command);
 }
 
+const listeningTo = [
+  "Horus Goes Shopping on Spotify",
+  "Hypixel Knights Talent Show Album on repeat",
+  "Hypixel Knights Talent Show Album",
+  "What Makes You Beautiful Cover on Soundcloud",
+  "Demons (Imagine Dragons Cover) on Soundcloud",
+  "hitches and iro dying of laughter on Soundcloud",
+  "505 (Arctic Monkeys Cover) on Soundcloud",
+  "Isabella's Lullaby on Soundcloud",
+  "Hotel Yorba (White Stripes Cover) on Soundcloud",
+  "Mine Diamonds (MCAP Cover) on Soundcloud",
+  "I Miss The Old Meanie on Soundcloud",
+  "Payphone (Maroon 5 Cover) on Soundcloud"
+];
+
 bot.on('ready', () => {
-  console.log(`Success! Discord bot is now online.`);
+  console.log('Success! Discord bot is now online.');
   bot.user.setStatus('online');
-  bot.user.setActivity('Horus Goes Shopping on Spotify', {
-    type: 'LISTENING'
-  });
+  setInterval(() => {
+    const statusIndex = Math.floor(Math.random() * (listeningTo.length - 1) + 1);
+    bot.user.setActivity(listeningTo[statusIndex], {
+      type: 'LISTENING'
+    });
+  }, 60000);
 });
 
 bot.on('guildCreate', guild => {
@@ -131,9 +149,13 @@ function spawnBot() {
     minebot.chat(`/gc ${message.author.username} > ${message.content}`);
     bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<:discord:829596398822883368> **${message.author.username}: ${message.content}**`);
     message.delete().catch(error => {
-      if (error.code === 10008) {
+      if (error.code == 10008) {
         console.log(error);
         message.channel.send(`**:warning: ${message.author}, there was an error while performing that task.**`);
+      }
+      if (error.code == 50001) {
+        console.log(error);
+        message.channel.send(`**:warning: ${message.author}, I need MANAGE_MESSAGES to perform that task.**`);
       }
     });
   });
