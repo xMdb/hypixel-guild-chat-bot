@@ -153,7 +153,7 @@ function spawnBot() {
         console.log(error);
         message.channel.send(`**:warning: ${message.author}, there was an error while performing that task.**`);
       }
-      if (error.code == 50001) {
+      if (error.code == 50001 || 50013) {
         console.log(error);
         message.channel.send(`**:warning: ${message.author}, I need MANAGE_MESSAGES to perform that task.**`);
       }
@@ -183,30 +183,30 @@ function spawnBot() {
     console.log("Error event fired.");
     console.log(error);
     bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**Minebot: Error** \`\`\`${error}\`\`\``);
-    console.log("Restarting in 10 seconds.");
+    console.log("Restarting in 5 seconds.");
     setTimeout(() => {
       process.exit(1);
-    }, 10000);
+    }, 5000);
   });
 
   minebot.on('end', (error) => {
     console.log("End event fired.");
     console.log(error);
     bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**Minebot: Ended** \`\`\`${error}\`\`\``);
-    console.log("Restarting in 10 seconds.");
+    console.log("Restarting in 5 seconds.");
     setTimeout(() => {
       process.exit(1);
-    }, 10000);
+    }, 5000);
   });
 
   minebot.on('kicked', (reason) => {
     console.log("The bot was kicked.")
     console.log(reason);
     bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**The bot was kicked. Reason:** \`\`\`${reason}\`\`\``);
-    console.log("Restarting in 10 seconds.");
+    console.log("Restarting in 5 seconds.");
     setTimeout(() => {
       process.exit(1);
-    }, 10000);
+    }, 5000);
   });
 }
 
