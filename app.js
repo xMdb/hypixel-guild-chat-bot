@@ -99,14 +99,9 @@ function spawnBot() {
 
   // Mineflayer chat patterns
 
-  // Guild chat pattern for ranked players (source: https://github.com/Myzumi/Guild-Bot)
+  // Guild chat pattern
   minebot.chatAddPattern(
-    /^Guild > (\[.*?\])*.*? ([\w\d]{2,17}).*?( \[.*?\])*.*?: (\w*.*.{1,10000})*$/i, 'guildChatRanked', 'Guild chat event for ranked players'
-  );
-
-  // Guild chat pattern for nons (source: https://github.com/Myzumi/Guild-Bot)
-  minebot.chatAddPattern(
-    /^Guild > ([\w\d]{2,17}).*?( \[.*?\])*.*?: (\w*.*.{1,10000})*$/i, 'guildChatNon', 'Guild chat event for nons'
+    /^Guild > (\[.*\]\s*)?([\w\d]{2,17}).*?(\[.{1,15}\])?: (.*)$/i, 'guildChat', 'Guild chat event'
   );
 
   // On guild member join/leave Hypixel
@@ -121,17 +116,17 @@ function spawnBot() {
 
   // On new guild member
   minebot.chatAddPattern(
-    /^(\[.*?\])*.*? ([\w\d]{2,17}).*? joined the guild!$/i, 'newGuildMember', 'New guild member joins'
+    /^(\[.*\]\s*)?([\w\d]{2,17}).*? joined the guild!$/i, 'newGuildMember', 'New guild member joins'
   );
 
   // On member leave guild
   minebot.chatAddPattern(
-    /^(\[.*?\])*.*? ([\w\d]{2,17}).*? left the guild!$/i, 'byeGuildMember', 'Member leaves the guild'
+    /^(\[.*\]\s*)?([\w\d]{2,17}).*? left the guild!$/i, 'byeGuildMember', 'Member leaves the guild'
   );
 
   // On member kicked
   minebot.chatAddPattern(
-    /^(\[.*?\])*.*? ([\w\d]{2,17}).*? was kicked by (\[.*?\])*.*? ([\w\d]{2,17}).*?!$/i, 'kickedGuildMember', 'Member gets the boot'
+    /^(\[.*\]\s*)?([\w\d]{2,17}).*? was kicked by (\[.*\]\s*)?([\w\d]{2,17}).*?!$/i, 'kickedGuildMember', 'Member gets the boot'
   );
 
   // Bot reconnection log to Discord (source: https://github.com/Myzumi/Guild-Bot)
@@ -140,16 +135,10 @@ function spawnBot() {
     bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`:information_source: There are **${numOfTrueOnline}** other members online.`);
   });
 
-  // In-game to Discord (ranked)
-  minebot.on('guildChatRanked', (rank, playername, grank, message) => {
+  // In-game to Discord
+  minebot.on('guildChat', (rank, playername, grank, message) => {
     if (playername === minebot.username) return;
-    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<a:MC:829592987616804867> **${rank} ${playername}: ${message}**`);
-  });
-
-  // In-game to Discord (non)
-  minebot.on('guildChatNon', (playername, grank, message) => {
-    if (playername === minebot.username) return;
-    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<a:MC:829592987616804867> **${playername}: ${message}**`);
+    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<a:MC:829592987616804867> **${rank}${playername}: ${message}**`);
   });
 
   // Other messages to Discord
@@ -204,10 +193,10 @@ function spawnBot() {
     console.log("End event fired.");
     console.log(error);
     bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**Minebot: Ended** \`\`\`${error}\`\`\``);
-    console.log("Restarting in 5 seconds.");
+    console.log("Restarting in 10 seconds.");
     setTimeout(() => {
       process.exit(1);
-    }, 5000);
+    }, 10000);
   });
 
   minebot.on('kicked', (reason) => {
