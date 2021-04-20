@@ -9,8 +9,8 @@ const Discord = require('discord.js');
 const bot = new Discord.Client({
   disableMentions: 'everyone'
 });
-const config = require('./config.json');
 const mineflayer = require('mineflayer');
+const config = require('./config.json');
 
 
 // Startup of Discord bot
@@ -99,14 +99,19 @@ function spawnBot() {
 
   // Mineflayer chat patterns
 
-  // Guild chat pattern (source: https://github.com/Myzumi/Guild-Bot)
+  // Guild chat pattern for ranked players (source: https://github.com/Myzumi/Guild-Bot)
   minebot.chatAddPattern(
-    /^Guild > (\[.*?\])*.*? ([\w\d]{2,17}).*?( \[.*?\])*.*?: (\w*.*.{1,10000})*$/i, 'guildChat', 'Guild chat event'
+    /^Guild > (\[.*?\])*.*? ([\w\d]{2,17}).*?( \[.*?\])*.*?: (\w*.*.{1,10000})*$/i, 'guildChatRanked', 'Guild chat event for ranked players'
+  );
+
+  // Guild chat pattern for nons (source: https://github.com/Myzumi/Guild-Bot)
+  minebot.chatAddPattern(
+    /^Guild > ([\w\d]{2,17}).*?( \[.*?\])*.*?: (\w*.*.{1,10000})*$/i, 'guildChatNon', 'Guild chat event for nons'
   );
 
   // On guild member join/leave Hypixel
   minebot.chatAddPattern(
-    /^Guild > ([\w\d]{2,17}).*? (\w*[A-z0-9_ \.\,;:\-_\/]{1,10000})*$/i, 'memberJoinLeave', 'Join leave event'
+    /^Guild > ([\w\d]{2,17}).*? (joined.|left.)*$/i, 'memberJoinLeave', 'Join leave event'
   );
 
   // Get online guild members
@@ -135,10 +140,34 @@ function spawnBot() {
     bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`:information_source: There are **${numOfTrueOnline}** other members online.`);
   });
 
-  // In-game to Discord
-  minebot.on('guildChat', (rank, playername, grank, message) => {
+  // In-game to Discord (ranked)
+  minebot.on('guildChatRanked', (rank, playername, grank, message) => {
     if (playername === minebot.username) return;
     bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<a:MC:829592987616804867> **${rank} ${playername}: ${message}**`);
+  });
+
+  // In-game to Discord (non)
+  minebot.on('guildChatNon', (playername, grank, message) => {
+    if (playername === minebot.username) return;
+    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<a:MC:829592987616804867> **${playername}: ${message}**`);
+  });
+
+  // Other messages to Discord
+  minebot.on('memberJoinLeave', (playername, joinleave) => {
+    if (playername === minebot.username) return;
+    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<:hypixel:829640659542867969> **${playername} ${joinleave}**`);
+  });
+
+  minebot.on('newGuildMember', (rank, playername) => {
+    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<a:join:830746278680985620> ${rank} ${playername} joined the guild!`);
+  });
+
+  minebot.on('byeGuildMember', (rank, playername) => {
+    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<a:leave:830746292186775592> ${rank} ${playername} left the guild.`);
+  });
+
+  minebot.on('kickedGuildMember', (rank1, playername1, rank2, playername2) => {
+    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<a:leave:830746292186775592> ${rank1} ${playername1} was kicked by ${rank2} ${playername2}!`);
   });
 
   // Discord to in-game
@@ -160,25 +189,7 @@ function spawnBot() {
     });
   });
 
-  // Member join/leave server, join/leave guild, kicked from guild
-
-  minebot.on('memberJoinLeave', (playername, joinleave) => {
-    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<:hypixel:829640659542867969> **${playername} ${joinleave}**`);
-  });
-
-  minebot.on('newGuildMember', (rank, playername) => {
-    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<a:join:830746278680985620> ${rank} ${playername} joined the guild!`);
-  });
-
-  minebot.on('byeGuildMember', (rank, playername) => {
-    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<a:leave:830746292186775592> ${rank} ${playername} left the guild.`);
-  });
-
-  minebot.on('kickedGuildMember', (rank1, playername1, rank2, playername2) => {
-    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<a:leave:830746292186775592> ${rank1} ${playername1} was kicked by ${rank2} ${playername2}!`);
-  });
-
-  // Minebot error logging
+  // Minebot error handling
   minebot.on('error', (error) => {
     console.log("Error event fired.");
     console.log(error);
