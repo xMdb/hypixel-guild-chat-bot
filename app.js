@@ -5,6 +5,7 @@ const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
+const chalk = require('chalk');
 const Discord = require('discord.js');
 const bot = new Discord.Client({
   disableMentions: 'everyone'
@@ -37,7 +38,7 @@ const listeningTo = [
 ];
 
 bot.on('ready', () => {
-  console.log('Success! Discord bot is now online.');
+  console.log(chalk.bgGreen('Success! Discord bot is now online.'));
   bot.user.setStatus('online');
   setInterval(() => {
     const statusIndex = Math.floor(Math.random() * (listeningTo.length - 1) + 1);
@@ -48,11 +49,11 @@ bot.on('ready', () => {
 });
 
 bot.on('guildCreate', guild => {
-  console.log(`New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`);
+  console.log(chalk.bgGreen(`New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`));
 });
 
 bot.on('guildDelete', guild => {
-  console.log(`Bot removed from: ${guild.name} (id: ${guild.id})`);
+  console.log(chalk.bgGreen(`Bot removed from: ${guild.name} (id: ${guild.id})`));
 });
 
 // Startup of Minecraft bot
@@ -70,10 +71,10 @@ function spawnBot() {
   // Send to Limbo on login (source: https://github.com/mew/discord-hypixel-bridge)
   minebot.on('login', async () => {
     setTimeout(() => {
-      console.log('Logged in.');
+      console.log(chalk.bgGreen('Logged in.'));
       minebot.chat('/ac \u00a7c<3');
     }, 5000);
-    console.log('Successfully joined Hypixel.');
+    console.log(chalk.bgGreen('Successfully joined Hypixel.'));
   });
 
   // Display chat in console and send to Limbo again if kicked or something (source: https://github.com/mew/discord-hypixel-bridge)
@@ -81,7 +82,7 @@ function spawnBot() {
     console.log(chatMsg.toAnsi());
     const msg = chatMsg.toString();
     if (msg.endsWith(' joined the lobby!') && msg.includes('[MVP+')) {
-      console.log('Lobby detected: Sending to Limbo.');
+      console.log(chalk.bgRed('Lobby detected: Sending to Limbo.'));
       minebot.chat('/ac \u00a7ca');
     }
   });
@@ -95,7 +96,7 @@ function spawnBot() {
   setTimeout(() => {
     minebot.chat('/g online');
     bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<:yes:829640052531134464> Bot has reconnected to Discord.`);
-  }, 7000);
+  }, 10000);
 
   // Mineflayer chat patterns
 
@@ -195,7 +196,7 @@ function spawnBot() {
     console.log("Error event fired.");
     console.log(error);
     bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**Minebot: Error** \`\`\`${error}\`\`\``);
-    console.log("Restarting in 5 seconds.");
+    console.log(chalk.bgRed("Restarting in 5 seconds."));
     setTimeout(() => {
       process.exit(1);
     }, 5000);
@@ -204,17 +205,17 @@ function spawnBot() {
   minebot.on('end', (error) => {
     console.log("End event fired.");
     console.log(error);
-    console.log("Restarting in 10 seconds.");
+    console.log(chalk.bgRed("Restarting in 10 seconds."));
     setTimeout(() => {
       process.exit(1);
     }, 10000);
   });
 
   minebot.on('kicked', (reason) => {
-    console.log("The bot was kicked.")
+    console.log(chalk.bgRed("The bot was kicked."));
     console.log(reason);
     bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**The bot was kicked. Reason:** \`\`\`${reason}\`\`\``);
-    console.log("Restarting in 5 seconds.");
+    console.log(chalk.bgRed("Restarting in 5 seconds."));
     setTimeout(() => {
       process.exit(1);
     }, 5000);
