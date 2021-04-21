@@ -58,7 +58,7 @@ bot.on('guildDelete', guild => {
 // Startup of Minecraft bot
 function spawnBot() {
   const minebot = mineflayer.createBot({
-    host: 'mc.hypixel.net',
+    host: 'hypixel.net',
     username: process.env.MC_USER,
     password: process.env.MC_PASS,
     version: '1.16.4',
@@ -94,7 +94,7 @@ function spawnBot() {
   // Bot reconnection message
   setTimeout(() => {
     minebot.chat('/g online');
-    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<:yes:829640052531134464> Bot has reconnected.`);
+    bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<:yes:829640052531134464> Bot has reconnected to Discord.`);
   }, 7000);
 
   // Mineflayer chat patterns
@@ -132,31 +132,43 @@ function spawnBot() {
   // Bot reconnection log to Discord (source: https://github.com/Myzumi/Guild-Bot)
   minebot.on('getNumOfOnline', (numOfOnline) => {
     let numOfTrueOnline = numOfOnline - 1;
-    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`:information_source: There are **${numOfTrueOnline}** other members online.`);
+    bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`:information_source: Bot has reconnected to Hypixel. There are **${numOfTrueOnline}** other members online.`);
   });
 
   // In-game to Discord
   minebot.on('guildChat', (rank, playername, grank, message) => {
     if (playername === minebot.username) return;
-    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<a:MC:829592987616804867> **${rank}${playername}: ${message}**`);
+    if (rank == undefined) {
+      return bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:MC:829592987616804867> **${playername}: ${message}**`);
+    }
+    bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:MC:829592987616804867> **${rank}${playername}: ${message}**`);
   });
 
   // Other messages to Discord
   minebot.on('memberJoinLeave', (playername, joinleave) => {
     if (playername === minebot.username) return;
-    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<:hypixel:829640659542867969> **${playername} ${joinleave}**`);
+    bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<:hypixel:829640659542867969> **${playername} ${joinleave}**`);
   });
 
   minebot.on('newGuildMember', (rank, playername) => {
-    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<a:join:830746278680985620> ${rank} ${playername} joined the guild!`);
+    if (rank == undefined) {
+      return bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:join:830746278680985620> ${playername} joined the guild!`);
+    }
+    bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:join:830746278680985620> ${rank}${playername} joined the guild!`);
   });
 
   minebot.on('byeGuildMember', (rank, playername) => {
-    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<a:leave:830746292186775592> ${rank} ${playername} left the guild.`);
+    if (rank == undefined) {
+      return bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:leave:830746292186775592> ${playername} left the guild.`);
+    }
+    bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:leave:830746292186775592> ${rank}${playername} left the guild.`);
   });
 
   minebot.on('kickedGuildMember', (rank1, playername1, rank2, playername2) => {
-    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<a:leave:830746292186775592> ${rank1} ${playername1} was kicked by ${rank2} ${playername2}!`);
+    if (rank1 == undefined) {
+      return bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:leave:830746292186775592> ${playername1} was kicked by ${rank2}${playername2}!`);
+    }
+    bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:leave:830746292186775592> ${rank1}${playername1} was kicked by ${rank2}${playername2}!`);
   });
 
   // Discord to in-game
@@ -165,7 +177,7 @@ function spawnBot() {
     // Source: https://github.com/mew/discord-hypixel-bridge
     if (message.channel.id !== config.gchatID || message.author.bot || message.content.startsWith(config.prefix)) return;
     minebot.chat(`/gc ${message.author.username} > ${message.content}`);
-    bot.guilds.cache.get(config.HKID).channels.cache.get(config.gchatID).send(`<:discord:829596398822883368> **${message.author.username}: ${message.content}**`);
+    bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<:discord:829596398822883368> **${message.author.username}: ${message.content}**`);
     message.delete().catch(error => {
       if (error.code == 10008) {
         console.log(error);
@@ -187,6 +199,15 @@ function spawnBot() {
     setTimeout(() => {
       process.exit(1);
     }, 5000);
+  });
+
+  minebot.on('end', (error) => {
+    console.log("End event fired.");
+    console.log(error);
+    console.log("Restarting in 10 seconds.");
+    setTimeout(() => {
+      process.exit(1);
+    }, 10000);
   });
 
   minebot.on('kicked', (reason) => {
