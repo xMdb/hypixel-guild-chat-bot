@@ -18,6 +18,8 @@ This is mainly for the Hypixel Knights Discord server, but you can also easily a
 
 [discordjs/discord.js](https://github.com/discordjs/discord.js)
 
+[angelo2007/discord-reply](https://www.npmjs.com/package/discord-reply)
+
 [motdotla/dotenv](https://github.com/motdotla/dotenv)
 
 [rahatarmanahmed/hastebin](https://github.com/rahatarmanahmed/hastebin)

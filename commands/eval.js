@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+require('discord-reply');
 const bot = new Discord.Client();
 const config = require('../config.json');
 const hastebin = require('hastebin');
@@ -18,9 +19,9 @@ module.exports = {
       .setColor('#FF0000')
       .setDescription(`${message.author}, you do not have the correct permissions to use this command.`)
       .setTimestamp()
-      .setFooter(footer);
+      .setFooter(footer, message.author.displayAvatarURL);
     if (message.author.id !== config.ownerID) {
-      message.channel.send(noperms);
+      message.lineReply(noperms);
       return;
     }
     const code = args.join(" ");
@@ -55,8 +56,8 @@ module.exports = {
       .setColor('#61bf56')
       .setDescription(`\`\`\`${clean(evaled)}\`\`\``)
       .setTimestamp()
-      .setFooter(footer);
-    message.channel.send(evalEmbed);
+      .setFooter(footer, message.author.displayAvatarURL);
+    message.lineReply(evalEmbed);
     message.react(`<:yes:829640052531134464>`);
 
     const longRequestEmbed = new Discord.MessageEmbed()
@@ -64,7 +65,7 @@ module.exports = {
       .setColor('#338bff')
       .setDescription(`\`\`\`The result from your request was too long. Generating Hastebin link...\`\`\``)
       .setTimestamp()
-      .setFooter(footer);
+      .setFooter(footer, message.author.displayAvatarURL);
     process.on('unhandledRejection', APIError => {
       if (APIError.code === 50035) {
         message.channel.send(longRequestEmbed);
@@ -73,18 +74,18 @@ module.exports = {
             contentType: 'text/plain',
             server: 'https://haste.zneix.eu/'
           })
-          .then(url => message.channel.send(`**Result**: ${url}`))
+          .then(url => message.lineReply(`**Result**: ${url}`))
           .catch(e => console.log(e));
         message.react('<a:discordload:830394342082347058>');
       }
       if (APIError.code !== 50035) {
-        message.channel.send(`${message.author}, an error has occured.`);
+        message.lineReply(`An error has occured.`);
         const errorEmbed = new Discord.MessageEmbed()
           .setTitle('Evaluate - Error')
           .setColor('#ff0000')
           .setDescription(`\`\`\`${clean(APIError)}\`\`\``)
           .setTimestamp()
-          .setFooter(footer);
+          .setFooter(footer, message.author.displayAvatarURL);
         message.channel.send(errorEmbed);
         message.react(`<:nah:829640042334257202>`);
       }

@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+require('discord-reply');
 const config = require('../config.json');
 
 module.exports = {
@@ -16,10 +17,10 @@ module.exports = {
       .setTimestamp()
       .setFooter('Bot by xMdb#7897');
     if (message.author.id !== config.ownerID) {
-      message.channel.send(restartfail);
+      message.lineReply(restartfail);
       return;
     }
-    message.channel.send(restartsuccess).then(() => {
+    message.lineReply(restartsuccess).then(() => {
       process.exit(1);
     });
   }

@@ -7,6 +7,7 @@ const rl = readline.createInterface({
 });
 const chalk = require('chalk');
 const Discord = require('discord.js');
+require('discord-reply');
 const bot = new Discord.Client({
   disableMentions: 'everyone'
 });
@@ -241,8 +242,7 @@ bot.on('message', async message => {
     bot.commands.get(command).execute(message, args);
   } catch (error) {
     console.error(error);
-    message.react(`<:nah:829640042334257202>`);
-    message.reply('there was an error trying to execute that command! Check the console log for more details.');
+    message.lineReply('There was an error while trying to execute that command! Check the console log for more details.');
     bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**General command error:** \`\`\`${error}\`\`\``);
   }
 });

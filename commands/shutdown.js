@@ -1,5 +1,6 @@
 const nc = require('node-cmd');
 const Discord = require('discord.js');
+require('discord-reply');
 const config = require('../config.json');
 
 module.exports = {
@@ -17,10 +18,10 @@ module.exports = {
             .setTimestamp()
             .setFooter('Bot by xMdb#7897');
         if (message.author.id !== config.ownerID) {
-            message.channel.send(shutdownfail);
+            message.lineReply(shutdownfail);
             return;
         }
-        message.channel.send(shutdownsuccess).then(() => {
+        message.lineReply(shutdownsuccess).then(() => {
             nc.run(`pm2 delete 0`);
         });
     }
