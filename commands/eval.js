@@ -14,7 +14,11 @@ module.exports = {
         return text;
     }
     const footer = (`Command executed by ${message.author.username}#${message.author.discriminator} | Bot by xMdb#7897`);
-    const noperms = new Discord.MessageEmbed().setColor('#FF0000').setDescription(`${message.author}, you do not have the correct permissions to use this command.`).setTimestamp().setImage(message.author.avatarURL).setFooter(footer);
+    const noperms = new Discord.MessageEmbed()
+      .setColor('#FF0000')
+      .setDescription(`${message.author}, you do not have the correct permissions to use this command.`)
+      .setTimestamp()
+      .setFooter(footer);
     if (message.author.id !== config.ownerID) {
       message.channel.send(noperms);
       return;
@@ -46,11 +50,21 @@ module.exports = {
       }
     }
 
-    const evalEmbed = new Discord.MessageEmbed().setTitle('Evaluate - Completed').setColor('#61bf56').setDescription(`\`\`\`${clean(evaled)}\`\`\``).setTimestamp().setImage(message.author.avatarURL).setFooter(footer);
+    const evalEmbed = new Discord.MessageEmbed()
+      .setTitle('Evaluate - Completed')
+      .setColor('#61bf56')
+      .setDescription(`\`\`\`${clean(evaled)}\`\`\``)
+      .setTimestamp()
+      .setFooter(footer);
     message.channel.send(evalEmbed);
     message.react(`<:yes:829640052531134464>`);
 
-    const longRequestEmbed = new Discord.MessageEmbed().setTitle('Evaluate - Result Too Long').setColor('#338bff').setDescription(`\`\`\`The result from your request was too long. Generating Hastebin link...\`\`\``).setTimestamp().setFooter(footer);
+    const longRequestEmbed = new Discord.MessageEmbed()
+      .setTitle('Evaluate - Result Too Long')
+      .setColor('#338bff')
+      .setDescription(`\`\`\`The result from your request was too long. Generating Hastebin link...\`\`\``)
+      .setTimestamp()
+      .setFooter(footer);
     process.on('unhandledRejection', APIError => {
       if (APIError.code === 50035) {
         message.channel.send(longRequestEmbed);
@@ -59,13 +73,18 @@ module.exports = {
             contentType: 'text/plain',
             server: 'https://haste.zneix.eu/'
           })
-          .then(url => message.channel.send("**Result**: " + url))
+          .then(url => message.channel.send(`**Result**: ${url}`))
           .catch(e => console.log(e));
         message.react('<a:discordload:830394342082347058>');
       }
       if (APIError.code !== 50035) {
         message.channel.send(`${message.author}, an error has occured.`);
-        const errorEmbed = new Discord.MessageEmbed().setTitle('Evaluate - Error').setColor('#ff0000').setDescription(`\`\`\`${clean(APIError)}\`\`\``).setTimestamp().setImage(message.author.avatarURL).setFooter(footer);
+        const errorEmbed = new Discord.MessageEmbed()
+          .setTitle('Evaluate - Error')
+          .setColor('#ff0000')
+          .setDescription(`\`\`\`${clean(APIError)}\`\`\``)
+          .setTimestamp()
+          .setFooter(footer);
         message.channel.send(errorEmbed);
         message.react(`<:nah:829640042334257202>`);
       }
