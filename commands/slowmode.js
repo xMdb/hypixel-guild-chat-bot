@@ -8,10 +8,12 @@ module.exports = {
         const slowmodeSec = args.join(' ');
         const slowmodeFailure = new Discord.MessageEmbed()
             .setColor('#FF0000')
-            .setDescription(`You need the **Manage Channel** permission to use this command.`)
+            .setDescription(`You don't have permission to use this command.`)
             .setTimestamp()
             .setFooter('Bot by xMdb#7897');
-        if (message.member.hasPermission('MANAGE_CHANNEL')) {
+        if (!message.member.hasPermission('MANAGE_MESSAGES')) {
+            message.lineReply(slowmodeFailure)
+        } else {
             message.lineReply(`Slowmode set to **${slowmodeSec} seconds.**`);
             message.channel.setRateLimitPerUser(slowmodeSec, `Executed by ${message.author.username}#${message.author.discriminator}`).catch(error => {
                 if (error.code === 50035) {
@@ -24,8 +26,6 @@ module.exports = {
                     return;
                 }
             })
-        } else {
-            message.lineReply(slowmodeFailure)
         }
     }
 };

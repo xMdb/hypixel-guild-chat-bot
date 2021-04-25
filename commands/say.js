@@ -11,7 +11,9 @@ module.exports = {
       .setDescription(`You need the <@&520950339013312522> role to use this command.`)
       .setTimestamp()
       .setFooter('Bot by xMdb#7897');
-    if (message.member.roles.cache.has("520950339013312522")) {
+    if (!message.member.roles.cache.has("520950339013312522")) {
+      message.lineReply(sayFailure);
+    } else {
       message.delete().catch(O_o => {});
       message.channel.send(sayMessage).catch(error => {
         if (error.code === 50006) {
@@ -24,8 +26,6 @@ module.exports = {
           return;
         }
       })
-    } else {
-      message.lineReply(sayFailure);
     }
   }
 };
