@@ -8,87 +8,92 @@ module.exports = {
   name: 'eval',
   description: 'Evaluates JS code',
   execute(message, args) {
+    let start = Date.now();
+
     function clean(text) {
       if (typeof (text) === "string")
         return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
       else
         return text;
     }
-    const footer = (`Command executed by ${message.author.username}#${message.author.discriminator} | Bot by xMdb#7897`);
     const noperms = new Discord.MessageEmbed()
       .setColor('#FF0000')
       .setDescription(`${message.author}, you do not have the correct permissions to use this command.`)
       .setTimestamp()
-      .setFooter(footer, message.author.displayAvatarURL);
+      .setFooter(`Executed by ${message.author.username}#${message.author.discriminator}`, message.author.displayAvatarURL);
     if (message.author.id !== config.ownerID) {
       message.lineReply(noperms);
       return;
     }
     const code = args.join(" ");
-    let evaled = eval(code);
-    if (typeof evaled !== "string")
-      evaled = require("util").inspect(evaled);
+    try {
+      let evaled = eval(code);
+      if (typeof evaled !== "string")
+        evaled = require("util").inspect(evaled);
 
-    // Prevent all token leaking
-    if (evaled.includes(bot.token)) {
-      evaled = evaled.replace(bot.token, "undefined");
+      // Prevent all token leaking
       if (evaled.includes(bot.token)) {
         evaled = evaled.replace(bot.token, "undefined");
       }
-    }
-    if (evaled.includes(process.env.BOT_TOKEN)) {
-      evaled = evaled.replace(process.env.BOT_TOKEN, "undefined");
-
       if (evaled.includes(process.env.BOT_TOKEN)) {
         evaled = evaled.replace(process.env.BOT_TOKEN, "undefined");
       }
-    }
-    if (evaled.includes('process.env.BOT_TOKEN')) {
-      evaled = evaled.replace('process.env.BOT_TOKEN', "undefined");
 
-      if (evaled.includes('process.env.BOT_TOKEN')) {
-        evaled = evaled.replace('process.env.BOT_TOKEN', "undefined");
-      }
-    }
+      let end = Date.now();
 
-    const evalEmbed = new Discord.MessageEmbed()
-      .setTitle('Evaluate - Completed')
-      .setColor('#61bf56')
-      .setDescription(`\`\`\`${clean(evaled)}\`\`\``)
-      .setTimestamp()
-      .setFooter(footer, message.author.displayAvatarURL);
-    message.lineReply(evalEmbed);
-    message.react(`<:yes:829640052531134464>`);
-
-    const longRequestEmbed = new Discord.MessageEmbed()
-      .setTitle('Evaluate - Result Too Long')
-      .setColor('#338bff')
-      .setDescription(`\`\`\`The result from your request was too long. Generating Hastebin link...\`\`\``)
-      .setTimestamp()
-      .setFooter(footer, message.author.displayAvatarURL);
-    process.on('unhandledRejection', APIError => {
-      if (APIError.code === 50035) {
+      const longRequestEmbed = new Discord.MessageEmbed()
+        .setTitle('Evaluate - Result Too Long  📜')
+        .setColor('YELLOW')
+        .setDescription(`Generating Hastebin link!`)
+        .setTimestamp()
+        .setFooter(`Execution time: ${end - start}ms`, message.author.displayAvatarURL());
+      if (evaled.length > 1500) {
         message.channel.send(longRequestEmbed);
         hastebin.createPaste(clean(evaled), {
             raw: false,
             contentType: 'text/plain',
             server: 'https://haste.zneix.eu/'
           })
-          .then(url => message.lineReply(`**Result**: ${url}`))
+          .then(url => message.lineReply(`**Result:** ${url}`))
           .catch(e => console.log(e));
         message.react('<a:discordload:830394342082347058>');
+        return;
       }
-      if (APIError.code !== 50035) {
-        message.lineReply(`An error has occured.`);
-        const errorEmbed = new Discord.MessageEmbed()
-          .setTitle('Evaluate - Error')
-          .setColor('#ff0000')
-          .setDescription(`\`\`\`${clean(APIError)}\`\`\``)
-          .setTimestamp()
-          .setFooter(footer, message.author.displayAvatarURL);
-        message.channel.send(errorEmbed);
-        message.react(`<:nah:829640042334257202>`);
-      }
-    });
+
+      const evalEmbed = new Discord.MessageEmbed()
+        .setTitle('Evaluate - Completed  ✅')
+        .setColor('GREEN')
+        .addFields({
+          name: `Input`,
+          value: `\`\`\`js\n${code}\`\`\``
+        })
+        .addFields({
+          name: `Output`,
+          value: `\`\`\`yaml\n${clean(evaled)}\`\`\``
+        })
+        .setTimestamp()
+        .setFooter(`Execution time: ${end - start}ms`, message.author.displayAvatarURL());
+      message.lineReply(evalEmbed);
+      message.react(`✅`);
+
+
+    } catch (error) {
+      message.lineReply(`An error has occured.`);
+      const errorEmbed = new Discord.MessageEmbed()
+        .setTitle('Evaluate - Error  ❌')
+        .setColor('RED')
+        .addFields({
+          name: `Input`,
+          value: `\`\`\`js\n${code}\`\`\``
+        })
+        .addFields({
+          name: `Output`,
+          value: `\`\`\`fix\n${clean(error)}\`\`\``
+        })
+        .setTimestamp()
+        .setFooter(`Executed by ${message.author.username}#${message.author.discriminator}`, message.author.displayAvatarURL);
+      message.channel.send(errorEmbed);
+      message.react(`❌`);
+    }
   }
-};
+}
