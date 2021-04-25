@@ -8,7 +8,12 @@ This is mainly for the Hypixel Knights Discord server, but you can also easily a
 2. Clone it into your own directory
 3. Install the latest version of node.js and the required packages using `npm install`
 4. Make a new Discord bot account on the [Discord Developer Portal](https://discord.com/developers/applications)
-5. Make a .env file in the directory and include the values listed in [example.env](https://github.com/xMdb/hypixel-knights-gchat-bot/blob/main/example.env)
+5. Make a .env file in the directory and include the following values:
+```
+BOT_TOKEN=token goes here
+MC_USER=minecraft email goes here
+MC_PASS=minecraft password goes here
+```
 6. Edit the [config.json](https://github.com/xMdb/hypixel-knights-gchat-bot/blob/main/config.json) file and edit all values to your own
 7. (REQUIRED) Install pm2 by using `npm install pm2 -g`
 8. Start the bot by using `pm2 start app.js`
