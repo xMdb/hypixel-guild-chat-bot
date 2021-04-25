@@ -4,6 +4,7 @@ module.exports = {
     name: 'uptime',
     description: 'Shows bot uptime',
     execute(message, args) {
+
         let days = Math.floor(process.uptime() / 86400);
         let hours = Math.floor(process.uptime() / 3600) % 24;
         let minutes = Math.floor(process.uptime() / 60) % 60;

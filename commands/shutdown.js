@@ -14,7 +14,7 @@ module.exports = {
             .setFooter('Bot by xMdb#7897');
         const shutdownfail = new Discord.MessageEmbed()
             .setColor('#FF0000')
-            .setDescription(`${message.author}, you do not have the correct permissions to use this command.`)
+            .setDescription(`You do not have the correct permissions to use this command.`)
             .setTimestamp()
             .setFooter('Bot by xMdb#7897');
         if (message.author.id !== config.ownerID) {
@@ -22,7 +22,7 @@ module.exports = {
             return;
         }
         message.lineReply(shutdownsuccess).then(() => {
-            nc.run(`pm2 delete 0`);
+            nc.run(`pm2 delete app`);
         });
     }
 };
