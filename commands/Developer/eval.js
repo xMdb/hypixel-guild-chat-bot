@@ -85,11 +85,11 @@ module.exports = {
         .setTitle('Evaluate - Error  ❌')
         .setColor('RED')
         .addFields({
-          name: `Input 📥`,
+          name: `Input  📥`,
           value: `\`\`\`js\n${code}\`\`\``
         })
         .addFields({
-          name: `Output 📤`,
+          name: `Output  📤`,
           value: `\`\`\`fix\n${clean(error)}\`\`\``
         })
         .setTimestamp()
