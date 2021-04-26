@@ -5,13 +5,13 @@ const config = require('../../config.json');
 module.exports = {
   name: 'say',
   aliases: ['repeat', 'quote'],
-  description: 'Makes the bot say the message inputted',
+  description: 'The bot will repeat whatever you input',
   usage: '[message]',
   cooldown: 3,
   execute(message, args) {
     const sayMessage = args.join(' ');
     const sayFailure = new Discord.MessageEmbed()
-      .setColor('#FF0000')
+      .setColor('RED')
       .setDescription(`You need the <@&520950339013312522> role to use this command.`)
       .setTimestamp()
       .setFooter('Bot by xMdb#7897');

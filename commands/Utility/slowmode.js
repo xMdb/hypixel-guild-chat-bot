@@ -17,7 +17,7 @@ module.exports = {
         }
         const slowmodeSec = args.join(' ');
         const slowmodeFailure = new Discord.MessageEmbed()
-            .setColor('#FF0000')
+            .setColor('RED')
             .setDescription(`You don't have permission to use this command.`)
             .setTimestamp()
             .setFooter('Bot by xMdb#7897');

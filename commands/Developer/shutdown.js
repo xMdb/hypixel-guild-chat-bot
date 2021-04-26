@@ -9,12 +9,12 @@ module.exports = {
     description: 'Shuts down the bot',
     execute(message, args) {
         const shutdownsuccess = new Discord.MessageEmbed()
-            .setColor('#FF0000')
+            .setColor('RED')
             .setDescription('Process ended. Please restart the bot manually.')
             .setTimestamp()
             .setFooter('Bot by xMdb#7897');
         const shutdownfail = new Discord.MessageEmbed()
-            .setColor('#FF0000')
+            .setColor('RED')
             .setDescription(`You do not have the correct permissions to use this command.`)
             .setTimestamp()
             .setFooter('Bot by xMdb#7897');

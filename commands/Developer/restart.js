@@ -4,7 +4,7 @@ const config = require('../../config.json');
 
 module.exports = {
   name: 'restart',
-  alias: ['reboot'],
+  aliases: ['reboot'],
   description: 'Restarts the bot',
   execute(message, args) {
     const restartsuccess = new Discord.MessageEmbed()
@@ -13,7 +13,7 @@ module.exports = {
       .setTimestamp()
       .setFooter('Bot by xMdb#7897');
     const restartfail = new Discord.MessageEmbed()
-      .setColor('#FF0000')
+      .setColor('RED')
       .setDescription(`${message.author}, you do not have the correct permissions to use this command.`)
       .setTimestamp()
       .setFooter('Bot by xMdb#7897');

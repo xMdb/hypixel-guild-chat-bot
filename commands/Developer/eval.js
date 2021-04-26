@@ -45,7 +45,7 @@ module.exports = {
 
       const longRequestEmbed = new Discord.MessageEmbed()
         .setTitle('Evaluate - Result Too Long  📜')
-        .setColor('YELLOW')
+        .setColor('#3F51B5')
         .setDescription(`Generating Hastebin link!`)
         .setTimestamp()
         .setFooter(`Execution time: ${end - start}ms`, message.author.displayAvatarURL());
@@ -64,7 +64,7 @@ module.exports = {
 
       const evalEmbed = new Discord.MessageEmbed()
         .setTitle('Evaluate - Completed  ✅')
-        .setColor('GREEN')
+        .setColor('#3A783F')
         .addFields({
           name: `Input`,
           value: `\`\`\`js\n${code}\`\`\``
@@ -85,11 +85,11 @@ module.exports = {
         .setTitle('Evaluate - Error  ❌')
         .setColor('RED')
         .addFields({
-          name: `Input`,
+          name: `Input 📥`,
           value: `\`\`\`js\n${code}\`\`\``
         })
         .addFields({
-          name: `Output`,
+          name: `Output 📤`,
           value: `\`\`\`fix\n${clean(error)}\`\`\``
         })
         .setTimestamp()
