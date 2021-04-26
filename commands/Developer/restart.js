@@ -1,9 +1,10 @@
 const Discord = require('discord.js');
 require('discord-reply');
-const config = require('../config.json');
+const config = require('../../config.json');
 
 module.exports = {
   name: 'restart',
+  alias: ['reboot'],
   description: 'Restarts the bot',
   execute(message, args) {
     const restartsuccess = new Discord.MessageEmbed()

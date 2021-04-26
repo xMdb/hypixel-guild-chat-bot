@@ -1,10 +1,11 @@
 const nc = require('node-cmd');
 const Discord = require('discord.js');
 require('discord-reply');
-const config = require('../config.json');
+const config = require('../../config.json');
 
 module.exports = {
     name: 'shutdown',
+    aliases: ['kys', 'kill'],
     description: 'Shuts down the bot',
     execute(message, args) {
         const shutdownsuccess = new Discord.MessageEmbed()

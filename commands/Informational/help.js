@@ -1,10 +1,11 @@
 const Discord = require('discord.js');
 require('discord-reply');
-const config = require('../config.json');
+const config = require('../../config.json');
 
 module.exports = {
   name: 'help',
-  description: 'Displays useless information',
+  description: 'Displays information about the bot',
+  cooldown: 3,
   execute(message, args) {
     const helpcmd = new Discord.MessageEmbed()
       .setTitle('Hello!')

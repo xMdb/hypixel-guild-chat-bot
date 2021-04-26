@@ -1,12 +1,14 @@
 const Discord = require('discord.js');
 require('discord-reply');
 const bot = new Discord.Client();
-const config = require('../config.json');
+const config = require('../../config.json');
 const hastebin = require('hastebin');
 
 module.exports = {
   name: 'eval',
+  aliases: ['evaluate', 'run', 'e'],
   description: 'Evaluates JS code',
+  cooldown: 3,
   execute(message, args) {
     let start = Date.now();
 
@@ -96,4 +98,4 @@ module.exports = {
       message.react(`❌`);
     }
   }
-}
+};

@@ -2,7 +2,8 @@ const Discord = require('discord.js');
 
 module.exports = {
     name: 'uptime',
-    description: 'Shows bot uptime',
+    description: 'Displays the current uptime of the bot',
+    cooldown: 5,
     execute(message, args) {
 
         let days = Math.floor(process.uptime() / 86400);

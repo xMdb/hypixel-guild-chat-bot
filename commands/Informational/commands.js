@@ -1,9 +1,11 @@
 const Discord = require('discord.js');
-const config = require('../config.json');
+const config = require('../../config.json');
 
 module.exports = {
   name: 'commands',
-  description: 'Displays useful information',
+  aliases: ['cmds', 'cmd', 'cmdhelp'],
+  description: 'Shows a list of commands',
+  cooldown: 3,
   execute(message, args) {
     const cmdlist = new Discord.MessageEmbed()
       .setTitle('Current Command List')

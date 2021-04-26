@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 module.exports = {
   name: 'ping',
   description: 'To ping or to pong?',
+  cooldown: 1,
   execute(message, args) {
     message.channel.send(':ping_pong:').then(async (msg) => {
       msg.delete();

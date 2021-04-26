@@ -16,11 +16,15 @@ const config = require('./config.json');
 
 
 // Startup of Discord bot
+bot.cooldowns = new Discord.Collection();
 bot.commands = new Discord.Collection();
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-for (const file of commandFiles) {
-  const command = require(`./commands/${file}`);
-  bot.commands.set(command.name, command);
+const commandFolders = fs.readdirSync('./commands');
+for (const folder of commandFolders) {
+  const commandFiles = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'));
+  for (const file of commandFiles) {
+    const command = require(`./commands/${folder}/${file}`);
+    bot.commands.set(command.name, command);
+  }
 }
 
 const listeningTo = [
@@ -39,7 +43,7 @@ const listeningTo = [
 ];
 
 bot.on('ready', () => {
-  console.log(chalk.bgGreen('Success! Discord bot is now online.'));
+  console.log(chalk.greenBright('Success! Discord bot is now online.'));
   bot.user.setStatus('online');
   setInterval(() => {
     const statusIndex = Math.floor(Math.random() * (listeningTo.length - 1) + 1);
@@ -50,11 +54,11 @@ bot.on('ready', () => {
 });
 
 bot.on('guildCreate', guild => {
-  console.log(chalk.bgGreen(`New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`));
+  console.log(chalk.greenBright(`New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`));
 });
 
 bot.on('guildDelete', guild => {
-  console.log(chalk.bgGreen(`Bot removed from: ${guild.name} (id: ${guild.id})`));
+  console.log(chalk.greenBright(`Bot removed from: ${guild.name} (id: ${guild.id})`));
 });
 
 // Startup of Minecraft bot
@@ -72,10 +76,10 @@ function spawnBot() {
   // Send to Limbo on login (source: https://github.com/mew/discord-hypixel-bridge)
   minebot.on('login', async () => {
     setTimeout(() => {
-      console.log(chalk.bgGreen('Logged in.'));
+      console.log(chalk.greenBright('Logged in.'));
       minebot.chat('/ac \u00a7c<3');
     }, 5000);
-    console.log(chalk.bgGreen('Successfully joined Hypixel.'));
+    console.log(chalk.greenBright('Successfully joined Hypixel.'));
   });
 
   // Display chat in console and send to Limbo again if kicked or something (source: https://github.com/mew/discord-hypixel-bridge)
@@ -83,7 +87,7 @@ function spawnBot() {
     console.log(chatMsg.toAnsi());
     const msg = chatMsg.toString();
     if (msg.endsWith(' joined the lobby!') && msg.includes('[MVP+')) {
-      console.log(chalk.bgRed('Lobby detected: Sending to Limbo.'));
+      console.log(chalk.redBright('Lobby detected: Sending to Limbo.'));
       minebot.chat('/ac \u00a7ca');
     }
   });
@@ -194,29 +198,29 @@ function spawnBot() {
 
   // Minebot error handling
   minebot.on('error', (error) => {
-    console.log("Error event fired.");
-    console.log(error);
+    console.log(chalk.redBright("Error event fired."));
+    console.error(error);
     bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**Minebot: Error** \`\`\`${error}\`\`\``);
-    console.log(chalk.bgRed("Restarting in 5 seconds."));
+    console.log(chalk.redBright("Restarting in 5 seconds."));
     setTimeout(() => {
       process.exit(1);
     }, 5000);
   });
 
   minebot.on('end', (error) => {
-    console.log("End event fired.");
-    console.log(error);
-    console.log(chalk.bgRed("Restarting in 10 seconds."));
+    console.log(chalk.redBright("End event fired."));
+    console.error(error);
+    console.log(chalk.redBright("Restarting in 10 seconds."));
     setTimeout(() => {
       process.exit(1);
     }, 10000);
   });
 
   minebot.on('kicked', (reason) => {
-    console.log(chalk.bgRed("The bot was kicked."));
-    console.log(reason);
+    console.log(chalk.redBright("The bot was kicked."));
+    console.error(reason);
     bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**The bot was kicked. Reason:** \`\`\`${reason}\`\`\``);
-    console.log(chalk.bgRed("Restarting in 5 seconds."));
+    console.log(chalk.redBright("Restarting in 5 seconds."));
     setTimeout(() => {
       process.exit(1);
     }, 5000);
@@ -230,20 +234,50 @@ setTimeout(() => {
 // Discord bot stuff
 bot.on('message', async message => {
   const args = message.content.slice(config.prefix.length).trim().split(/ +/);
-  const command = args.shift().toLowerCase();
-  if (message.author.bot) return;
-  if (!message.content.startsWith(config.prefix)) return;
+  const commandName = args.shift().toLowerCase();
+  if (message.author.bot || !message.content.startsWith(config.prefix)) return;
   if (message.content.includes(process.env.BOT_TOKEN)) {
     message.replace(bot.token, 'undefined');
   }
+  if (message.channel.type === 'dm') {
+    return message.reply('I can\'t execute that command inside DMs!');
+  }
+  const command = bot.commands.get(commandName) ||
+    bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
-  if (!bot.commands.has(command)) return;
+  if (!command) return;
+  const {
+    cooldowns
+  } = bot;
+
+  if (!cooldowns.has(command.name)) {
+    cooldowns.set(command.name, new Discord.Collection());
+  }
+
+  const now = Date.now();
+  const timestamps = cooldowns.get(command.name);
+  const cooldownAmount = (command.cooldown || 3) * 1000;
+
+  if (timestamps.has(message.author.id)) {
+    const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
+
+    if (now < expirationTime && message.author.id !== config.ownerID) {
+      const timeLeft = (expirationTime - now) / 1000;
+      const cooldownEmbed = new Discord.MessageEmbed()
+        .setTitle(`Woah! Slow down!`)
+        .setColor(`#3f51b5`)
+        .setDescription(`You\'ll be able to use this command again in **${timeLeft.toFixed(1)} second(s)**`);
+      return message.channel.send(cooldownEmbed);
+    }
+  }
+  timestamps.set(message.author.id, now);
+  setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
   try {
-    bot.commands.get(command).execute(message, args);
-  } catch (error) {
-    console.error(error);
+    await command.execute(message, args);
+  } catch (err) {
+    console.log(err);
     message.lineReply('There was an error while trying to execute that command! Check the console log for more details.');
-    bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**General command error:** \`\`\`${error}\`\`\``);
+    bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**General command error:** \`\`\`${err}\`\`\``);
   }
 });
 
