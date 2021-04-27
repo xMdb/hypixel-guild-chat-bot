@@ -3,7 +3,6 @@ const Discord = require('discord.js');
 require('discord-reply');
 const config = require('../../config.json');
 const chalk = require('chalk');
-const footer = (`Bot by xMdb#7897`, message.author.displayAvatarURL())
 
 module.exports = {
     name: 'reload',
@@ -17,7 +16,7 @@ module.exports = {
             .setColor('RED')
             .setDescription(`You do not have the correct permissions to use this command.`)
             .setTimestamp()
-            .setFooter(footer);
+            .setFooter(`Bot by xMdb#7897`, message.author.displayAvatarURL());
         if (message.author.id !== config.ownerID) {
             return message.lineReply(noPerms);
         }
@@ -25,7 +24,7 @@ module.exports = {
             .setColor('RED')
             .setDescription(`Please input a command to reload.`)
             .setTimestamp()
-            .setFooter(footer);
+            .setFooter(`Bot by xMdb#7897`, message.author.displayAvatarURL());
         if (!args.length) {
             return message.lineReply(noArgs);
         }
@@ -36,7 +35,7 @@ module.exports = {
             .setColor('RED')
             .setDescription(`Sorry, the command **${commandName}** was not found.`)
             .setTimestamp()
-            .setFooter(footer);
+            .setFooter(`Bot by xMdb#7897`, message.author.displayAvatarURL());
         if (!command) return message.lineReply(noCmd);
         const commandFolders = fs.readdirSync('./commands');
         const folderName = commandFolders.find(folder => fs.readdirSync(`./commands/${folder}`).includes(`${commandName}.js`));
@@ -49,7 +48,7 @@ module.exports = {
                 .setColor('#3A783F')
                 .setDescription(`The command **${commandName}** was successfully reloaded!`)
                 .setTimestamp()
-                .setFooter(footer);
+                .setFooter(`Bot by xMdb#7897`, message.author.displayAvatarURL());
             message.lineReply(reloadSuccess);
             console.log(chalk.yellowBright(`${commandName} was reloaded.`));
         } catch (error) {
@@ -58,7 +57,7 @@ module.exports = {
                 .setColor('RED')
                 .setDescription(`There was an error while reloading the command **${commandName}**.\n\`\`\`${error}\`\`\``)
                 .setTimestamp()
-                .setFooter(footer);
+                .setFooter(`Bot by xMdb#7897`, message.author.displayAvatarURL());
             console.error(error);
             message.lineReply(reloadFailure);
         }

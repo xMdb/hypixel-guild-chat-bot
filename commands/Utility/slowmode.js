@@ -36,7 +36,7 @@ module.exports = {
             message.lineReply(slowmodeFailure);
         } else {
             const slowmodeSuccess = new Discord.MessageEmbed()
-                .setColor('RED')
+                .setColor('#3A783F')
                 .setDescription(`Success! The slowmode in this channel is now set to **${slowmodeSec}** seconds!`)
                 .setTimestamp()
                 .setFooter(footer);
