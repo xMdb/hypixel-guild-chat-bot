@@ -1,3 +1,30 @@
+/*
+
+
+ __    __  __    __         ______   __    __        ________   ______   _______  
+|  \  |  \|  \  /  \       /      \ |  \  |  \      |        \ /      \ |       \ 
+| $$  | $$| $$ /  $$      |  $$$$$$\| $$\ | $$       \$$$$$$$$|  $$$$$$\| $$$$$$$\
+| $$__| $$| $$/  $$       | $$  | $$| $$$\| $$         | $$   | $$  | $$| $$__/ $$
+| $$    $$| $$  $$        | $$  | $$| $$$$\ $$         | $$   | $$  | $$| $$    $$
+| $$$$$$$$| $$$$$\        | $$  | $$| $$\$$ $$         | $$   | $$  | $$| $$$$$$$ 
+| $$  | $$| $$ \$$\       | $$__/ $$| $$ \$$$$         | $$   | $$__/ $$| $$      
+| $$  | $$| $$  \$$\       \$$    $$| $$  \$$$         | $$    \$$    $$| $$      
+ \$$   \$$ \$$   \$$        \$$$$$$  \$$   \$$          \$$     \$$$$$$  \$$      
+                                                                                  
+                                                                                  
+                                                                                     
+- Discord bot used to connect Minecraft chat to Discord and vice versa by xMdb!
+
+- This is mainly for the Hypixel Knights Discord server, 
+  but you can also easily adapt the code to work in your own server,
+  or use it in your own project (mind the GPL-3.0 License).
+
+- Read more about this bot in the README.md!                                         */
+
+
+
+// ██████ Integrations █████████████████████████████████████████████████████████
+
 require('dotenv').config();
 const fs = require('fs');
 const readline = require("readline");
@@ -14,8 +41,8 @@ const bot = new Discord.Client({
 const mineflayer = require('mineflayer');
 const config = require('./config.json');
 
+// ██████ Discord Bot: Initialization ██████████████████████████████████████████
 
-// Startup of Discord bot
 bot.cooldowns = new Discord.Collection();
 bot.commands = new Discord.Collection();
 const commandFolders = fs.readdirSync('./commands');
@@ -61,7 +88,8 @@ bot.on('guildDelete', guild => {
   console.log(chalk.greenBright(`Bot removed from: ${guild.name} (id: ${guild.id})`));
 });
 
-// Startup of Minecraft bot
+// ██████ Minecraft Bot: Initialization ████████████████████████████████████████
+
 function spawnBot() {
   const minebot = mineflayer.createBot({
     host: 'hypixel.net',
@@ -73,7 +101,8 @@ function spawnBot() {
     interval: 5000
   });
 
-  // Send to Limbo on login (source: https://github.com/mew/discord-hypixel-bridge)
+  // ██████ Minecraft Bot: Handler ██████████████████████████████████████████████
+  // —— Send to Limbo on login (source: https://github.com/mew/discord-hypixel-bridge)
   minebot.on('login', async () => {
     setTimeout(() => {
       console.log(chalk.greenBright('Logged in.'));
@@ -82,7 +111,9 @@ function spawnBot() {
     console.log(chalk.greenBright('Successfully joined Hypixel.'));
   });
 
-  // Display chat in console and send to Limbo again if kicked or something (source: https://github.com/mew/discord-hypixel-bridge)
+
+  // ██████ Console -> Minecraft ███████████████████████████████████████████████
+  // —— (source: https://github.com/mew/discord-hypixel-bridge)
   minebot.on('message', (chatMsg) => {
     console.log(chatMsg.toAnsi());
     const msg = chatMsg.toString();
@@ -92,56 +123,56 @@ function spawnBot() {
     }
   });
 
-  // Console to in-game
   rl.on('line', (input) => {
     minebot.chat(input);
   });
 
-  // Bot reconnection message
+  // —— Bot reconnection message
   setTimeout(() => {
     minebot.chat('/g online');
     bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<:yes:829640052531134464> Bot has reconnected to Discord.`);
   }, 10000);
 
-  // Mineflayer chat patterns
+  // ██████ Minecraft Bot: Chat Patterns ███████████████████████████████████████
 
-  // Guild chat pattern
+  // —— Guild chat pattern
   minebot.chatAddPattern(
     /^Guild > (\[.*\]\s*)?([\w\d]{2,17}).*?(\[.{1,15}\])?: (.*)$/i, 'guildChat', 'Guild chat event'
   );
 
-  // On guild member join/leave Hypixel
+  // —— On guild member join/leave Hypixel
   minebot.chatAddPattern(
     /^Guild > ([\w\d]{2,17}).*? (joined.|left.)*$/i, 'memberJoinLeave', 'Join leave event'
   );
 
-  // Get online guild members
+  // —— Get online guild members
   minebot.chatAddPattern(
     /^Online Members: (.+)$/i, 'getNumOfOnline', 'Number of online members'
   );
 
-  // On new guild member
+  // —— On new guild member
   minebot.chatAddPattern(
     /^(\[.*\]\s*)?([\w\d]{2,17}).*? joined the guild!$/i, 'newGuildMember', 'New guild member joins'
   );
 
-  // On member leave guild
+  // —— On member leave guild
   minebot.chatAddPattern(
     /^(\[.*\]\s*)?([\w\d]{2,17}).*? left the guild!$/i, 'byeGuildMember', 'Member leaves the guild'
   );
 
-  // On member kicked
+  // —— On member kicked
   minebot.chatAddPattern(
     /^(\[.*\]\s*)?([\w\d]{2,17}).*? was kicked by (\[.*\]\s*)?([\w\d]{2,17}).*?!$/i, 'kickedGuildMember', 'Member gets the boot'
   );
 
-  // Bot reconnection log to Discord (source: https://github.com/Myzumi/Guild-Bot)
+  // —— Bot reconnection log to Discord (source: https://github.com/Myzumi/Guild-Bot)
   minebot.on('getNumOfOnline', (numOfOnline) => {
     let numOfTrueOnline = numOfOnline - 1;
     bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`:information_source: Bot has reconnected to Hypixel. There are **${numOfTrueOnline}** other members online.`);
   });
 
-  // In-game to Discord
+  // ██████ Minecraft -> Discord ███████████████████████████████████████████████
+
   minebot.on('guildChat', (rank, playername, grank, message) => {
     if (playername === minebot.username) return;
     if (rank == undefined) {
@@ -150,7 +181,7 @@ function spawnBot() {
     bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:MC:829592987616804867> **${rank}${playername}: ${message}**`);
   });
 
-  // Other messages to Discord
+  // —— Other types of messages -> Discord
   minebot.on('memberJoinLeave', (playername, joinleave) => {
     if (playername === minebot.username) return;
     bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<:hypixel:829640659542867969> **${playername} ${joinleave}**`);
@@ -177,10 +208,11 @@ function spawnBot() {
     bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:leave:830746292186775592> ${rank1}${playername1} was kicked by ${rank2}${playername2}!`);
   });
 
-  // Discord to in-game
+  // ██████ Discord -> Minecraft ███████████████████████████████████████████████
+
   bot.on('message', message => {
     if (message.author.id === bot.user.id) return;
-    // Source: https://github.com/mew/discord-hypixel-bridge
+    // —— Source: https://github.com/mew/discord-hypixel-bridge
     if (message.channel.id !== config.gchatID || message.author.bot || message.content.startsWith(config.prefix)) return;
     minebot.chat(`/gc ${message.author.username} > ${message.content}`);
     bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<:discord:829596398822883368> **${message.author.username}: ${message.content}**`);
@@ -196,7 +228,8 @@ function spawnBot() {
     });
   });
 
-  // Minebot error handling
+  // ██████ Minecraft Bot: Error Handler ███████████████████████████████████████
+
   minebot.on('error', (error) => {
     console.log(chalk.redBright("Error event fired."));
     console.error(error);
@@ -227,40 +260,41 @@ function spawnBot() {
   });
 }
 
+// —— Login the Minecraft bot
 setTimeout(() => {
   spawnBot();
 }, 5000);
 
-// Discord bot stuff
+// ██████ Discord Bot: Command Handler █████████████████████████████████████████
+
 bot.on('message', async message => {
   const args = message.content.slice(config.prefix.length).trim().split(/ +/);
   const commandName = args.shift().toLowerCase();
   if (message.author.bot || !message.content.startsWith(config.prefix)) return;
+  // —— Another token leak prevention method
   if (message.content.includes(process.env.BOT_TOKEN)) {
     message.replace(bot.token, 'undefined');
   }
+  // —— Deny command execution in commands
   if (message.channel.type === 'dm') {
     return message.reply('I can\'t execute that command inside DMs!');
   }
   const command = bot.commands.get(commandName) ||
     bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
+  // —— Discord command cooldowns
   if (!command) return;
   const {
     cooldowns
   } = bot;
-
   if (!cooldowns.has(command.name)) {
     cooldowns.set(command.name, new Discord.Collection());
   }
-
   const now = Date.now();
   const timestamps = cooldowns.get(command.name);
   const cooldownAmount = (command.cooldown || 3) * 1000;
-
   if (timestamps.has(message.author.id)) {
     const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
-
     if (now < expirationTime && message.author.id !== config.ownerID) {
       const timeLeft = (expirationTime - now) / 1000;
       const cooldownEmbed = new Discord.MessageEmbed()
@@ -272,13 +306,16 @@ bot.on('message', async message => {
   }
   timestamps.set(message.author.id, now);
   setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+
+  // —— Execute command and throw an error if anything breaks
   try {
     await command.execute(message, args);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     message.lineReply('There was an error while trying to execute that command! Check the console log for more details.');
     bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**General command error:** \`\`\`${err}\`\`\``);
   }
 });
 
+// —— Login the bot
 bot.login(process.env.BOT_TOKEN);
