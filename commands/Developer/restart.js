@@ -4,7 +4,7 @@ const config = require('../../config.json');
 
 module.exports = {
   name: 'restart',
-  aliases: ['reboot'],
+  aliases: ['reboot', 'rs'],
   description: 'Restarts the bot',
   execute(message, args) {
     const restartsuccess = new Discord.MessageEmbed()

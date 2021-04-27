@@ -93,7 +93,7 @@ module.exports = {
           value: `\`\`\`fix\n${clean(error)}\`\`\``
         })
         .setTimestamp()
-        .setFooter(`Executed by ${message.author.username}#${message.author.discriminator}`, message.author.displayAvatarURL);
+        .setFooter(`Executed by ${message.author.username}#${message.author.discriminator}`, message.author.displayAvatarURL());
       message.channel.send(errorEmbed);
       message.react(`❌`);
     }
