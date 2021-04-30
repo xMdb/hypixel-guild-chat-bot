@@ -165,6 +165,11 @@ function spawnBot() {
     /^(\[.*\]\s*)?([\w\d]{2,17}).*? was kicked from the guild by (\[.*\]\s*)?([\w\d]{2,17}).*?!$/i, 'kickedGuildMember', 'Member gets the boot'
   );
 
+  // —— On member rank change
+  minebot.chatAddPattern(
+    /^(\[.*\]\s*)?([\w\d]{2,17}).*? was (promoted|demoted)* from (.*) to (.*)$/i, 'changeRankGuildMember', 'Member promoted or demoted'
+  );
+
   // —— Bot reconnection log to Discord (source: https://github.com/Myzumi/Guild-Bot)
   minebot.on('getNumOfOnline', (numOfOnline) => {
     let numOfTrueOnline = numOfOnline - 1;
@@ -203,9 +208,16 @@ function spawnBot() {
 
   minebot.on('kickedGuildMember', (rank1, playername1, rank2, playername2) => {
     if (rank1 == undefined) {
-      return bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:leave:830746292186775592> ${playername1} was kicked by ${rank2}${playername2}!`);
+      return bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:leave:830746292186775592> ${playername1} was kicked by ${rank2}${playername2}! RIP!`);
     }
-    bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:leave:830746292186775592> ${rank1}${playername1} was kicked by ${rank2}${playername2}!`);
+    bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:leave:830746292186775592> ${rank1}${playername1} was kicked by ${rank2}${playername2}! RIP!`);
+  });
+
+  minebot.on('changeRankGuildMember', (rank, playername, grankChangeType, grank1, grank2) => {
+    if (rank == undefined) {
+      return bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:rankChange:837570909065314375> ${playername} has been ${grankChangeType} from ${grank1} to ${grank2}.`);
+    }
+    bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:rankChange:837570909065314375> ${rank}${playername} has been ${grankChangeType} from ${grank1} to ${grank2}.`);
   });
 
   // ██████ Discord -> Minecraft ███████████████████████████████████████████████
