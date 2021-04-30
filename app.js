@@ -92,11 +92,13 @@ bot.on('guildDelete', guild => {
 
 function spawnBot() {
   const minebot = mineflayer.createBot({
-    host: 'hypixel.net',
     username: process.env.MC_USER,
     password: process.env.MC_PASS,
+    host: 'hypixel.net',
     version: '1.16.4',
     auth: 'microsoft',
+    logErrors: 'true',
+    hideErrors: 'false',
     checkTimeoutInterval: 30000,
     interval: 5000
   });
