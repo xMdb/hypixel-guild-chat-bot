@@ -170,6 +170,11 @@ function spawnBot() {
     /^(\[.*\]\s*)?([\w\d]{2,17}).*? was (promoted|demoted)* from (.*) to (.*)$/i, 'changeRankGuildMember', 'Member promoted or demoted'
   );
 
+  // —— On guild level up
+  minebot.chatAddPattern(
+    /^                   The Guild has reached Level (\d*)!$/i, 'guildLevelUp', 'Guild level up'
+  );
+
   // —— Bot reconnection log to Discord (source: https://github.com/Myzumi/Guild-Bot)
   minebot.on('getNumOfOnline', (numOfOnline) => {
     let numOfTrueOnline = numOfOnline - 1;
@@ -218,6 +223,10 @@ function spawnBot() {
       return bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:rankChange:837570909065314375> ${playername} has been ${grankChangeType} from ${grank1} to ${grank2}.`);
     }
     bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:rankChange:837570909065314375> ${rank}${playername} has been ${grankChangeType} from ${grank1} to ${grank2}.`);
+  });
+
+  minebot.on('guildLevelUp', (level) => {
+    bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:join:830746278680985620> **Yay!** The guild has leveled up to **Level ${level}**!`);
   });
 
   // ██████ Discord -> Minecraft ███████████████████████████████████████████████
