@@ -162,7 +162,7 @@ function spawnBot() {
 
   // —— On member kicked
   minebot.chatAddPattern(
-    /^(\[.*\]\s*)?([\w\d]{2,17}).*? was kicked by (\[.*\]\s*)?([\w\d]{2,17}).*?!$/i, 'kickedGuildMember', 'Member gets the boot'
+    /^(\[.*\]\s*)?([\w\d]{2,17}).*? was kicked from the guild by (\[.*\]\s*)?([\w\d]{2,17}).*?!$/i, 'kickedGuildMember', 'Member gets the boot'
   );
 
   // —— Bot reconnection log to Discord (source: https://github.com/Myzumi/Guild-Bot)
