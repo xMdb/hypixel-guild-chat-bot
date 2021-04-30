@@ -174,6 +174,11 @@ function spawnBot() {
   minebot.chatAddPattern(
     /^                   The Guild has reached Level (\d*)!$/i, 'guildLevelUp', 'Guild level up'
   );
+  
+  // —— On guild quest tier complete
+  minebot.chatAddPattern(
+    /^    The guild has completed Tier (\d*) of this week's Guild Quest!$/i, 'guildTierComplete', 'Guild quest tier complete'
+  );
 
   // —— Bot reconnection log to Discord (source: https://github.com/Myzumi/Guild-Bot)
   minebot.on('getNumOfOnline', (numOfOnline) => {
@@ -227,6 +232,10 @@ function spawnBot() {
 
   minebot.on('guildLevelUp', (level) => {
     bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:join:830746278680985620> **Yay!** The guild has leveled up to **Level ${level}**!`);
+  });
+  
+  minebot.on('guildTierComplete', (tier) => {
+    bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:join:830746278680985620> **Yay!** The guild has completed **Tier ${tier}** of **this week's Guild Quest**!`);
   });
 
   // ██████ Discord -> Minecraft ███████████████████████████████████████████████
