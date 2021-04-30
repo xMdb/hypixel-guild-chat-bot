@@ -1,25 +1,25 @@
 /*
 
 
- __    __  __    __         ______   __    __        ________   ______   _______  
-|  \  |  \|  \  /  \       /      \ |  \  |  \      |        \ /      \ |       \ 
-| $$  | $$| $$ /  $$      |  $$$$$$\| $$\ | $$       \$$$$$$$$|  $$$$$$\| $$$$$$$\
-| $$__| $$| $$/  $$       | $$  | $$| $$$\| $$         | $$   | $$  | $$| $$__/ $$
-| $$    $$| $$  $$        | $$  | $$| $$$$\ $$         | $$   | $$  | $$| $$    $$
-| $$$$$$$$| $$$$$\        | $$  | $$| $$\$$ $$         | $$   | $$  | $$| $$$$$$$ 
-| $$  | $$| $$ \$$\       | $$__/ $$| $$ \$$$$         | $$   | $$__/ $$| $$      
-| $$  | $$| $$  \$$\       \$$    $$| $$  \$$$         | $$    \$$    $$| $$      
- \$$   \$$ \$$   \$$        \$$$$$$  \$$   \$$          \$$     \$$$$$$  \$$      
+    __    __  __    __         ______   __    __        ________   ______   _______  
+   |  \  |  \|  \  /  \       /      \ |  \  |  \      |        \ /      \ |       \ 
+   | $$  | $$| $$ /  $$      |  $$$$$$\| $$\ | $$       \$$$$$$$$|  $$$$$$\| $$$$$$$\
+   | $$__| $$| $$/  $$       | $$  | $$| $$$\| $$         | $$   | $$  | $$| $$__/ $$
+   | $$    $$| $$  $$        | $$  | $$| $$$$\ $$         | $$   | $$  | $$| $$    $$
+   | $$$$$$$$| $$$$$\        | $$  | $$| $$\$$ $$         | $$   | $$  | $$| $$$$$$$ 
+   | $$  | $$| $$ \$$\       | $$__/ $$| $$ \$$$$         | $$   | $$__/ $$| $$      
+   | $$  | $$| $$  \$$\       \$$    $$| $$  \$$$         | $$    \$$    $$| $$      
+    \$$   \$$ \$$   \$$        \$$$$$$  \$$   \$$          \$$     \$$$$$$  \$$      
                                                                                   
                                                                                   
                                                                                      
-- Discord bot used to connect Minecraft chat to Discord and vice versa by xMdb!
+   - Discord bot used to connect Minecraft chat to Discord and vice versa by xMdb!
 
-- This is mainly for the Hypixel Knights Discord server, 
-  but you can also easily adapt the code to work in your own server,
-  or use it in your own project (mind the GPL-3.0 License).
+   - This is mainly for the Hypixel Knights Discord server, 
+     but you can also easily adapt the code to work in your own server,
+     or use it in your own project (mind the GPL-3.0 License).
 
-- Read more about this bot in the README.md!                                         */
+   - Read more about this bot in the README.md!                                         */
 
 
 
