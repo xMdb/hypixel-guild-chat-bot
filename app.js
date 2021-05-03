@@ -349,9 +349,10 @@ bot.on('message', async message => {
   try {
     await command.execute(message, args);
   } catch (err) {
+    const webhook = new Discord.WebhookClient(process.env.ERROR_WEBHOOK_ID, process.env.ERROR_WEBHOOK_TOKEN);
     console.error(err);
     message.lineReply('There was an error while trying to execute that command! Check the console log for more details.');
-    bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**General command error:** \`\`\`${err}\`\`\``);
+    webhook.send(`**General command error:** \`\`\`${err}\`\`\``);
   }
 });
 
