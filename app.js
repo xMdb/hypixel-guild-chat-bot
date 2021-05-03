@@ -129,10 +129,14 @@ function spawnBot() {
     minebot.chat(input);
   });
 
+  function toDiscordChat(msg) {
+    return bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(msg);
+  }
+
   // —— Bot reconnection message
   setTimeout(() => {
     minebot.chat('/g online');
-    bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<:yes:829640052531134464> Bot has reconnected to Discord.`);
+    toDiscordChat(`<:yes:829640052531134464> Bot has reconnected to Discord.`);
   }, 10000);
 
   // ██████ Minecraft Bot: Chat Patterns ███████████████████████████████████████
@@ -176,7 +180,7 @@ function spawnBot() {
   minebot.chatAddPattern(
     /^                   The Guild has reached Level (\d*)!$/i, 'guildLevelUp', 'Guild level up'
   );
-  
+
   // —— On guild quest tier complete
   minebot.chatAddPattern(
     /^    The guild has completed Tier (\d*) of this week's Guild Quest!$/i, 'guildTierComplete', 'Guild quest tier complete'
@@ -185,7 +189,7 @@ function spawnBot() {
   // —— Bot reconnection log to Discord (source: https://github.com/Myzumi/Guild-Bot)
   minebot.on('getNumOfOnline', (numOfOnline) => {
     let numOfTrueOnline = numOfOnline - 1;
-    bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`:information_source: Bot has reconnected to Hypixel. There are **${numOfTrueOnline}** other members online.`);
+    toDiscordChat(`:information_source: Bot has reconnected to Hypixel. There are **${numOfTrueOnline}** other members online.`);
   });
 
   // ██████ Minecraft -> Discord ███████████████████████████████████████████████
@@ -193,51 +197,51 @@ function spawnBot() {
   minebot.on('guildChat', (rank, playername, grank, message) => {
     if (playername === minebot.username) return;
     if (rank == undefined) {
-      return bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:MC:829592987616804867> **${playername}: ${message}**`);
+      return toDiscordChat(`<a:MC:829592987616804867> **${playername}: ${message}**`);
     }
-    bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:MC:829592987616804867> **${rank}${playername}: ${message}**`);
+    toDiscordChat(`<a:MC:829592987616804867> **${rank}${playername}: ${message}**`);
   });
 
   // —— Other types of messages -> Discord
   minebot.on('memberJoinLeave', (playername, joinleave) => {
     if (playername === minebot.username) return;
-    bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<:hypixel:829640659542867969> **${playername} ${joinleave}**`);
+    toDiscordChat(`<:hypixel:829640659542867969> **${playername} ${joinleave}**`);
   });
 
   minebot.on('newGuildMember', (rank, playername) => {
     if (rank == undefined) {
-      return bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:join:830746278680985620> ${playername} joined the guild!`);
+      return toDiscordChat(`<a:join:830746278680985620> ${playername} joined the guild!`);
     }
-    bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:join:830746278680985620> ${rank}${playername} joined the guild!`);
+    toDiscordChat(`<a:join:830746278680985620> ${rank}${playername} joined the guild!`);
   });
 
   minebot.on('byeGuildMember', (rank, playername) => {
     if (rank == undefined) {
-      return bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:leave:830746292186775592> ${playername} left the guild.`);
+      return toDiscordChat(`<a:leave:830746292186775592> ${playername} left the guild.`);
     }
-    bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:leave:830746292186775592> ${rank}${playername} left the guild.`);
+    toDiscordChat(`<a:leave:830746292186775592> ${rank}${playername} left the guild.`);
   });
 
   minebot.on('kickedGuildMember', (rank1, playername1, rank2, playername2) => {
     if (rank1 == undefined) {
-      return bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:leave:830746292186775592> ${playername1} was kicked by ${rank2}${playername2}! RIP!`);
+      return toDiscordChat(`<a:leave:830746292186775592> ${playername1} was kicked by ${rank2}${playername2}! RIP!`);
     }
-    bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:leave:830746292186775592> ${rank1}${playername1} was kicked by ${rank2}${playername2}! RIP!`);
+    toDiscordChat(`<a:leave:830746292186775592> ${rank1}${playername1} was kicked by ${rank2}${playername2}! RIP!`);
   });
 
   minebot.on('changeRankGuildMember', (rank, playername, grankChangeType, grank1, grank2) => {
     if (rank == undefined) {
-      return bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:rankChange:837570909065314375> ${playername} has been ${grankChangeType} from ${grank1} to ${grank2}.`);
+      return toDiscordChat(`<a:rankChange:837570909065314375> ${playername} has been ${grankChangeType} from ${grank1} to ${grank2}.`);
     }
-    bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:rankChange:837570909065314375> ${rank}${playername} has been ${grankChangeType} from ${grank1} to ${grank2}.`);
+    toDiscordChat(`<a:rankChange:837570909065314375> ${rank}${playername} has been ${grankChangeType} from ${grank1} to ${grank2}.`);
   });
 
   minebot.on('guildLevelUp', (level) => {
-    bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:join:830746278680985620> **Yay!** The guild has leveled up to **Level ${level}**!`);
+    toDiscordChat(`<a:join:830746278680985620> **Yay!** The guild has leveled up to **Level ${level}**!`);
   });
-  
+
   minebot.on('guildTierComplete', (tier) => {
-    bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<a:join:830746278680985620> **Yay!** The guild has completed **Tier ${tier}** of **this week's Guild Quest**!`);
+    toDiscordChat(`<a:join:830746278680985620> **Yay!** The guild has completed **Tier ${tier}** of **this week's Guild Quest**!`);
   });
 
   // ██████ Discord -> Minecraft ███████████████████████████████████████████████
@@ -247,7 +251,7 @@ function spawnBot() {
     // —— Source: https://github.com/mew/discord-hypixel-bridge
     if (message.channel.id !== config.gchatID || message.author.bot || message.content.startsWith(config.prefix)) return;
     minebot.chat(`/gc ${message.author.username} > ${message.content}`);
-    bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(`<:discord:829596398822883368> **${message.author.username}: ${message.content}**`);
+    toDiscordChat(`<:discord:829596398822883368> **${message.author.username}: ${message.content}**`);
     message.delete().catch(error => {
       if (error.code == 10008) {
         console.log(error);
