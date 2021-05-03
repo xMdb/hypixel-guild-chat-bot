@@ -266,10 +266,12 @@ function spawnBot() {
 
   // ██████ Minecraft Bot: Error Handler ███████████████████████████████████████
 
+  const webhook = new Discord.WebhookClient(process.env.ERROR_WEBHOOK_ID, process.env.ERROR_WEBHOOK_TOKEN);
+
   minebot.on('error', (error) => {
     console.log(chalk.redBright("Error event fired."));
     console.error(error);
-    bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**Minebot: Error** \`\`\`${error}\`\`\``);
+    webhook.send(`**Minebot: Error** \`\`\`${error}\`\`\``);
     console.log(chalk.redBright("Restarting in 5 seconds."));
     setTimeout(() => {
       process.exit(1);
@@ -288,7 +290,7 @@ function spawnBot() {
   minebot.on('kicked', (reason) => {
     console.log(chalk.redBright("The bot was kicked."));
     console.error(reason);
-    bot.guilds.cache.get(config.errorLogGuildID).channels.cache.get(config.errorLogChannelID).send(`**The bot was kicked. Reason:** \`\`\`${reason}\`\`\``);
+    webhook.send(`**The bot was kicked. Reason:** \`\`\`${reason}\`\`\``);
     console.log(chalk.redBright("Restarting in 5 seconds."));
     setTimeout(() => {
       process.exit(1);
