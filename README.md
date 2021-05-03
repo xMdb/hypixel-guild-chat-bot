@@ -13,6 +13,8 @@ This is mainly for the Hypixel Knights Discord server, but you can also easily a
 BOT_TOKEN=token goes here
 MC_USER=minecraft email goes here
 MC_PASS=minecraft password goes here
+ERROR_WEBHOOK_ID=create a webhook and get the webhook ID from the url and insert it here (for error logging)
+ERROR_WEBHOOK_TOKEN=create a webhook and get the webhook token from the url and insert it here (for error logging)
 ```
 6. Edit the [config.json](https://github.com/xMdb/hypixel-knights-gchat-bot/blob/main/config.json) values to your own
 7. (REQUIRED) Install pm2 by using `npm install pm2 -g`
