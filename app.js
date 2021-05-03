@@ -142,49 +142,31 @@ function spawnBot() {
   // ██████ Minecraft Bot: Chat Patterns ███████████████████████████████████████
 
   // —— Guild chat pattern
-  minebot.chatAddPattern(
-    /^Guild > (\[.*\]\s*)?([\w\d]{2,17}).*?(\[.{1,15}\])?: (.*)$/i, 'guildChat', 'Guild chat event'
-  );
+  minebot.addChatPattern(/^Guild > (\[.*\]\s*)?([\w\d]{2,17}).*?(\[.{1,15}\])?: (.*)$/i, 'guildChat');
 
   // —— On guild member join/leave Hypixel
-  minebot.chatAddPattern(
-    /^Guild > ([\w\d]{2,17}).*? (joined.|left.)*$/i, 'memberJoinLeave', 'Join leave event'
-  );
+  minebot.chatAddPattern(/^Guild > ([\w\d]{2,17}).*? (joined.|left.)*$/i, 'memberJoinLeave');
 
   // —— Get online guild members
-  minebot.chatAddPattern(
-    /^Online Members: (.+)$/i, 'getNumOfOnline', 'Number of online members'
-  );
+  minebot.chatAddPattern(/^Online Members: (.+)$/i, 'getNumOfOnline');
 
   // —— On new guild member
-  minebot.chatAddPattern(
-    /^(\[.*\]\s*)?([\w\d]{2,17}).*? joined the guild!$/i, 'newGuildMember', 'New guild member joins'
-  );
+  minebot.chatAddPattern(/^(\[.*\]\s*)?([\w\d]{2,17}).*? joined the guild!$/i, 'newGuildMember');
 
   // —— On member leave guild
-  minebot.chatAddPattern(
-    /^(\[.*\]\s*)?([\w\d]{2,17}).*? left the guild!$/i, 'byeGuildMember', 'Member leaves the guild'
-  );
+  minebot.chatAddPattern(/^(\[.*\]\s*)?([\w\d]{2,17}).*? left the guild!$/i, 'byeGuildMember');
 
   // —— On member kicked
-  minebot.chatAddPattern(
-    /^(\[.*\]\s*)?([\w\d]{2,17}).*? was kicked from the guild by (\[.*\]\s*)?([\w\d]{2,17}).*?!$/i, 'kickedGuildMember', 'Member gets the boot'
-  );
+  minebot.chatAddPattern(/^(\[.*\]\s*)?([\w\d]{2,17}).*? was kicked from the guild by (\[.*\]\s*)?([\w\d]{2,17}).*?!$/i, 'kickedGuildMember');
 
   // —— On member rank change
-  minebot.chatAddPattern(
-    /^(\[.*\]\s*)?([\w\d]{2,17}).*? was (promoted|demoted)* from (.*) to (.*)$/i, 'changeRankGuildMember', 'Member promoted or demoted'
-  );
+  minebot.chatAddPattern(/^(\[.*\]\s*)?([\w\d]{2,17}).*? was (promoted|demoted)* from (.*) to (.*)$/i, 'changeRankGuildMember');
 
   // —— On guild level up
-  minebot.chatAddPattern(
-    /^                   The Guild has reached Level (\d*)!$/i, 'guildLevelUp', 'Guild level up'
-  );
+  minebot.chatAddPattern(/^                   The Guild has reached Level (\d*)!$/i, 'guildLevelUp');
 
   // —— On guild quest tier complete
-  minebot.chatAddPattern(
-    /^    The guild has completed Tier (\d*) of this week's Guild Quest!$/i, 'guildTierComplete', 'Guild quest tier complete'
-  );
+  minebot.chatAddPattern(/^    The guild has completed Tier (\d*) of this week's Guild Quest!$/i, 'guildTierComplete');
 
   // —— Bot reconnection log to Discord (source: https://github.com/Myzumi/Guild-Bot)
   minebot.on('getNumOfOnline', (numOfOnline) => {
