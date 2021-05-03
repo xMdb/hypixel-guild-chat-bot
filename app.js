@@ -142,7 +142,7 @@ function spawnBot() {
   // ██████ Minecraft Bot: Chat Patterns ███████████████████████████████████████
 
   // —— Guild chat pattern
-  minebot.addChatPattern(/^Guild > (\[.*\]\s*)?([\w\d]{2,17}).*?(\[.{1,15}\])?: (.*)$/i, 'guildChat');
+  minebot.chatAddPattern(/^Guild > (\[.*\]\s*)?([\w\d]{2,17}).*?(\[.{1,15}\])?: (.*)$/i, 'guildChat');
 
   // —— On guild member join/leave Hypixel
   minebot.chatAddPattern(/^Guild > ([\w\d]{2,17}).*? (joined.|left.)*$/i, 'memberJoinLeave');
