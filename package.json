@@ -4,7 +4,7 @@
     "chalk": "^4.1.1",
     "discord-reply": "^0.1.2",
     "discord.js": "^12.5.3",
-    "dotenv": "^8.2.0",
+    "dotenv": "^9.0.0",
     "hastebin": "^0.2.1",
     "mineflayer": "^3.6.0",
     "node-cmd": "^4.0.0",
@@ -13,6 +13,6 @@
   "optionalDependencies": {
     "bufferutil": "^4.0.3",
     "pm2": "^4.5.6",
-    "utf-8-validate": "^5.0.4"
+    "utf-8-validate": "^5.0.5"
   }
 }
