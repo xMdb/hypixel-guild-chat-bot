@@ -54,10 +54,10 @@ module.exports = {
         hastebin.createPaste(clean(evaled), {
             raw: false,
             contentType: 'text/plain',
-            server: 'https://haste.zneix.eu/'
+            server: 'https://haste.mgrif.xyz'
           })
           .then(url => message.lineReply(`**Result:** ${url}`))
-          .catch(e => console.log(e));
+          .catch(e => console.error(e));
         message.react('<a:discordload:830394342082347058>');
         return;
       }
