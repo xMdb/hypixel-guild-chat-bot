@@ -4,7 +4,7 @@
     "chalk": "^4.1.1",
     "discord-reply": "^0.1.2",
     "discord.js": "^12.5.3",
-    "dotenv": "^9.0.0",
+    "dotenv": "^9.0.2",
     "hastebin": "^0.2.1",
     "mineflayer": "^3.6.0",
     "node-cmd": "^4.0.0",
