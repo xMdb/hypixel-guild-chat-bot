@@ -1,39 +1,57 @@
-# Hypixel Knights Chat Bot
+# Hypixel Guild Chat Bot
 Discord bot used to connect Minecraft chat to Discord and vice versa by xMdb!
 
-## How to Use
-This is mainly for the Hypixel Knights Discord server, but you can also easily adapt the code to work in your own server, or use it in your own project (mind the [GPL-3.0 License](https://github.com/xMdb/hypixel-knights-gchat-bot/blob/main/LICENSE)).
+> This application will login to Hypixel using Mineflayer which is not a normal Minecraft client, this could result in your Minecraft account getting banned from Hypixel, so use this application at your own risk. I am not liable for any damages and no warranty is provided as outlined in GPL-3.0 License.
+
+This application is mainly for the [Hypixel Knights Discord server](https://discord.gg/hk), but you can also easily adapt the code to work in your own server, or use it in your own project.
+
+## Table of Contents
+
+- [Installation](#installation)
+  - [Prerequisites](#prerequisites)
+  - [Setup Guide](#setup-guide)
+- [Acknowledgements](#acknowledgements)
+- [License](#license)
+
+<hr>
+
+## Installation
+
+### Prerequisites
+
+- Git
+- NodeJS >= 16
+- NPM >= 7.13.0
+- A Minecraft account
+
+### Setup Guide
 
 1. Fork and star this repo
-2. Clone it into your own directory
-3. Install the latest version of node.js and the required packages using `npm install`
-4. Make a new Discord bot account on the [Discord Developer Portal](https://discord.com/developers/applications)
-5. Make a .env file in the directory and include the following values:
+2. Clone it into your own directory using 
 ```
-BOT_TOKEN=token goes here
-MC_USER=minecraft email goes here
-MC_PASS=minecraft password goes here
-ERROR_WEBHOOK_ID=create a webhook and get the webhook ID from the url and insert it here (for error logging)
-ERROR_WEBHOOK_TOKEN=create a webhook and get the webhook token from the url and insert it here (for error logging)
+git clone https://github.com/xMdb/hypixel-guild-chat-bot.git
 ```
-6. Edit the [config.json](https://github.com/xMdb/hypixel-knights-gchat-bot/blob/main/config.json) values to your own
+4. Install the required packages using 
+```
+npm install
+```
+6. Make a new Discord bot account on the [Discord Developer Portal](https://discord.com/developers/applications)
+7. Make a .env file in the directory and include the following sensitive values:
+```
+BOT_TOKEN=Bot token from Discord Developer Portal
+MC_USER=Minecraft Account Email
+MC_PASS=Minecraft Account Password
+
+#    The following values are to be found from a Discord webhook URL: 
+#    https://discord.com/api/webhooks/[WEBHOOK ID]/[WEBHOOK TOKEN]/
+#    Then insert both into the following values:
+
+ERROR_WEBHOOK_ID=The webhook ID you would like to use for error logging
+ERROR_WEBHOOK_TOKEN=The webhook token you would like to use for error logging
+```
+6. Edit the [config.json](https://github.com/xMdb/hypixel-knights-gchat-bot/blob/main/config.json) and [status.json](https://github.com/xMdb/hypixel-knights-gchat-bot/blob/main/config.json) values to your own
 7. (REQUIRED) Install pm2 by using `npm install pm2 -g`
 8. Start the bot by using `pm2 start app.js`
-
-## Requirements
-[Node.js v16](https://nodejs.org/en/)
-
-[discordjs/discord.js](https://github.com/discordjs/discord.js)
-
-[angelo2007/discord-reply](https://www.npmjs.com/package/discord-reply)
-
-[motdotla/dotenv](https://github.com/motdotla/dotenv)
-
-[rahatarmanahmed/hastebin](https://github.com/rahatarmanahmed/hastebin)
-
-[PrismarineJS/mineflayer](https://github.com/PrismarineJS/mineflayer)
-
-[RIAEvangelist/node-cmd](https://github.com/RIAEvangelist/node-cmd)
 
 ## Acknowledgements
 Parts of this project are forked from:
@@ -41,3 +59,7 @@ Parts of this project are forked from:
 [mew/discord-hypixel-bridge](https://github.com/mew/discord-hypixel-bridge) under GPL-3.0 License.
 
 [Myzumi/Guild-Bot](https://github.com/Myzumi/Guild-Bot) under Apache-2.0 License.
+
+## License
+
+Hypixel Guild Chat Bot is open-sourced software licensed under the [GPL-3.0 License](https://github.com/xMdb/hypixel-knights-gchat-bot/blob/main/LICENSE).
