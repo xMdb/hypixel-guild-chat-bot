@@ -39,7 +39,9 @@ const bot = new Discord.Client({
   disableMentions: 'everyone'
 });
 const mineflayer = require('mineflayer');
+
 const config = require('./config.json');
+const listeningTo = require("./status.json")
 
 // ██████ Discord Bot: Initialization ██████████████████████████████████████████
 
@@ -53,21 +55,6 @@ for (const folder of commandFolders) {
     bot.commands.set(command.name, command);
   }
 }
-
-const listeningTo = [
-  "Horus Goes Shopping on Spotify",
-  "Hypixel Knights Talent Show Album on repeat",
-  "Hypixel Knights Talent Show Album",
-  "What Makes You Beautiful Cover on Soundcloud",
-  "Demons (Imagine Dragons Cover) on Soundcloud",
-  "hitches and iro dying of laughter on Soundcloud",
-  "505 (Arctic Monkeys Cover) on Soundcloud",
-  "Isabella's Lullaby on Soundcloud",
-  "Hotel Yorba (White Stripes Cover) on Soundcloud",
-  "Mine Diamonds (MCAP Cover) on Soundcloud",
-  "I Miss The Old Meanie on Soundcloud",
-  "Payphone (Maroon 5 Cover) on Soundcloud"
-];
 
 bot.on('ready', () => {
   console.log(chalk.greenBright('Success! Discord bot is now online.'));
