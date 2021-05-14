@@ -33,10 +33,16 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 const chalk = require('chalk');
-const Discord = require('discord.js');
+const Discord = require('discord.js-light');
 require('discord-reply');
 const bot = new Discord.Client({
-  disableMentions: 'everyone'
+  disableMentions: 'everyone',
+  cacheGuilds: true,
+  cacheChannels: true,
+  cacheOverwrites: false,
+  cacheRoles: true,
+  cacheEmojis: true,
+  cachePresences: false
 });
 const mineflayer = require('mineflayer');
 
@@ -99,7 +105,7 @@ function spawnBot() {
   minebot.on('login', async () => {
     setTimeout(() => {
       console.log(chalk.greenBright('Logged in.'));
-      minebot.chat('/ac \u00a7c<3');
+      minebot.chat('/ac \u00a7');
     }, 5000);
     console.log(chalk.greenBright('Successfully joined Hypixel.'));
   });
@@ -112,7 +118,7 @@ function spawnBot() {
     const msg = chatMsg.toString();
     if (msg.endsWith(' joined the lobby!') && msg.includes('[MVP+')) {
       console.log(chalk.redBright('Lobby detected: Sending to Limbo.'));
-      minebot.chat('/ac \u00a7ca');
+      minebot.chat('/ac \u00a7');
     }
   });
 
@@ -208,9 +214,13 @@ function spawnBot() {
   // ██████ Discord -> Minecraft ███████████████████████████████████████████████
 
   bot.on('message', async message => {
-    if (message.author.id === bot.user.id) return;
-    if (message.channel.id !== config.gchatID || message.author.bot || message.content.startsWith(config.prefix)) return;
-    if (message.content === '' || message.content === ' ') return;
+    if (message.author.id === bot.user.id ||
+      message.channel.id !== config.gchatID ||
+      message.author.bot ||
+      message.content.startsWith(config.prefix) ||
+      message.content === '' ||
+      message.content === ' ')
+      return;
     minebot.chat(`/gc ${message.author.username} > ${message.content}`);
     toDiscordChat(`<:discord:829596398822883368> **${message.author.username}: ${message.content}**`);
     message.delete().catch(error => {
