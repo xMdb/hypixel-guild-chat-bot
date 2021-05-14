@@ -3,7 +3,7 @@ Discord bot used to connect Minecraft chat to Discord and vice versa by xMdb!
 
 > This application will login to Hypixel using Mineflayer which is not a normal Minecraft client, this could result in your Minecraft account getting banned from Hypixel, so use this application at your own risk. I am not liable for any damages and no warranty is provided as outlined in GPL-3.0 License.
 
-This application is mainly for the [Hypixel Knights Discord server](https://discord.gg/hk), but you can also easily adapt the code to work in your own server, or use it in your own project.
+This application is mainly for the [Hypixel Knights Discord server](https://discord.gg/kQMNpNw6s5), but you can also easily adapt the code to work in your own server, or use it in your own project.
 
 ## Table of Contents
 
