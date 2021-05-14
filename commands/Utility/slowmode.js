@@ -32,7 +32,7 @@ module.exports = {
             .setDescription(`You don't have permission to use this command.`)
             .setTimestamp()
             .setFooter(footer);
-        if (!message.member.hasPermission('MANAGE_CHANNELS') && !message.author.id === config.ownerID) {
+        if (!message.member.hasPermission('MANAGE_MESSAGES')) {
             message.lineReply(slowmodeFailure);
         } else {
             const slowmodeSuccess = new Discord.MessageEmbed()
