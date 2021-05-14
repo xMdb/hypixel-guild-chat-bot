@@ -20,8 +20,8 @@ This application is mainly for the [Hypixel Knights Discord server](https://disc
 ### Prerequisites
 
 - Git
-- NodeJS >= 16
-- NPM >= 7.13.0
+- NodeJS 16 or later
+- NPM 7.13.0 or later
 - A Minecraft account
 
 ### Setup Guide
@@ -31,25 +31,25 @@ This application is mainly for the [Hypixel Knights Discord server](https://disc
 ```
 git clone https://github.com/xMdb/hypixel-guild-chat-bot.git
 ```
-4. Install the required packages using 
+3. Install the required packages using 
 ```
 npm install
 ```
-6. Make a new Discord bot account on the [Discord Developer Portal](https://discord.com/developers/applications)
-7. Make a .env file in the directory and include the following sensitive values:
+4. Make a new Discord bot account on the [Discord Developer Portal](https://discord.com/developers/applications)
+5. Make a .env file in the directory and include the following sensitive values:
 ```
 BOT_TOKEN=Bot token from Discord Developer Portal
 MC_USER=Minecraft Account Email
 MC_PASS=Minecraft Account Password
 
-#    The following values are to be found from a Discord webhook URL: 
-#    https://discord.com/api/webhooks/[WEBHOOK ID]/[WEBHOOK TOKEN]/
-#    Then insert both into the following values:
+# The following values are to be found from a Discord webhook URL: 
+# https://discord.com/api/webhooks/[WEBHOOK ID]/[WEBHOOK TOKEN]/
+# Then insert both into the following values:
 
 ERROR_WEBHOOK_ID=The webhook ID you would like to use for error logging
 ERROR_WEBHOOK_TOKEN=The webhook token you would like to use for error logging
 ```
-6. Edit the [config.json](https://github.com/xMdb/hypixel-knights-gchat-bot/blob/main/config.json) and [status.json](https://github.com/xMdb/hypixel-knights-gchat-bot/blob/main/config.json) values to your own
+6. Edit the [config.json](https://github.com/xMdb/hypixel-knights-gchat-bot/blob/main/config.json) and [status.json](https://github.com/xMdb/hypixel-knights-gchat-bot/blob/main/status.json) values to your own
 7. (REQUIRED) Install pm2 by using `npm install pm2 -g`
 8. Start the bot by using `pm2 start app.js`
 
