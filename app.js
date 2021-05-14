@@ -209,8 +209,8 @@ function spawnBot() {
 
   bot.on('message', async message => {
     if (message.author.id === bot.user.id) return;
-    // —— Source: https://github.com/mew/discord-hypixel-bridge
     if (message.channel.id !== config.gchatID || message.author.bot || message.content.startsWith(config.prefix)) return;
+    if (message.content === '' || message.content === ' ') return;
     minebot.chat(`/gc ${message.author.username} > ${message.content}`);
     toDiscordChat(`<:discord:829596398822883368> **${message.author.username}: ${message.content}**`);
     message.delete().catch(error => {
