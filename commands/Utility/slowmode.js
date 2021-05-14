@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Discord = require('discord.js-light');
 require('discord-reply');
 const config = require('../../config.json');
 const footer = ('Bot by xMdb#7897')
@@ -32,7 +32,7 @@ module.exports = {
             .setDescription(`You don't have permission to use this command.`)
             .setTimestamp()
             .setFooter(footer);
-        if (!message.member.hasPermission('MANAGE_MESSAGES')) {
+        if (!message.member.hasPermission('MANAGE_CHANNELS') && !message.author.id === config.ownerID) {
             message.lineReply(slowmodeFailure);
         } else {
             const slowmodeSuccess = new Discord.MessageEmbed()

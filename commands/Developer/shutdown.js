@@ -1,5 +1,5 @@
 const nc = require('node-cmd');
-const Discord = require('discord.js');
+const Discord = require('discord.js-light');
 require('discord-reply');
 const config = require('../../config.json');
 

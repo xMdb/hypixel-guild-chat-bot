@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Discord = require('discord.js-light');
 require('discord-reply');
 const bot = new Discord.Client();
 const config = require('../../config.json');
