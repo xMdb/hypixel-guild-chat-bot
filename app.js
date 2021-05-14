@@ -41,7 +41,8 @@ const bot = new Discord.Client({
 const mineflayer = require('mineflayer');
 
 const config = require('./config.json');
-const listeningTo = require("./status.json")
+const statusList = require("./status.json");
+const regex = require('./handlers/regex');
 
 // ██████ Discord Bot: Initialization ██████████████████████████████████████████
 
@@ -58,21 +59,24 @@ for (const folder of commandFolders) {
 
 bot.on('ready', () => {
   console.log(chalk.greenBright('Success! Discord bot is now online.'));
-  bot.user.setStatus('online');
+  bot.user.setStatus('dnd');
+  bot.user.setActivity('the console window... starting up', {
+    type: 'WATCHING'
+  });
   setInterval(() => {
-    const statusIndex = Math.floor(Math.random() * (listeningTo.length - 1) + 1);
-    bot.user.setActivity(listeningTo[statusIndex], {
+    const statusIndex = Math.floor(Math.random() * (statusList.length - 1) + 1);
+    bot.user.setActivity(statusList[statusIndex], {
       type: 'LISTENING'
     });
   }, 60000);
 });
 
 bot.on('guildCreate', guild => {
-  console.log(chalk.greenBright(`New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`));
+  console.log(chalk.greenBright(`New guild joined: \"${guild.name}\" (id: ${guild.id}). This guild has ${guild.memberCount} members!`));
 });
 
 bot.on('guildDelete', guild => {
-  console.log(chalk.greenBright(`Bot removed from: ${guild.name} (id: ${guild.id})`));
+  console.log(chalk.greenBright(`Bot removed from: \"${guild.name}\" (id: ${guild.id})`));
 });
 
 // ██████ Minecraft Bot: Initialization ████████████████████████████████████████
@@ -103,7 +107,7 @@ function spawnBot() {
 
   // ██████ Console -> Minecraft ███████████████████████████████████████████████
   // —— (source: https://github.com/mew/discord-hypixel-bridge)
-  minebot.on('message', (chatMsg) => {
+  minebot.on('message', async (chatMsg) => {
     console.log(chatMsg.toAnsi());
     const msg = chatMsg.toString();
     if (msg.endsWith(' joined the lobby!') && msg.includes('[MVP+')) {
@@ -112,11 +116,11 @@ function spawnBot() {
     }
   });
 
-  rl.on('line', (input) => {
+  rl.on('line', async (input) => {
     minebot.chat(input);
   });
 
-  function toDiscordChat(msg) {
+  async function toDiscordChat(msg) {
     return bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(msg);
   }
 
@@ -128,35 +132,19 @@ function spawnBot() {
 
   // ██████ Minecraft Bot: Chat Patterns ███████████████████████████████████████
 
-  // —— Guild chat pattern
-  minebot.chatAddPattern(/^Guild > (\[.*\]\s*)?([\w\d]{2,17}).*?(\[.{1,15}\])?: (.*)$/i, 'guildChat');
-
-  // —— On guild member join/leave Hypixel
-  minebot.chatAddPattern(/^Guild > ([\w\d]{2,17}).*? (joined.|left.)*$/i, 'memberJoinLeave');
-
-  // —— Get online guild members
-  minebot.chatAddPattern(/^Online Members: (.+)$/i, 'getNumOfOnline');
-
-  // —— On new guild member
-  minebot.chatAddPattern(/^(\[.*\]\s*)?([\w\d]{2,17}).*? joined the guild!$/i, 'newGuildMember');
-
-  // —— On member leave guild
-  minebot.chatAddPattern(/^(\[.*\]\s*)?([\w\d]{2,17}).*? left the guild!$/i, 'byeGuildMember');
-
-  // —— On member kicked
-  minebot.chatAddPattern(/^(\[.*\]\s*)?([\w\d]{2,17}).*? was kicked from the guild by (\[.*\]\s*)?([\w\d]{2,17}).*?!$/i, 'kickedGuildMember');
-
-  // —— On member rank change
-  minebot.chatAddPattern(/^(\[.*\]\s*)?([\w\d]{2,17}).*? was (promoted|demoted)* from (.*) to (.*)$/i, 'changeRankGuildMember');
-
-  // —— On guild level up
-  minebot.chatAddPattern(/^                   The Guild has reached Level (\d*)!$/i, 'guildLevelUp');
-
-  // —— On guild quest tier complete
-  minebot.chatAddPattern(/^    The guild has completed Tier (\d*) of this week's Guild Quest!$/i, 'guildTierComplete');
+  minebot.chatAddPattern(regex.guildChat, 'guildChat');
+  minebot.chatAddPattern(regex.joinLeave, 'joinLeave');
+  minebot.chatAddPattern(regex.getOnline, 'getOnline');
+  minebot.chatAddPattern(regex.newMember, 'newMember');
+  minebot.chatAddPattern(regex.memberLeave, 'memberLeave');
+  minebot.chatAddPattern(regex.memberKicked, 'memberKicked');
+  minebot.chatAddPattern(regex.promotedDemoted, 'promotedDemoted');
+  minebot.chatAddPattern(regex.guildLevelUp, 'guildLevelUp');
+  minebot.chatAddPattern(regex.questTierComplete, 'questTierComplete');
+  // minebot.chatAddPattern(regex.questComplete, 'questComplete');
 
   // —— Bot reconnection log to Discord (source: https://github.com/Myzumi/Guild-Bot)
-  minebot.on('getNumOfOnline', (numOfOnline) => {
+  minebot.on('getOnline', (numOfOnline) => {
     let numOfTrueOnline = numOfOnline - 1;
     toDiscordChat(`:information_source: Bot has reconnected to Hypixel. There are **${numOfTrueOnline}** other members online.`);
   });
@@ -172,33 +160,33 @@ function spawnBot() {
   });
 
   // —— Other types of messages -> Discord
-  minebot.on('memberJoinLeave', (playername, joinleave) => {
+  minebot.on('joinLeave', (playername, joinleave) => {
     if (playername === minebot.username) return;
     toDiscordChat(`<:hypixel:829640659542867969> **${playername} ${joinleave}**`);
   });
 
-  minebot.on('newGuildMember', (rank, playername) => {
+  minebot.on('newMember', (rank, playername) => {
     if (rank == undefined) {
       return toDiscordChat(`<a:join:830746278680985620> ${playername} joined the guild!`);
     }
     toDiscordChat(`<a:join:830746278680985620> ${rank}${playername} joined the guild!`);
   });
 
-  minebot.on('byeGuildMember', (rank, playername) => {
+  minebot.on('memberLeave', (rank, playername) => {
     if (rank == undefined) {
       return toDiscordChat(`<a:leave:830746292186775592> ${playername} left the guild.`);
     }
     toDiscordChat(`<a:leave:830746292186775592> ${rank}${playername} left the guild.`);
   });
 
-  minebot.on('kickedGuildMember', (rank1, playername1, rank2, playername2) => {
+  minebot.on('memberKicked', (rank1, playername1, rank2, playername2) => {
     if (rank1 == undefined) {
       return toDiscordChat(`<a:leave:830746292186775592> ${playername1} was kicked by ${rank2}${playername2}! RIP!`);
     }
     toDiscordChat(`<a:leave:830746292186775592> ${rank1}${playername1} was kicked by ${rank2}${playername2}! RIP!`);
   });
 
-  minebot.on('changeRankGuildMember', (rank, playername, grankChangeType, grank1, grank2) => {
+  minebot.on('promotedDemoted', (rank, playername, grankChangeType, grank1, grank2) => {
     if (rank == undefined) {
       return toDiscordChat(`<a:rankChange:837570909065314375> ${playername} has been ${grankChangeType} from ${grank1} to ${grank2}.`);
     }
@@ -209,13 +197,17 @@ function spawnBot() {
     toDiscordChat(`<a:join:830746278680985620> **Yay!** The guild has leveled up to **Level ${level}**!`);
   });
 
-  minebot.on('guildTierComplete', (tier) => {
+  minebot.on('questTierComplete', (tier) => {
     toDiscordChat(`<a:join:830746278680985620> **Yay!** The guild has completed **Tier ${tier}** of **this week's Guild Quest**!`);
   });
 
+  // minebot.on('questComplete', (tier) => {
+  //   toDiscordChat(`<a:join:830746278680985620> **Yay!** The guild has completed **this week's Guild Quest**!`);
+  // });
+
   // ██████ Discord -> Minecraft ███████████████████████████████████████████████
 
-  bot.on('message', message => {
+  bot.on('message', async message => {
     if (message.author.id === bot.user.id) return;
     // —— Source: https://github.com/mew/discord-hypixel-bridge
     if (message.channel.id !== config.gchatID || message.author.bot || message.content.startsWith(config.prefix)) return;
