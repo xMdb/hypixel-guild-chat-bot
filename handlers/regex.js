@@ -28,6 +28,6 @@ regexStrings.guildLevelUp = /^                   The Guild has reached Level (\d
 regexStrings.questTierComplete = /^    The guild has completed Tier (\d*) of this week's Guild Quest!$/i;
 
 // —— On guild quest complete
-regexStrings.questComplete = {};
+regexStrings.questComplete = /^           The guild has completed this week's Guild Quest!$/i;
 
 module.exports = regexStrings;

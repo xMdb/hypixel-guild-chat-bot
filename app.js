@@ -27,7 +27,7 @@
 
 require('dotenv').config();
 const fs = require('fs');
-const readline = require("readline");
+const readline = require('readline');
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
@@ -47,7 +47,7 @@ const bot = new Discord.Client({
 const mineflayer = require('mineflayer');
 
 const config = require('./config.json');
-const statusList = require("./status.json");
+const statusList = require('./status.json');
 const regex = require('./handlers/regex');
 
 // ██████ Discord Bot: Initialization ██████████████████████████████████████████
@@ -66,7 +66,7 @@ for (const folder of commandFolders) {
 bot.on('ready', () => {
   console.log(chalk.greenBright('Success! Discord bot is now online.'));
   bot.user.setStatus('dnd');
-  bot.user.setActivity('the console window... starting up', {
+  bot.user.setActivity('the console window (STARTING UP)', {
     type: 'WATCHING'
   });
   setInterval(() => {
@@ -147,7 +147,7 @@ function spawnBot() {
   minebot.chatAddPattern(regex.promotedDemoted, 'promotedDemoted');
   minebot.chatAddPattern(regex.guildLevelUp, 'guildLevelUp');
   minebot.chatAddPattern(regex.questTierComplete, 'questTierComplete');
-  // minebot.chatAddPattern(regex.questComplete, 'questComplete');
+  minebot.chatAddPattern(regex.questComplete, 'questComplete');
 
   // —— Bot reconnection log to Discord (source: https://github.com/Myzumi/Guild-Bot)
   minebot.on('getOnline', (numOfOnline) => {
@@ -207,9 +207,9 @@ function spawnBot() {
     toDiscordChat(`<a:join:830746278680985620> **Yay!** The guild has completed **Tier ${tier}** of **this week's Guild Quest**!`);
   });
 
-  // minebot.on('questComplete', (tier) => {
-  //   toDiscordChat(`<a:join:830746278680985620> **Yay!** The guild has completed **this week's Guild Quest**!`);
-  // });
+  minebot.on('questComplete', () => {
+    toDiscordChat(`<a:join:830746278680985620> **Yay!** The guild has completed **this week's Guild Quest**!`);
+  });
 
   // ██████ Discord -> Minecraft ███████████████████████████████████████████████
 
@@ -240,29 +240,29 @@ function spawnBot() {
   const webhook = new Discord.WebhookClient(process.env.ERROR_WEBHOOK_ID, process.env.ERROR_WEBHOOK_TOKEN);
 
   minebot.on('error', (error) => {
-    console.log(chalk.redBright("Error event fired."));
+    console.log(chalk.redBright('Error event fired.'));
     console.error(error);
     webhook.send(`**Minebot: Error** \`\`\`${error}\`\`\``);
-    console.log(chalk.redBright("Restarting in 5 seconds."));
+    console.log(chalk.redBright('Restarting in 5 seconds.'));
     setTimeout(() => {
       process.exit(1);
     }, 5000);
   });
 
   minebot.on('end', (error) => {
-    console.log(chalk.redBright("End event fired."));
+    console.log(chalk.redBright('End event fired.'));
     console.error(error);
-    console.log(chalk.redBright("Restarting in 10 seconds."));
+    console.log(chalk.redBright('Restarting in 10 seconds.'));
     setTimeout(() => {
       process.exit(1);
     }, 10000);
   });
 
   minebot.on('kicked', (reason) => {
-    console.log(chalk.redBright("The bot was kicked."));
+    console.log(chalk.redBright('The bot was kicked.'));
     console.error(reason);
     webhook.send(`**The bot was kicked. Reason:** \`\`\`${reason}\`\`\``);
-    console.log(chalk.redBright("Restarting in 5 seconds."));
+    console.log(chalk.redBright('Restarting in 5 seconds.'));
     setTimeout(() => {
       process.exit(1);
     }, 5000);
