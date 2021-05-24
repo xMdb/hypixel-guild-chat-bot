@@ -233,6 +233,9 @@ function spawnBot() {
         message.channel.send(`**:warning: ${message.author}, I need MANAGE_MESSAGES to perform that task.**`);
       }
     });
+    if (message.content.startsWith(`/`)) {
+      toDiscordChat(`https://media.tenor.com/images/e6cd56fc29e429ff89fef2fd2bdfaae2/tenor.gif`);
+    }
   });
 
   // ██████ Minecraft Bot: Error Handler ███████████████████████████████████████
