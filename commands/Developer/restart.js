@@ -17,10 +17,7 @@ module.exports = {
       .setDescription(`${message.author}, you do not have the correct permissions to use this command.`)
       .setTimestamp()
       .setFooter('Bot by xMdb#7897');
-    if (message.author.id !== config.ownerID) {
-      message.lineReply(restartfail);
-      return;
-    }
+    if (message.author.id !== config.ownerID) return message.lineReply(restartfail);
     message.lineReply(restartsuccess).then(() => {
       process.exit(1);
     });

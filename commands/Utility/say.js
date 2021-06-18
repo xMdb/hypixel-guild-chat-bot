@@ -7,7 +7,7 @@ module.exports = {
   aliases: ['repeat', 'quote'],
   description: 'The bot will repeat whatever you input',
   usage: '[message]',
-  cooldown: 3,
+  cooldown: 5,
   execute(message, args) {
     const sayMessage = args.join(' ');
     const sayFailure = new Discord.MessageEmbed()
@@ -16,9 +16,7 @@ module.exports = {
       .setTimestamp()
       .setFooter('Bot by xMdb#7897');
     if (message.member.roles.cache.has("520950339013312522") || message.author.id === config.ownerID) {
-      if (!args.length) {
-        return message.channel.send(`${message.author}, please input something for me to say.\nUsage: **${config.prefix}${module.exports.name} ${module.exports.usage}**`);
-      }
+      if (!args.length) return message.channel.send(`${message.author}, please input something for me to say.\nUsage: **${config.prefix}${module.exports.name} ${module.exports.usage}**`);
       message.delete();
       message.channel.send(sayMessage).catch(error => {
         if (error.code === 50001 || 50013) {

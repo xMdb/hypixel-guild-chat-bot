@@ -17,26 +17,24 @@ module.exports = {
             .setDescription(`You do not have the correct permissions to use this command.`)
             .setTimestamp()
             .setFooter(`Bot by xMdb#7897`, message.author.displayAvatarURL());
-        if (message.author.id !== config.ownerID) {
-            return message.lineReply(noPerms);
-        }
         const noArgs = new Discord.MessageEmbed()
             .setColor('RED')
             .setDescription(`Please input a command to reload.`)
             .setTimestamp()
             .setFooter(`Bot by xMdb#7897`, message.author.displayAvatarURL());
-        if (!args.length) {
-            return message.lineReply(noArgs);
-        }
+        if (message.author.id !== config.ownerID) return message.lineReply(noPerms);
+        if (!args.length) return message.lineReply(noArgs);
 
         const commandName = args[0].toLowerCase();
         const command = message.client.commands.get(commandName);
+
         const noCmd = new Discord.MessageEmbed()
             .setColor('RED')
             .setDescription(`Sorry, the command **${commandName}** was not found.`)
             .setTimestamp()
             .setFooter(`Bot by xMdb#7897`, message.author.displayAvatarURL());
         if (!command) return message.lineReply(noCmd);
+
         const commandFolders = fs.readdirSync('./commands');
         const folderName = commandFolders.find(folder => fs.readdirSync(`./commands/${folder}`).includes(`${commandName}.js`));
         delete require.cache[require.resolve(`../${folderName}/${commandName}.js`)];

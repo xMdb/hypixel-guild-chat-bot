@@ -15,24 +15,21 @@ module.exports = {
     function clean(text) {
       if (typeof (text) === "string")
         return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
-      else
-        return text;
+      return text;
     }
     const noperms = new Discord.MessageEmbed()
       .setColor('#FF0000')
       .setDescription(`${message.author}, you do not have the correct permissions to use this command.`)
       .setTimestamp()
       .setFooter(`Executed by ${message.author.username}#${message.author.discriminator}`, message.author.displayAvatarURL);
-    if (message.author.id !== config.ownerID) {
-      message.lineReply(noperms);
-      return;
-    }
+    if (message.author.id !== config.ownerID) return message.lineReply(noperms);
+
     const code = args.join(" ");
+
     try {
       let evaled = eval(code);
       if (typeof evaled !== "string")
         evaled = require("util").inspect(evaled);
-
       // Prevent all token leaking
       if (evaled.includes(bot.token)) {
         evaled = evaled.replace(bot.token, "undefined");

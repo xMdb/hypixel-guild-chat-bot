@@ -63,6 +63,10 @@ for (const folder of commandFolders) {
   }
 }
 
+async function toDiscordChat(msg) {
+  return bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(msg);
+}
+
 bot.on('ready', () => {
   console.log(chalk.greenBright('Success! Discord bot is now online.'));
   bot.user.setStatus('dnd');
@@ -75,6 +79,7 @@ bot.on('ready', () => {
       type: 'LISTENING'
     });
   }, 60000);
+  toDiscordChat(`<:yes:829640052531134464> Bot has reconnected to Discord.`);
 });
 
 bot.on('guildCreate', guild => {
@@ -126,14 +131,9 @@ function spawnBot() {
     minebot.chat(input);
   });
 
-  async function toDiscordChat(msg) {
-    return bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(msg);
-  }
-
   // —— Bot reconnection message
   setTimeout(() => {
     minebot.chat('/g online');
-    toDiscordChat(`<:yes:829640052531134464> Bot has reconnected to Discord.`);
   }, 10000);
 
   // ██████ Minecraft Bot: Chat Patterns ███████████████████████████████████████
@@ -151,17 +151,14 @@ function spawnBot() {
 
   // —— Bot reconnection log to Discord (source: https://github.com/Myzumi/Guild-Bot)
   minebot.on('getOnline', (numOfOnline) => {
-    let numOfTrueOnline = numOfOnline - 1;
-    toDiscordChat(`:information_source: Bot has reconnected to Hypixel. There are **${numOfTrueOnline}** other members online.`);
+    toDiscordChat(`:information_source: Bot has reconnected to Hypixel. There are **${numOfOnline - 1}** other members online.`);
   });
 
   // ██████ Minecraft -> Discord ███████████████████████████████████████████████
 
   minebot.on('guildChat', (rank, playername, grank, message) => {
     if (playername === minebot.username) return;
-    if (rank == undefined) {
-      return toDiscordChat(`<a:MC:829592987616804867> **${playername}: ${message}**`);
-    }
+    if (rank == undefined) return toDiscordChat(`<a:MC:829592987616804867> **${playername}: ${message}**`);
     toDiscordChat(`<a:MC:829592987616804867> **${rank}${playername}: ${message}**`);
   });
 
@@ -172,30 +169,22 @@ function spawnBot() {
   });
 
   minebot.on('newMember', (rank, playername) => {
-    if (rank == undefined) {
-      return toDiscordChat(`<a:join:830746278680985620> ${playername} joined the guild!`);
-    }
+    if (rank == undefined) return toDiscordChat(`<a:join:830746278680985620> ${playername} joined the guild!`);
     toDiscordChat(`<a:join:830746278680985620> ${rank}${playername} joined the guild!`);
   });
 
   minebot.on('memberLeave', (rank, playername) => {
-    if (rank == undefined) {
-      return toDiscordChat(`<a:leave:830746292186775592> ${playername} left the guild.`);
-    }
+    if (rank == undefined) return toDiscordChat(`<a:leave:830746292186775592> ${playername} left the guild.`);
     toDiscordChat(`<a:leave:830746292186775592> ${rank}${playername} left the guild.`);
   });
 
   minebot.on('memberKicked', (rank1, playername1, rank2, playername2) => {
-    if (rank1 == undefined) {
-      return toDiscordChat(`<a:leave:830746292186775592> ${playername1} was kicked by ${rank2}${playername2}! RIP!`);
-    }
+    if (rank1 == undefined) return toDiscordChat(`<a:leave:830746292186775592> ${playername1} was kicked by ${rank2}${playername2}! RIP!`);
     toDiscordChat(`<a:leave:830746292186775592> ${rank1}${playername1} was kicked by ${rank2}${playername2}! RIP!`);
   });
 
   minebot.on('promotedDemoted', (rank, playername, grankChangeType, grank1, grank2) => {
-    if (rank == undefined) {
-      return toDiscordChat(`<a:rankChange:837570909065314375> ${playername} has been ${grankChangeType} from ${grank1} to ${grank2}.`);
-    }
+    if (rank == undefined) return toDiscordChat(`<a:rankChange:837570909065314375> ${playername} has been ${grankChangeType} from ${grank1} to ${grank2}.`);
     toDiscordChat(`<a:rankChange:837570909065314375> ${rank}${playername} has been ${grankChangeType} from ${grank1} to ${grank2}.`);
   });
 
@@ -224,18 +213,12 @@ function spawnBot() {
     minebot.chat(`/gc ${message.author.username} > ${message.content}`);
     toDiscordChat(`<:discord:829596398822883368> **${message.author.username}: ${message.content}**`);
     message.delete().catch(error => {
-      if (error.code == 10008) {
+      if (error.code > 10000) {
         console.log(error);
         message.channel.send(`**:warning: ${message.author}, there was an error while performing that task.**`);
       }
-      if (error.code == 50001 || 50013) {
-        console.log(error);
-        message.channel.send(`**:warning: ${message.author}, I need MANAGE_MESSAGES to perform that task.**`);
-      }
     });
-    if (message.content.startsWith(`/`)) {
-      toDiscordChat(`https://media.tenor.com/images/e6cd56fc29e429ff89fef2fd2bdfaae2/tenor.gif`);
-    }
+    if (message.content.startsWith(`/`)) toDiscordChat(`https://media.tenor.com/images/e6cd56fc29e429ff89fef2fd2bdfaae2/tenor.gif`);
   });
 
   // ██████ Minecraft Bot: Error Handler ███████████████████████████████████████
@@ -247,6 +230,7 @@ function spawnBot() {
     console.error(error);
     webhook.send(`**Minebot: Error** \`\`\`${error}\`\`\``);
     console.log(chalk.redBright('Restarting in 5 seconds.'));
+    toDiscordChat(`<:nah:829640042334257202> The bot has encountered an unknown error and will restart shortly.`);
     setTimeout(() => {
       process.exit(1);
     }, 5000);
@@ -266,6 +250,7 @@ function spawnBot() {
     console.error(reason);
     webhook.send(`**The bot was kicked. Reason:** \`\`\`${reason}\`\`\``);
     console.log(chalk.redBright('Restarting in 5 seconds.'));
+    toDiscordChat(`<:nah:829640042334257202> The bot was kicked from the server and will reconnect shortly. Reason: \`\`\`${reason}\`\`\``);
     setTimeout(() => {
       process.exit(1);
     }, 5000);
@@ -288,9 +273,7 @@ bot.on('message', async message => {
     message.replace(bot.token, 'undefined');
   }
   // —— Deny command execution in commands
-  if (message.channel.type === 'dm') {
-    return message.reply('I can\'t execute that command inside DMs!');
-  }
+  if (message.channel.type === 'dm') return message.reply('I can\'t execute commands inside DMs! Please use commands in servers I am in.');
   const command = bot.commands.get(commandName) ||
     bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 

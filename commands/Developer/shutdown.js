@@ -18,12 +18,9 @@ module.exports = {
             .setDescription(`You do not have the correct permissions to use this command.`)
             .setTimestamp()
             .setFooter('Bot by xMdb#7897');
-        if (message.author.id !== config.ownerID) {
-            message.lineReply(shutdownfail);
-            return;
-        }
+        if (message.author.id !== config.ownerID) return message.lineReply(shutdownfail);
         message.lineReply(shutdownsuccess).then(() => {
-            nc.run(`pm2 delete app`);
+            nc.run(`pm2 stop app`);
         });
     }
 };
