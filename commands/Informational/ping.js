@@ -1,7 +1,9 @@
 const Discord = require('discord.js-light');
+const config = require('../../config');
 
 module.exports = {
   name: 'ping',
+  aliases: ['p', 'pong', 'heartbeat', 'hb'],
   description: 'To ping or to pong?',
   cooldown: 1,
   execute(message, args) {
@@ -9,10 +11,10 @@ module.exports = {
       msg.delete();
       const pingcmd = new Discord.MessageEmbed()
         .setTitle('Pong!')
-        .setColor('#3A783F')
+        .setColor(config.colours.success)
         .setDescription(`**Latency**: ${msg.createdTimestamp - message.createdTimestamp}ms`)
         .setTimestamp()
-        .setFooter('Bot by xMdb#7897');
+        .setFooter(config.messages.footer);
       message.channel.send(pingcmd);
     });
   }

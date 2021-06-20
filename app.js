@@ -46,8 +46,7 @@ const bot = new Discord.Client({
 });
 const mineflayer = require('mineflayer');
 
-const config = require('./config.json');
-const statusList = require('./status.json');
+const config = require('./config');
 const regex = require('./handlers/regex');
 
 // ██████ Discord Bot: Initialization ██████████████████████████████████████████
@@ -64,7 +63,7 @@ for (const folder of commandFolders) {
 }
 
 async function toDiscordChat(msg) {
-  return bot.guilds.cache.get(config.serverID).channels.cache.get(config.gchatID).send(msg);
+  return bot.guilds.cache.get(config.ids.server).channels.cache.get(config.ids.guildChannel).send(msg);
 }
 
 bot.on('ready', () => {
@@ -74,8 +73,8 @@ bot.on('ready', () => {
     type: 'WATCHING'
   });
   setInterval(() => {
-    const statusIndex = Math.floor(Math.random() * (statusList.length - 1) + 1);
-    bot.user.setActivity(statusList[statusIndex], {
+    const statusIndex = Math.floor(Math.random() * (config.statuses.length - 1) + 1);
+    bot.user.setActivity(config.statuses[statusIndex], {
       type: 'LISTENING'
     });
   }, 60000);
@@ -204,9 +203,9 @@ function spawnBot() {
 
   bot.on('message', async message => {
     if (message.author.id === bot.user.id ||
-      message.channel.id !== config.gchatID ||
+      message.channel.id !== config.ids.guildChannel ||
       message.author.bot ||
-      message.content.startsWith(config.prefix) ||
+      message.content.startsWith(config.bot.prefix) ||
       message.content === '' ||
       message.content === ' ')
       return;
@@ -265,9 +264,9 @@ setTimeout(() => {
 // ██████ Discord Bot: Command Handler █████████████████████████████████████████
 
 bot.on('message', async message => {
-  const args = message.content.slice(config.prefix.length).trim().split(/ +/);
+  const args = message.content.slice(config.bot.prefix.length).trim().split(/ +/);
   const commandName = args.shift().toLowerCase();
-  if (message.author.bot || !message.content.startsWith(config.prefix)) return;
+  if (message.author.bot || !message.content.startsWith(config.bot.prefix)) return;
   // —— Another token leak prevention method
   if (message.content.includes(process.env.BOT_TOKEN)) {
     message.replace(bot.token, 'undefined');
@@ -290,11 +289,11 @@ bot.on('message', async message => {
   const cooldownAmount = (command.cooldown || 3) * 1000;
   if (timestamps.has(message.author.id)) {
     const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
-    if (now < expirationTime && message.author.id !== config.ownerID) {
+    if (now < expirationTime && message.author.id !== config.ids.botOwner) {
       const timeLeft = (expirationTime - now) / 1000;
       const cooldownEmbed = new Discord.MessageEmbed()
         .setTitle(`Woah! Slow down!`)
-        .setColor(`#3f51b5`)
+        .setColor(config.colours.informational)
         .setDescription(`You\'ll be able to use this command again in **${timeLeft.toFixed(1)} second(s)**`);
       return message.channel.send(cooldownEmbed);
     }
@@ -302,13 +301,16 @@ bot.on('message', async message => {
   timestamps.set(message.author.id, now);
   setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
+  process.on('uncaughtException', (err) => console.error(err))
+    .on('unhandledRejection', (err) => console.error(err));
+
   // —— Execute command and throw an error if anything breaks
   try {
     await command.execute(message, args);
   } catch (err) {
     const webhook = new Discord.WebhookClient(process.env.ERROR_WEBHOOK_ID, process.env.ERROR_WEBHOOK_TOKEN);
     console.error(err);
-    message.lineReply('There was an error while trying to execute that command! Check the console log for more details.');
+    message.lineReply(config.messages.error);
     webhook.send(`**General command error:** \`\`\`${err}\`\`\``);
   }
 });

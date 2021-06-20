@@ -1,7 +1,7 @@
 const fs = require('fs');
 const Discord = require('discord.js-light');
 require('discord-reply');
-const config = require('../../config.json');
+const config = require('../../config');
 const chalk = require('chalk');
 
 module.exports = {
@@ -9,30 +9,30 @@ module.exports = {
     aliases: ['rc', 'reloadcmd'],
     description: 'Reloads a command',
     usage: '[command to reload]',
-    slowmode: 100,
+    slowmode: 10,
     execute(message, args) {
         // Handle user not being bot owner & if no arguments are present
         const noPerms = new Discord.MessageEmbed()
-            .setColor('RED')
-            .setDescription(`You do not have the correct permissions to use this command.`)
+            .setColor(config.colours.error)
+            .setDescription(config.messages.noPermissionDev)
             .setTimestamp()
-            .setFooter(`Bot by xMdb#7897`, message.author.displayAvatarURL());
+            .setFooter(`Executed by ${message.author.username}#${message.author.discriminator}`, message.author.displayAvatarURL());
         const noArgs = new Discord.MessageEmbed()
-            .setColor('RED')
+            .setColor(config.colours.error)
             .setDescription(`Please input a command to reload.`)
             .setTimestamp()
-            .setFooter(`Bot by xMdb#7897`, message.author.displayAvatarURL());
-        if (message.author.id !== config.ownerID) return message.lineReply(noPerms);
+            .setFooter(`Executed by ${message.author.username}#${message.author.discriminator}`, message.author.displayAvatarURL());
+        if (message.author.id !== config.ids.botOwner) return message.lineReply(noPerms);
         if (!args.length) return message.lineReply(noArgs);
 
         const commandName = args[0].toLowerCase();
         const command = message.client.commands.get(commandName);
 
         const noCmd = new Discord.MessageEmbed()
-            .setColor('RED')
+            .setColor(config.colours.error)
             .setDescription(`Sorry, the command **${commandName}** was not found.`)
             .setTimestamp()
-            .setFooter(`Bot by xMdb#7897`, message.author.displayAvatarURL());
+            .setFooter(`Executed by ${message.author.username}#${message.author.discriminator}`, message.author.displayAvatarURL());
         if (!command) return message.lineReply(noCmd);
 
         const commandFolders = fs.readdirSync('./commands');
@@ -43,19 +43,19 @@ module.exports = {
             const newCommand = require(`../${folderName}/${commandName}.js`);
             message.client.commands.set(newCommand.name, newCommand);
             const reloadSuccess = new Discord.MessageEmbed()
-                .setColor('#3A783F')
-                .setDescription(`The command **${commandName}** was successfully reloaded!`)
+                .setColor(config.colours.informational)
+                .setDescription(`The command **${commandName}** was successfully reloaded.`)
                 .setTimestamp()
-                .setFooter(`Bot by xMdb#7897`, message.author.displayAvatarURL());
+                .setFooter(`Executed by ${message.author.username}#${message.author.discriminator}`, message.author.displayAvatarURL());
             message.lineReply(reloadSuccess);
             console.log(chalk.yellowBright(`${commandName} was reloaded.`));
         } catch (error) {
             console.error(error);
             const reloadFailure = new Discord.MessageEmbed()
-                .setColor('RED')
+                .setColor(config.colours.error)
                 .setDescription(`There was an error while reloading the command **${commandName}**.\n\`\`\`${error}\`\`\``)
                 .setTimestamp()
-                .setFooter(`Bot by xMdb#7897`, message.author.displayAvatarURL());
+                .setFooter(`Executed by ${message.author.username}#${message.author.discriminator}`, message.author.displayAvatarURL());
             console.error(error);
             message.lineReply(reloadFailure);
         }

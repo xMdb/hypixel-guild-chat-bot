@@ -52,7 +52,7 @@ MC_PASS=Minecraft Account Password
 ERROR_WEBHOOK_ID=The webhook ID you would like to use for error logging
 ERROR_WEBHOOK_TOKEN=The webhook token you would like to use for error logging
 ```
-6. Edit the [config.json](https://github.com/xMdb/hypixel-knights-gchat-bot/blob/main/config.json) and [status.json](https://github.com/xMdb/hypixel-knights-gchat-bot/blob/main/status.json) values to your own
+6. Edit the [config.json](https://github.com/xMdb/hypixel-knights-gchat-bot/blob/main/config.json) to fit your own needs
 7. (REQUIRED) Install pm2 by using `npm install pm2 -g`
 8. Start the bot by using `pm2 start app.js`
 

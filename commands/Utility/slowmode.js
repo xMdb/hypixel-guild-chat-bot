@@ -1,6 +1,6 @@
 const Discord = require('discord.js-light');
 require('discord-reply');
-const footer = ('Bot by xMdb#7897')
+const config = require('../../config');
 
 module.exports = {
     name: 'slowmode',
@@ -10,30 +10,32 @@ module.exports = {
     cooldown: 5,
     async execute(message, args) {
         const value = args.join(' ');
-        const noPerms = new Discord.MessageEmbed()
-            .setColor('RED')
-            .setDescription(`You don't have permission to use this command.`)
+        const noPermsUser = new Discord.MessageEmbed()
+            .setColor(config.colours.error)
+            .setDescription(config.messages.noPermissionNormal)
             .setTimestamp()
-            .setFooter(footer);
+            .setFooter(config.messages.footer);
+        const noPermsBot = new Discord.MessageEmbed()
+            .setColor(config.colours.error)
+            .setDescription(config.messages.selfNoPermissions)
+            .setTimestamp()
+            .setFooter(config.messages.footer);
         const invalidArgs = new Discord.MessageEmbed()
-            .setColor('RED')
+            .setColor(config.colours.error)
             .setDescription(`Please include a value in **seconds** that is below **6 hours**.`)
             .setTimestamp()
-            .setFooter(footer);
+            .setFooter(config.messages.footer);
         const success = new Discord.MessageEmbed()
-            .setColor('#3A783F')
+            .setColor(config.colours.success)
             .setDescription(`Success! The slowmode in this channel is now set to **${value}** seconds!`)
             .setTimestamp()
-            .setFooter(footer);
-        if (!message.member.hasPermission('MANAGE_MESSAGES')) return message.lineReply(noPerms);
+            .setFooter(config.messages.footer);
+        if (!message.member.hasPermission('MANAGE_MESSAGES')) return message.lineReply(noPermsUser);
         if (!value.length || isNaN(value) || value > 21600) return message.lineReply(invalidArgs);
         try {
             await message.channel.setRateLimitPerUser(value, `Executed by ${message.author.username}#${message.author.discriminator}`)
         } catch (error) {
-            if (error.code === 50013) {
-                message.channel.send(`${message.author}, I do not have the correct permissions to perform that task.`);
-                return;
-            }
+            if (error.code === 50013) return message.lineReply(noPermsBot);
         }
         message.lineReply(success);
     }

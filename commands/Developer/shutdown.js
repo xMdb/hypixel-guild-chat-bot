@@ -1,26 +1,26 @@
 const nc = require('node-cmd');
 const Discord = require('discord.js-light');
 require('discord-reply');
-const config = require('../../config.json');
+const config = require('../../config');
 
 module.exports = {
     name: 'shutdown',
-    aliases: ['kys', 'kill'],
+    aliases: ['kys', 'kill', 'sd', 'end'],
     description: 'Shuts down the bot',
     execute(message, args) {
-        const shutdownsuccess = new Discord.MessageEmbed()
-            .setColor('RED')
+        const noPerms = new Discord.MessageEmbed()
+            .setColor(config.colours.error)
+            .setDescription(config.messages.noPermissionDev)
+            .setTimestamp()
+            .setFooter(config.messages.footer);
+        const success = new Discord.MessageEmbed()
+            .setColor(config.colours.informational)
             .setDescription('Process ended. Please restart the bot manually.')
             .setTimestamp()
-            .setFooter('Bot by xMdb#7897');
-        const shutdownfail = new Discord.MessageEmbed()
-            .setColor('RED')
-            .setDescription(`You do not have the correct permissions to use this command.`)
-            .setTimestamp()
-            .setFooter('Bot by xMdb#7897');
-        if (message.author.id !== config.ownerID) return message.lineReply(shutdownfail);
-        message.lineReply(shutdownsuccess).then(() => {
-            nc.run(`pm2 stop app`);
+            .setFooter(config.messages.footer);
+        if (message.author.id !== config.ids.botOwner) return message.lineReply(noPerms);
+        message.lineReply(success).then(() => {
+            nc.run(`pm2 delete app`);
         });
     }
 };

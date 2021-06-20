@@ -1,7 +1,7 @@
 const Discord = require('discord.js-light');
 require('discord-reply');
 const bot = new Discord.Client();
-const config = require('../../config.json');
+const config = require('../../config');
 const hastebin = require('hastebin');
 
 module.exports = {
@@ -18,11 +18,11 @@ module.exports = {
       return text;
     }
     const noperms = new Discord.MessageEmbed()
-      .setColor('#FF0000')
-      .setDescription(`${message.author}, you do not have the correct permissions to use this command.`)
+      .setColor(config.colours.error)
+      .setDescription(config.messages.noPermissionDev)
       .setTimestamp()
-      .setFooter(`Executed by ${message.author.username}#${message.author.discriminator}`, message.author.displayAvatarURL);
-    if (message.author.id !== config.ownerID) return message.lineReply(noperms);
+      .setFooter(`Executed by ${message.author.username}#${message.author.discriminator}`, message.author.displayAvatarURL());
+    if (message.author.id !== config.ids.botOwner) return message.lineReply(noperms).catch(message.channel.send(noperms))
 
     const code = args.join(" ");
 
@@ -42,7 +42,7 @@ module.exports = {
 
       const longRequestEmbed = new Discord.MessageEmbed()
         .setTitle('Evaluate - Result Too Long  📜')
-        .setColor('#3F51B5')
+        .setColor(config.colours.informational)
         .setDescription(`Generating Hastebin link!`)
         .setTimestamp()
         .setFooter(`Execution time: ${end - start}ms`, message.author.displayAvatarURL());
@@ -61,7 +61,7 @@ module.exports = {
 
       const evalEmbed = new Discord.MessageEmbed()
         .setTitle('Evaluate - Completed  ✅')
-        .setColor('#3A783F')
+        .setColor(config.colours.success)
         .addFields({
           name: `Input`,
           value: `\`\`\`js\n${code}\`\`\``
@@ -80,7 +80,7 @@ module.exports = {
       message.lineReply(`An error has occured.`);
       const errorEmbed = new Discord.MessageEmbed()
         .setTitle('Evaluate - Error  ❌')
-        .setColor('RED')
+        .setColor(config.colours.error)
         .addFields({
           name: `Input  📥`,
           value: `\`\`\`js\n${code}\`\`\``
