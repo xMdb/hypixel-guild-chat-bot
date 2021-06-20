@@ -22,7 +22,7 @@ module.exports = {
       .setDescription(config.messages.noPermissionDev)
       .setTimestamp()
       .setFooter(`Executed by ${message.author.username}#${message.author.discriminator}`, message.author.displayAvatarURL());
-    if (message.author.id !== config.ids.botOwner) return message.lineReply(noperms).catch(message.channel.send(noperms))
+    if (message.author.id !== config.ids.botOwner) return message.lineReply(noperms);
 
     const code = args.join(" ");
 
