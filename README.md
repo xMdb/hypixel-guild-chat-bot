@@ -45,14 +45,16 @@ BOT_TOKEN=Bot token from Discord Developer Portal
 MC_USER=Minecraft Account Email
 MC_PASS=Minecraft Account Password
 
-# The following values are to be found from a Discord webhook URL: 
-# https://discord.com/api/webhooks/[WEBHOOK ID]/[WEBHOOK TOKEN]/
-# Then insert both into the following values:
+# Create a new webhook
+# The Webhooks ID and token can be found in the URL, when you request that URL, or in the response body.
+# https://discord.com/api/webhooks/12345678910/T0kEn0fw3Bh00K
+#                                  ^^^^^^^^^^  ^^^^^^^^^^^^ 
+#                                  Webhook ID  Webhook Token
 
 ERROR_WEBHOOK_ID=The webhook ID you would like to use for error logging
 ERROR_WEBHOOK_TOKEN=The webhook token you would like to use for error logging
 ```
-6. Edit the [config.json](https://github.com/xMdb/hypixel-knights-gchat-bot/blob/main/config.js) to fit your own needs
+6. Edit the [config.js](https://github.com/xMdb/hypixel-knights-gchat-bot/blob/main/config.js) to fit your own needs
 7. (REQUIRED) Install pm2 by using `npm install pm2 -g`
 8. Start the bot by using `pm2 start app.js`
 
