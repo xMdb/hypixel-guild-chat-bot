@@ -310,7 +310,7 @@ bot.on('message', async message => {
   } catch (err) {
     const webhook = new Discord.WebhookClient(process.env.ERROR_WEBHOOK_ID, process.env.ERROR_WEBHOOK_TOKEN);
     console.error(err);
-    message.lineReply(config.messages.error);
+    message.lineReply(config.messages.errorDev);
     webhook.send(`**General command error:** \`\`\`${err}\`\`\``);
   }
 });
