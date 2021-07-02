@@ -68,7 +68,6 @@ async function toDiscordChat(msg) {
 
 bot.on('ready', () => {
   console.log(chalk.greenBright('Success! Discord bot is now online.'));
-  bot.user.setStatus('dnd');
   bot.user.setActivity('the console window (STARTING UP)', {
     type: 'WATCHING'
   });
@@ -77,7 +76,7 @@ bot.on('ready', () => {
     bot.user.setActivity(config.statuses[statusIndex], {
       type: 'LISTENING'
     });
-  }, 60000);
+  }, 60 * 1000);
   toDiscordChat(`<:yes:829640052531134464> Bot has reconnected to Discord.`);
 });
 
@@ -148,7 +147,7 @@ function spawnBot() {
   minebot.chatAddPattern(regex.questTierComplete, 'questTierComplete');
   minebot.chatAddPattern(regex.questComplete, 'questComplete');
 
-  // —— Bot reconnection log to Discord (source: https://github.com/Myzumi/Guild-Bot)
+  // —— Bot reconnection log
   minebot.on('getOnline', (numOfOnline) => {
     toDiscordChat(`:information_source: Bot has reconnected to Hypixel. There are **${numOfOnline - 1}** other members online.`);
   });
