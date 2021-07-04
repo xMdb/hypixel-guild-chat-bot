@@ -24,8 +24,8 @@ This application is mainly for the [Hypixel Knights Discord server](https://disc
 
 - Git
 - NodeJS 16 or later
-- NPM 7.13.0 or later
-- A Minecraft account
+- NPM latest version
+- A full access premium Minecraft account
 
 ### Setup Guide
 
