@@ -56,8 +56,8 @@ ERROR_WEBHOOK_TOKEN=The webhook token you would like to use for error logging
 ```
 6. Edit the [config.js](https://github.com/xMdb/hypixel-knights-gchat-bot/blob/main/config.js) to fit your own needs
 7. (RECOMMENDED) Install PM2 by using `npm install pm2 -g`
-8. (RECOMMENED) Start the bot by using `pm2 start app.js`
-> If you do not install and use PM2, the shutdown and restart commands will not function as intended.
+8. (RECOMMENDED) Start the bot by using `pm2 start app.js`
+> :warning: **If you do not install and use PM2, the shutdown and restart commands will not function as intended.**
 
 ## Acknowledgements
 Parts of this project are forked from:
