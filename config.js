@@ -17,7 +17,39 @@ module.exports = {
 		noPermissionNormal: "You do not have the correct permissions to use this command.",
 		noPermissionDev: "You shouldn\'t be using this command.",
 		selfNoPermissions: "Sorry, I do not have the correct permissions to perform that task.",
-		footer: "Bot by xMdb#7897"
+		footer: "Bot by xMdb#7897",
+		statuses: [
+			"Horus Goes Shopping on Spotify",
+			"Hypixel Knights Talent Show Album on repeat",
+			"Hypixel Knights Talent Show Album",
+			"What Makes You Beautiful Cover on Soundcloud",
+			"Demons (Imagine Dragons Cover) on Soundcloud",
+			"hitches and iro dying of laughter on Soundcloud",
+			"505 (Arctic Monkeys Cover) on Soundcloud",
+			"Isabella's Lullaby on Soundcloud",
+			"Hotel Yorba (White Stripes Cover) on Soundcloud",
+			"Mine Diamonds (MCAP Cover) on Soundcloud",
+			"I Miss The Old Meanie on Soundcloud",
+			"Payphone (Maroon 5 Cover) on Soundcloud"
+		],
+		cooldown: [
+			"Woah! Slow down!",
+			"Hold your horses!",
+			"Slow down.",
+			"Slow it down...",
+			"C\'mon bud, slow it down now",
+			"Take a breather...",
+			"Take a chill pill!",
+			"Slooowwwww dooowwwwnnn...",
+			"Spam isn't cool, fam",
+			"Heeeeyoo lets slow it down...",
+			"Maaaate, slow down!",
+			"Maaaate, slow down! Wouldn\'t wanna hit a roo would ya?",
+			"Cool it, bud",
+			"Hey there bud lets slow it down now",
+			"スパムしないでください...",
+			"スパムしないで!"
+		],
 	},
 
 	colours: {
@@ -26,18 +58,4 @@ module.exports = {
 		informational: "#3F51B5"
 	},
 
-	statuses: [
-		"Horus Goes Shopping on Spotify",
-		"Hypixel Knights Talent Show Album on repeat",
-		"Hypixel Knights Talent Show Album",
-		"What Makes You Beautiful Cover on Soundcloud",
-		"Demons (Imagine Dragons Cover) on Soundcloud",
-		"hitches and iro dying of laughter on Soundcloud",
-		"505 (Arctic Monkeys Cover) on Soundcloud",
-		"Isabella's Lullaby on Soundcloud",
-		"Hotel Yorba (White Stripes Cover) on Soundcloud",
-		"Mine Diamonds (MCAP Cover) on Soundcloud",
-		"I Miss The Old Meanie on Soundcloud",
-		"Payphone (Maroon 5 Cover) on Soundcloud"
-	]
 }

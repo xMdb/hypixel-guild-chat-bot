@@ -68,11 +68,9 @@ module.exports = {
  */
 function normalizeString(str) {
   let newStr = "";
-
   for (let i = 0; i < str.length; i++) {
     let char = str.charAt(i);
-
-    if (i === 0) {
+    if (i === 0 || str.charAt(i - 1) === " ") {
       newStr += char.toUpperCase();
     } else {
       newStr += char.toLowerCase();

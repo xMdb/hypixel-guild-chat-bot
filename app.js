@@ -21,6 +21,8 @@
 
    - Read more about this bot in the README.md!                                         */
 
+
+
 // ██████ Integrations █████████████████████████████████████████████████████████
 
 require("dotenv").config();
@@ -28,7 +30,7 @@ const fs = require("fs");
 const readline = require("readline");
 const rl = readline.createInterface({
   input: process.stdin,
-  output: process.stdout,
+  output: process.stdout
 });
 const chalk = require("chalk");
 const Discord = require("discord.js-light");
@@ -40,7 +42,7 @@ const bot = new Discord.Client({
   cacheOverwrites: false,
   cacheRoles: true,
   cacheEmojis: true,
-  cachePresences: false,
+  cachePresences: false
 });
 const mineflayer = require("mineflayer");
 
@@ -75,23 +77,23 @@ async function toDiscordChat(msg) {
 
 bot.on("ready", () => {
   console.log(chalk.greenBright("Success! Discord bot is now online."));
-  bot.user.setActivity("the console window (STARTING UP)", {
-    type: "WATCHING",
+  bot.user.setActivity("the console window", {
+    type: "WATCHING"
   });
   setInterval(() => {
-    const statusIndex = Math.floor(Math.random() * (config.statuses.length - 1) + 1);
-    bot.user.setActivity(config.statuses[statusIndex], {
-      type: "LISTENING",
+    const statusIndex = Math.floor(Math.random() * (config.messages.statuses.length - 1) + 1);
+    bot.user.setActivity(config.messages.statuses[statusIndex], {
+      type: "LISTENING"
     });
   }, 60 * 1000);
   toDiscordChat(`<:yes:829640052531134464> Bot has reconnected to Discord.`);
 });
 
-bot.on("guildCreate", (guild) => {
+bot.on("guildCreate", guild => {
   console.log(chalk.greenBright(`New guild joined: \"${guild.name}\" (id: ${guild.id}). This guild has ${guild.memberCount} members!`));
 });
 
-bot.on("guildDelete", (guild) => {
+bot.on("guildDelete", guild => {
   console.log(chalk.greenBright(`Bot removed from: \"${guild.name}\" (id: ${guild.id})`));
 });
 
@@ -107,7 +109,7 @@ function spawnBot() {
     logErrors: "true",
     hideErrors: "false",
     checkTimeoutInterval: 30000,
-    interval: 5000,
+    interval: 5000
   });
 
   // ██████ Minecraft Bot: Handler ██████████████████████████████████████████████
@@ -206,11 +208,17 @@ function spawnBot() {
 
   // ██████ Discord -> Minecraft ███████████████████████████████████████████████
 
-  bot.on("message", async (message) => {
-    if (message.author.id === bot.user.id || message.channel.id !== config.ids.guildChannel || message.author.bot || message.content.startsWith(config.bot.prefix) || message.content === "" || message.content === " ") return;
+  bot.on('message', async message => {
+    if (message.author.id === bot.user.id ||
+      message.channel.id !== config.ids.guildChannel ||
+      message.author.bot ||
+      message.content.startsWith(config.bot.prefix) ||
+      message.content === " " ||
+      message.content === "")
+      return;
     minebot.chat(`/gc ${message.author.username} > ${message.content}`);
     toDiscordChat(`<:discord:829596398822883368> **${message.author.username}: ${message.content}**`);
-    message.delete().catch((error) => {
+    message.delete().catch(error => {
       if (error.code > 10000) {
         console.log(error);
         message.channel.send(`**:warning: ${message.author}, there was an error while performing that task.**`);
@@ -237,7 +245,7 @@ function spawnBot() {
   minebot.on("end", (error) => {
     console.log(chalk.redBright("End event fired."));
     console.error(error);
-    console.log(chalk.redBright("Restarting in 15 seconds."));
+    console.log(chalk.redBright('Restarting in 15 seconds.'));
     setTimeout(() => {
       process.exit(1);
     }, 15 * 1000);
@@ -262,7 +270,7 @@ setTimeout(() => {
 
 // ██████ Discord Bot: Command Handler █████████████████████████████████████████
 
-bot.on("message", async (message) => {
+bot.on('message', async message => {
   const args = message.content.slice(config.bot.prefix.length).trim().split(/ +/);
   const commandName = args.shift().toLowerCase();
   if (message.author.bot || !message.content.startsWith(config.bot.prefix)) return;
@@ -289,10 +297,11 @@ bot.on("message", async (message) => {
     const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
     if (now < expirationTime && message.author.id !== config.ids.owner) {
       const timeLeft = (expirationTime - now) / 1000;
+      const slowmodeIndex = Math.floor(Math.random() * (config.messages.cooldown.length - 1) + 1);
       const cooldownEmbed = new Discord.MessageEmbed()
-        .setTitle(`Woah! Slow down!`)
+        .setTitle(config.messages.cooldown[slowmodeIndex])
         .setColor(config.colours.informational)
-        .setDescription(`You\'ll be able to use this command again in **${timeLeft.toFixed(1)} second(s)**`);
+        .setDescription(`You\'ll be able to use this command again in **${timeLeft.toFixed(0)} seconds.**`);
       return message.channel.send(cooldownEmbed);
     }
   }
