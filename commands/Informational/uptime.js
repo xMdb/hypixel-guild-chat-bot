@@ -5,8 +5,10 @@ module.exports = {
     name: 'uptime',
     aliases: ['up', 'time', 'timeup', 'timeonline'],
     description: 'Displays the current uptime of the bot',
+    usage: ' ',
     cooldown: 5,
-    execute(message, args) {
+    perms: "None",
+    execute(message) {
 
         let days = Math.floor(process.uptime() / 86400);
         let hours = Math.floor(process.uptime() / 3600) % 24;

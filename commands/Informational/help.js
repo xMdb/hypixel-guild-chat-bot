@@ -10,9 +10,10 @@ module.exports = {
   name: "help",
   aliases: ["h", "cmds", "cmd", "cmdhelp"],
   description: "Displays information about the bot",
+  usage: "[command]",
   cooldown: 3,
+  perms: "None",
   /**
-   *
    * @param {Message} message
    * @param {string[]} args
    * @param {Client} bot
@@ -23,17 +24,22 @@ module.exports = {
       const command = bot.commands.get(cmd);
       if (!command) {
         const nocmd = new MessageEmbed()
-        .setDescription(`I could not find the command or alias **"${cmd}"**.`)
-        .setColor(config.colours.informational)
+          .setDescription(`Sorry, the command **"${cmd}"** was not found.`)
+          .setColor(config.colours.error)
+          .setFooter(`For a list of all the commands run ${config.bot.prefix}help`);
         message.lineReply(nocmd);
         return;
       }
-
       const embed = new MessageEmbed()
-        .setTitle(`Help - **${cmd} command**`)
-        .setDescription(command.description)
+        .setTitle(`${bot.user.username} Help | ${normalizeString(command.category)} | ${normalizeString(cmd)}`)
         .setColor(config.colours.informational)
-        .setFooter(`For a list of all the commands run ${config.bot.prefix}help`);
+        .setDescription(`\n\nCommand Arguments:\n - \`[]\` is optional\n - \`<>\` is required\n - \`|\` means \"OR\"\n\n**Do not actually include [], <>, | symbols when using the command!**\n\n`)
+        .addField("Usage", `\`\`\`${config.bot.prefix}${cmd} ${command.usage}\`\`\``)
+        .addField("Description", `\`\`\`${command.description}\`\`\``)
+        .addField("Aliases", `\`${command.aliases.join(", ")}\``, true)
+        .addField("Category", `\`${normalizeString(command.category)}\``, true)
+        .addField("Permissions Required", `\`${command.perms}\``, true)
+        .setFooter(`For a list of all other commands run ${config.bot.prefix}help`);
       message.lineReply(embed);
       return;
     }
@@ -57,9 +63,9 @@ module.exports = {
     dev = await bot.users.fetch(config.ids.owner).catch((err) => console.error("Could not get owners user object"));
 
     embed
-      .setTitle("Hello!")
+      .setTitle(`Hello! I'm ${bot.user.username}!`)
       .setColor(config.colours.informational)
-      .setDescription(`I'm a chat bot that connects Minecraft chat to Discord and vice versa, poorly coded by ${dev} and [contributors](https://github.com/xMdb/hypixel-guild-chat-bot/graphs/contributors).\n\nCommand Arguments:\n - \`[]\` is optional\n - \`<>\` is required\n - \`|\` means \"OR\"\n\n**Do not actually include [], <>, | symbols when using the command!**`)
+      .setDescription(`I'm a chat bot that connects Minecraft chat to Discord and vice versa, poorly coded by ${dev} and the [contributors](https://github.com/xMdb/hypixel-guild-chat-bot/graphs/contributors "Click to view contributors on GitHub") on GitHub.\n\nCommand Arguments:\n - \`[]\` is optional\n - \`<>\` is required\n - \`|\` means \"OR\"\n\n**Do not actually include [], <>, | symbols when using the command!**\n\n`)
       .setFooter(`To get more info about a command run ${config.bot.prefix}help <command>`);
     message.lineReply(embed);
   },

@@ -6,8 +6,9 @@ module.exports = {
     name: 'slowmode',
     aliases: ['sm', 'setslowmode', 'delay', 'slow'],
     description: 'Allows a custom slowmode value to be set',
-    usage: '[seconds]',
+    usage: '<seconds>',
     cooldown: 5,
+    perms: "Moderator",
     async execute(message, args) {
         const value = args.join(' ');
         const noPermsUser = new Discord.MessageEmbed()

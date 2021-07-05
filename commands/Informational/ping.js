@@ -4,9 +4,11 @@ const config = require('../../config');
 module.exports = {
   name: 'ping',
   aliases: ['p', 'pong', 'heartbeat', 'hb'],
-  description: 'To ping or to pong?',
+  description: 'To ping or to pong? - Displays bot ping',
+  usage: ' ',
   cooldown: 1,
-  execute(message, args) {
+  perms: "None",
+  execute(message) {
     message.channel.send(':ping_pong:').then(async (msg) => {
       msg.delete();
       const pingcmd = new Discord.MessageEmbed()

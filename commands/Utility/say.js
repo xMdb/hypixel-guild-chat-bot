@@ -5,9 +5,10 @@ const config = require('../../config');
 module.exports = {
   name: 'say',
   aliases: ['repeat', 'quote', 's'],
-  description: 'The bot will repeat whatever you input',
-  usage: '[message]',
+  description: 'The bot will repeat whatever you input (requires the Trusted role)',
+  usage: '<message>',
   cooldown: 5,
+  perms: "Trusted",
   async execute(message, args) {
     const noPermsUser = new Discord.MessageEmbed()
       .setColor(config.colours.error)

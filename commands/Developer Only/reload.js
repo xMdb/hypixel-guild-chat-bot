@@ -7,9 +7,10 @@ const chalk = require('chalk');
 module.exports = {
     name: 'reload',
     aliases: ['rc', 'reloadcmd'],
-    description: 'Reloads a command',
-    usage: '[command to reload]',
-    slowmode: 10,
+    description: 'Reloads the provided command file (bot owner only)',
+    usage: '<command to reload>',
+    cooldown: 10,
+    perms: "Bot Owner",
     execute(message, args) {
         // Handle user not being bot owner & if no arguments are present
         const noPerms = new Discord.MessageEmbed()

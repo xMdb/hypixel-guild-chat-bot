@@ -5,8 +5,11 @@ const config = require('../../config');
 module.exports = {
   name: 'restart',
   aliases: ['reboot', 'rs'],
-  description: 'Restarts the bot',
-  execute(message, args) {
+  description: 'Restarts the bot (bot owner only)',
+  usage: ' ',
+  cooldown: 10,
+  perms: "Bot Owner",
+  execute(message) {
     const noPerms = new Discord.MessageEmbed()
       .setColor(config.colours.error)
       .setDescription(config.messages.noPermissionDev)

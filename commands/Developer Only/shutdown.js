@@ -6,8 +6,11 @@ const config = require('../../config');
 module.exports = {
     name: 'shutdown',
     aliases: ['kys', 'kill', 'sd', 'end'],
-    description: 'Shuts down the bot',
-    execute(message, args) {
+    description: 'Shuts down the bot (bot owner only)',
+    usage: ' ',
+    cooldown: 10,
+    perms: "Bot Owner",
+    execute(message) {
         const noPerms = new Discord.MessageEmbed()
             .setColor(config.colours.error)
             .setDescription(config.messages.noPermissionDev)

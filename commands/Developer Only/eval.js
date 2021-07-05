@@ -7,9 +7,11 @@ const hastebin = require('hastebin');
 module.exports = {
   name: 'eval',
   aliases: ['evaluate', 'run', 'e'],
-  description: 'Evaluates JS code',
-  cooldown: 3,
-  execute(message, args) {
+  description: 'Evaluates JavaScript code (bot owner only)',
+  usage: '<code to evaluate>',
+  cooldown: 10,
+  perms: "Bot Owner",
+  execute(message, args, bot) {
     let start = Date.now();
 
     function clean(text) {

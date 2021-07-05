@@ -59,14 +59,14 @@ for (const folder of commandFolders) {
   for (const file of commandFiles) {
     const command = require(`./commands/${folder}/${file}`);
     bot.commands.set(command.name, {
+      name: command.name,
+      category: folder,
       aliases: command.aliases,
       description: command.description,
       usage: command.usage,
-      slowmode: command.slowmode,
       cooldown: command.cooldown,
-      execute: command.execute,
-      name: command.name,
-      category: folder,
+      perms: command.perms,
+      execute: command.execute
     });
   }
 }
@@ -297,9 +297,9 @@ bot.on('message', async message => {
     const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
     if (now < expirationTime && message.author.id !== config.ids.owner) {
       const timeLeft = (expirationTime - now) / 1000;
-      const slowmodeIndex = Math.floor(Math.random() * (config.messages.cooldown.length - 1) + 1);
+      const cooldownIndex = Math.floor(Math.random() * (config.messages.cooldown.length - 1) + 1);
       const cooldownEmbed = new Discord.MessageEmbed()
-        .setTitle(config.messages.cooldown[slowmodeIndex])
+        .setTitle(config.messages.cooldown[cooldownIndex])
         .setColor(config.colours.informational)
         .setDescription(`You\'ll be able to use this command again in **${timeLeft.toFixed(0)} seconds.**`);
       return message.channel.send(cooldownEmbed);
