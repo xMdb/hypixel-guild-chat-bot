@@ -69,9 +69,9 @@ for (const folder of commandFolders) {
   }
 }
 
-// async function toDiscordChat(msg) {
-//   return bot.guilds.cache.get(config.ids.server).channels.cache.get(config.ids.guildChannel).send(msg);
-// }
+async function toDiscordChat(msg) {
+  return bot.guilds.cache.get(config.ids.server).channels.cache.get(config.ids.guildChannel).send(msg);
+}
 
 bot.on("ready", () => {
   console.log(chalk.greenBright("Success! Discord bot is now online."));
@@ -227,31 +227,31 @@ function spawnBot() {
     console.log(chalk.redBright("Error event fired."));
     console.error(error);
     webhook.send(`**Minebot: Error** \`\`\`${error}\`\`\``);
-    console.log(chalk.redBright("Restarting in 5 seconds."));
+    console.log(chalk.redBright("Restarting in 10 seconds."));
     toDiscordChat(`<:nah:829640042334257202> The bot has encountered an unknown error and will restart shortly.`);
     setTimeout(() => {
       process.exit(1);
-    }, 5000);
+    }, 10 * 1000);
   });
 
   minebot.on("end", (error) => {
     console.log(chalk.redBright("End event fired."));
     console.error(error);
-    console.log(chalk.redBright("Restarting in 10 seconds."));
+    console.log(chalk.redBright("Restarting in 15 seconds."));
     setTimeout(() => {
       process.exit(1);
-    }, 10000);
+    }, 15 * 1000);
   });
 
   minebot.on("kicked", (reason) => {
     console.log(chalk.redBright("The bot was kicked."));
     console.error(reason);
     webhook.send(`**The bot was kicked. Reason:** \`\`\`${reason}\`\`\``);
-    console.log(chalk.redBright("Restarting in 5 seconds."));
+    console.log(chalk.redBright("Restarting in 10 seconds."));
     toDiscordChat(`<:nah:829640042334257202> The bot was kicked from the server and will reconnect shortly. Reason: \`\`\`${reason}\`\`\``);
     setTimeout(() => {
       process.exit(1);
-    }, 5000);
+    }, 10 * 1000);
   });
 }
 
@@ -276,7 +276,9 @@ bot.on("message", async (message) => {
 
   // —— Discord command cooldowns
   if (!command) return;
-  const { cooldowns } = bot;
+  const {
+    cooldowns
+  } = bot;
   if (!cooldowns.has(command.name)) {
     cooldowns.set(command.name, new Discord.Collection());
   }
@@ -285,7 +287,7 @@ bot.on("message", async (message) => {
   const cooldownAmount = (command.cooldown || 3) * 1000;
   if (timestamps.has(message.author.id)) {
     const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
-    if (now < expirationTime && message.author.id !== config.ids.botOwner) {
+    if (now < expirationTime && message.author.id !== config.ids.owner) {
       const timeLeft = (expirationTime - now) / 1000;
       const cooldownEmbed = new Discord.MessageEmbed()
         .setTitle(`Woah! Slow down!`)
