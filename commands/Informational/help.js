@@ -22,7 +22,10 @@ module.exports = {
       const cmd = args[0].toLowerCase();
       const command = bot.commands.get(cmd);
       if (!command) {
-        message.lineReply(`That command doesn't exist.`);
+        const nocmd = new MessageEmbed()
+        .setDescription(`I could not find the command or alias **"${cmd}"**.`)
+        .setColor(config.colours.informational)
+        message.lineReply(nocmd);
         return;
       }
 
