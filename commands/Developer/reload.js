@@ -22,7 +22,7 @@ module.exports = {
             .setDescription(`Please input a command to reload.`)
             .setTimestamp()
             .setFooter(`Executed by ${message.author.username}#${message.author.discriminator}`, message.author.displayAvatarURL());
-        if (message.author.id !== config.ids.botOwner) return message.lineReply(noPerms);
+        if (message.author.id !== config.ids.owner) return message.lineReply(noPerms);
         if (!args.length) return message.lineReply(noArgs);
 
         const commandName = args[0].toLowerCase();

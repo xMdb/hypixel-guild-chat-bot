@@ -1,10 +1,11 @@
 module.exports = {
 	bot: {
-		prefix: "h!"
+		prefix: "h!",
+		owner: "xMdb#7897"
 	},
 
 	ids: {
-		botOwner: "253699775377965056",
+		owner: "253699775377965056",
 		server: "520948670758387722",
 		guildChannel: "833112550970359830",
 		trustedRole: "520950339013312522"

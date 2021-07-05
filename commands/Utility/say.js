@@ -19,7 +19,7 @@ module.exports = {
       .setDescription(config.messages.selfNoPermissions)
       .setTimestamp()
       .setFooter(config.messages.footer);
-    if (!message.member.roles.cache.has(config.ids.trustedRole) && message.author.id !== config.ids.botOwner) return message.lineReply(noPermsUser);
+    if (!message.member.roles.cache.has(config.ids.trustedRole) && message.author.id !== config.ids.owner) return message.lineReply(noPermsUser);
     if (!args.length || args.length > 1999) return message.channel.send(`${message.author}, please input something for me to say.\nUsage: **${config.bot.prefix}${module.exports.name} ${module.exports.usage}**`);
     try {
       await message.delete();

@@ -17,7 +17,7 @@ module.exports = {
       .setDescription('Process ended. Restarting...')
       .setTimestamp()
       .setFooter(config.messages.footer);
-    if (message.author.id !== config.ids.botOwner) return message.lineReply(noPerms);
+    if (message.author.id !== config.ids.owner) return message.lineReply(noPerms);
     message.lineReply(success).then(() => {
       process.exit(1);
     });

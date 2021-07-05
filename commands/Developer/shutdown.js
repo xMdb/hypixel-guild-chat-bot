@@ -18,7 +18,7 @@ module.exports = {
             .setDescription('Process ended. Please restart the bot manually.')
             .setTimestamp()
             .setFooter(config.messages.footer);
-        if (message.author.id !== config.ids.botOwner) return message.lineReply(noPerms);
+        if (message.author.id !== config.ids.owner) return message.lineReply(noPerms);
         message.lineReply(success).then(() => {
             nc.run(`pm2 delete app`);
         });
