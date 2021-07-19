@@ -11,7 +11,7 @@
     "discord.js-light": "^3.5.11",
     "dotenv": "^10.0.0",
     "hastebin": "^0.2.1",
-    "mineflayer": "^3.7.0",
+    "mineflayer": "^3.8.0",
     "node-cmd": "^4.0.0"
   },
   "optionalDependencies": {
