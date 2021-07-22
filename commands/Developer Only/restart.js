@@ -5,7 +5,7 @@ const config = require('../../config');
 module.exports = {
   name: 'restart',
   aliases: ['reboot', 'rs'],
-  description: 'Restarts the bot (bot owner only)',
+  description: 'Restarts the bot',
   usage: ' ',
   cooldown: 10,
   perms: "Bot Owner",

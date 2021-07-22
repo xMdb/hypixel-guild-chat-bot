@@ -5,7 +5,7 @@ const config = require('../../config');
 module.exports = {
   name: 'say',
   aliases: ['repeat', 'quote', 's'],
-  description: 'The bot will repeat whatever you input (requires the Trusted role)',
+  description: 'The bot will repeat whatever you input',
   usage: '<message>',
   cooldown: 5,
   perms: "Trusted",

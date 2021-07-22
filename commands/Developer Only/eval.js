@@ -7,7 +7,7 @@ const hastebin = require('hastebin');
 module.exports = {
   name: 'eval',
   aliases: ['evaluate', 'run', 'e'],
-  description: 'Evaluates JavaScript code (bot owner only)',
+  description: 'Evaluates JavaScript code',
   usage: '<code to evaluate>',
   cooldown: 10,
   perms: "Bot Owner",

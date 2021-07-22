@@ -24,7 +24,7 @@ module.exports = {
       const command = bot.commands.get(cmd);
       if (!command) {
         const nocmd = new MessageEmbed()
-          .setDescription(`Sorry, the command **"${cmd}"** was not found.`)
+          .setDescription(`Sorry, the command **${cmd}** was not found.`)
           .setColor(config.colours.error)
           .setFooter(`For a list of all the commands run ${config.bot.prefix}help`);
         message.lineReply(nocmd);

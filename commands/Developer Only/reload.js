@@ -7,7 +7,7 @@ const chalk = require('chalk');
 module.exports = {
     name: 'reload',
     aliases: ['rc', 'reloadcmd'],
-    description: 'Reloads the provided command file (bot owner only)',
+    description: 'Reloads the provided command file',
     usage: '<command to reload>',
     cooldown: 10,
     perms: "Bot Owner",

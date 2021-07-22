@@ -6,7 +6,7 @@ const config = require('../../config');
 module.exports = {
     name: 'shutdown',
     aliases: ['kys', 'kill', 'sd', 'end'],
-    description: 'Shuts down the bot (bot owner only)',
+    description: 'Shuts down the bot',
     usage: ' ',
     cooldown: 10,
     perms: "Bot Owner",
