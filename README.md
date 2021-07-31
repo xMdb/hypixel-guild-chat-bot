@@ -2,7 +2,7 @@
 
 [![Gitmoji](https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg?style=flat-square)](http://gitmoji.dev/) [![Commit Activity](https://img.shields.io/github/commit-activity/w/xMdb/hypixel-guild-chat-bot)](https://github.com/xMdb/hypixel-guild-chat-bot/commits/main/)
 
-Discord bot used to connect Minecraft chat to Discord and vice versa by xMdb!
+Discord bot used to connect Minecraft chat to Discord and vice versa. Open source, with love from xMdb ❤
 
 > This application will login to Hypixel using Mineflayer which is not a normal Minecraft client, this could result in your Minecraft account getting banned from Hypixel, so use this application at your own risk. I am not liable for any damages and no warranty is provided as outlined in GPL-3.0 License.
 
