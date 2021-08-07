@@ -1,4 +1,6 @@
-const Discord = require('discord.js-light');
+const {
+  MessageEmbed
+} = require('discord.js');
 const config = require('../../config');
 
 module.exports = {
@@ -8,16 +10,21 @@ module.exports = {
   usage: ' ',
   cooldown: 1,
   perms: "None",
-  execute(message) {
+  /**
+   * @param {Message} message
+   */
+  async execute(message) {
     message.channel.send(':ping_pong:').then(async (msg) => {
       msg.delete();
-      const pingcmd = new Discord.MessageEmbed()
+      const pingCmd = new MessageEmbed()
         .setTitle('Pong!')
         .setColor(config.colours.success)
         .setDescription(`**Latency**: ${msg.createdTimestamp - message.createdTimestamp}ms`)
         .setTimestamp()
         .setFooter(config.messages.footer);
-      message.channel.send(pingcmd);
+      message.channel.send({
+        embeds: [pingCmd]
+      });
     });
   }
 };

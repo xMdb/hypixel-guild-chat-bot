@@ -2,8 +2,7 @@ const {
   Message,
   Client,
   MessageEmbed
-} = require("discord.js-light");
-require("discord-reply");
+} = require("discord.js");
 const config = require("../../config");
 
 module.exports = {
@@ -23,14 +22,16 @@ module.exports = {
       const cmd = args[0].toLowerCase();
       const command = bot.commands.get(cmd);
       if (!command) {
-        const nocmd = new MessageEmbed()
+        const noCmd = new MessageEmbed()
           .setDescription(`Sorry, the command **${cmd}** was not found.`)
           .setColor(config.colours.error)
           .setFooter(`For a list of all the commands run ${config.bot.prefix}help`);
-        message.lineReply(nocmd);
+        message.reply({
+          embeds: [noCmd]
+        });
         return;
       }
-      const embed = new MessageEmbed()
+      const helpEmbed = new MessageEmbed()
         .setTitle(`${bot.user.username} Help | ${normalizeString(command.category)} | ${normalizeString(cmd)}`)
         .setColor(config.colours.informational)
         .setDescription(`\n\nCommand Arguments:\n - \`[]\` is optional\n - \`<>\` is required\n - \`|\` means \"OR\"\n\n**Do not actually include [], <>, | symbols when using the command!**\n\n`)
@@ -40,7 +41,9 @@ module.exports = {
         .addField("Category", `\`${normalizeString(command.category)}\``, true)
         .addField("Permissions Required", `\`${command.perms}\``, true)
         .setFooter(`For a list of all other commands run ${config.bot.prefix}help`);
-      message.lineReply(embed);
+      message.reply({
+        embeds: [helpEmbed]
+      });
       return;
     }
 
@@ -51,23 +54,25 @@ module.exports = {
     });
     uniqueCategories = uniqueCategories.map((ele) => normalizeString(ele));
 
-    const embed = new MessageEmbed();
+    const helpEmbed = new MessageEmbed();
     uniqueCategories.forEach((category) => {
       const commands = bot.commands.filter((ele) => ele.category.toLowerCase() === category.toLowerCase());
       let commandsString = commands.map((ele) => `\`${ele.name}\`,`).join(" ");
       commandsString = commandsString.substring(0, commandsString.length - 1);
-      embed.addField(category, commandsString);
+      helpEmbed.addField(category, commandsString);
     });
 
     let dev = config.bot.owner;
-    dev = await bot.users.fetch(config.ids.owner).catch((err) => console.error("Could not get owners user object"));
+    dev = await bot.users.fetch(config.ids.owner).catch((err) => console.error(err));
 
-    embed
+    helpEmbed
       .setTitle(`Hello! I'm ${bot.user.username}!`)
       .setColor(config.colours.informational)
       .setDescription(`I'm a chat bot that connects Minecraft chat to Discord and vice versa, poorly coded by ${dev} and the [contributors](https://github.com/xMdb/hypixel-guild-chat-bot/graphs/contributors "Click to view contributors on GitHub") on GitHub.\n\nCommand Arguments:\n - \`[]\` is optional\n - \`<>\` is required\n - \`|\` means \"OR\"\n\n**Do not actually include [], <>, | symbols when using the command!**\n\n`)
       .setFooter(`To get more info about a command run ${config.bot.prefix}help <command>`);
-    message.lineReply(embed);
+    message.reply({
+      embeds: [helpEmbed]
+    });
   },
 };
 

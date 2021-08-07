@@ -33,16 +33,19 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 const chalk = require("chalk");
-const Discord = require("discord.js-light");
-require("discord-reply");
-const bot = new Discord.Client({
-  disableMentions: "everyone",
-  cacheGuilds: true,
-  cacheChannels: true,
-  cacheOverwrites: false,
-  cacheRoles: true,
-  cacheEmojis: true,
-  cachePresences: false
+const {
+  Client,
+  Intents,
+  WebhookClient,
+  MessageEmbed,
+  Collection
+} = require("discord.js");
+const bot = new Client({
+  intents: [
+    Intents.FLAGS.GUILD_MEMBERS,
+    Intents.FLAGS.GUILD_MESSAGES,
+    Intents.FLAGS.GUILDS
+  ],
 });
 const mineflayer = require("mineflayer");
 
@@ -51,8 +54,8 @@ const regex = require("./handlers/regex");
 
 // ██████ Discord Bot: Initialization ██████████████████████████████████████████
 
-bot.cooldowns = new Discord.Collection();
-bot.commands = new Discord.Collection();
+bot.cooldowns = new Collection();
+bot.commands = new Collection();
 const commandFolders = fs.readdirSync("./commands");
 for (const folder of commandFolders) {
   const commandFiles = fs.readdirSync(`./commands/${folder}`).filter((file) => file.endsWith(".js"));
@@ -72,7 +75,9 @@ for (const folder of commandFolders) {
 }
 
 async function toDiscordChat(msg) {
-  return bot.guilds.cache.get(config.ids.server).channels.cache.get(config.ids.guildChannel).send(msg);
+  return bot.guilds.cache.get(config.ids.server).channels.cache.get(config.ids.guildChannel).send({
+    content: msg
+  });
 }
 
 bot.on("ready", () => {
@@ -208,7 +213,7 @@ function spawnBot() {
 
   // ██████ Discord -> Minecraft ███████████████████████████████████████████████
 
-  bot.on('message', async message => {
+  bot.on('messageCreate', async message => {
     if (message.author.id === bot.user.id ||
       message.channel.id !== config.ids.guildChannel ||
       message.author.bot ||
@@ -221,7 +226,9 @@ function spawnBot() {
     message.delete().catch(error => {
       if (error.code > 10000) {
         console.log(error);
-        message.channel.send(`**:warning: ${message.author}, there was an error while performing that task.**`);
+        message.channel.send({
+          content: `**:warning: ${message.author}, there was an error while performing that task.**`
+        });
       }
     });
     if (message.content.startsWith(`/`)) toDiscordChat(`https://media.tenor.com/images/e6cd56fc29e429ff89fef2fd2bdfaae2/tenor.gif`);
@@ -229,7 +236,9 @@ function spawnBot() {
 
   // ██████ Minecraft Bot: Error Handler ███████████████████████████████████████
 
-  const webhook = new Discord.WebhookClient(process.env.ERROR_WEBHOOK_ID, process.env.ERROR_WEBHOOK_TOKEN);
+  const webhook = new WebhookClient({
+    url: process.env.ERROR_WEBHOOK
+  });
 
   minebot.on("error", (error) => {
     console.log(chalk.redBright("Error event fired."));
@@ -264,13 +273,25 @@ function spawnBot() {
 }
 
 // —— Login the Minecraft bot
-setTimeout(() => {
-  spawnBot();
-}, 5000);
+if (process.env.ENVIRONMENT === "prod") {
+  setTimeout(() => {
+    spawnBot();
+  }, 5000);
+}
+
+if (process.env.ENVIRONMENT === "dev") {
+  setTimeout(() => {
+    console.log(chalk.yellowBright("Here's where the bot should login to Hypixel.\nThis is because you have the environment set to \'dev\'."));
+  }, 5000);
+}
+
+if (process.env.ENVIRONMENT === undefined) {
+  throw new Error("Please set the \"ENVIRONMENT\" value in your .env file to either \"prod\" or \"dev\".");
+}
 
 // ██████ Discord Bot: Command Handler █████████████████████████████████████████
 
-bot.on('message', async message => {
+bot.on('messageCreate', async message => {
   const args = message.content.slice(config.bot.prefix.length).trim().split(/ +/);
   const commandName = args.shift().toLowerCase();
   if (message.author.bot || !message.content.startsWith(config.bot.prefix)) return;
@@ -288,7 +309,7 @@ bot.on('message', async message => {
     cooldowns
   } = bot;
   if (!cooldowns.has(command.name)) {
-    cooldowns.set(command.name, new Discord.Collection());
+    cooldowns.set(command.name, new Collection());
   }
   const now = Date.now();
   const timestamps = cooldowns.get(command.name);
@@ -298,11 +319,13 @@ bot.on('message', async message => {
     if (now < expirationTime && message.author.id !== config.ids.owner) {
       const timeLeft = (expirationTime - now) / 1000;
       const cooldownIndex = Math.floor(Math.random() * (config.messages.cooldown.length - 1) + 1);
-      const cooldownEmbed = new Discord.MessageEmbed()
+      const cooldownEmbed = new MessageEmbed()
         .setTitle(config.messages.cooldown[cooldownIndex])
         .setColor(config.colours.informational)
         .setDescription(`You\'ll be able to use this command again in **${timeLeft.toFixed(0)} seconds.**`);
-      return message.channel.send(cooldownEmbed);
+      return message.channel.send({
+        embeds: [cooldownEmbed]
+      });
     }
   }
   timestamps.set(message.author.id, now);
@@ -314,9 +337,13 @@ bot.on('message', async message => {
   try {
     await command.execute(message, args, bot);
   } catch (err) {
-    const webhook = new Discord.WebhookClient(process.env.ERROR_WEBHOOK_ID, process.env.ERROR_WEBHOOK_TOKEN);
+    const webhook = new WebhookClient({
+      url: process.env.ERROR_WEBHOOK
+    });
     console.error(err);
-    message.lineReply(config.messages.errorDev);
+    message.reply({
+      content: config.messages.errorDev
+    });
     webhook.send(`**General command error:** \`\`\`${err}\`\`\``);
   }
 });

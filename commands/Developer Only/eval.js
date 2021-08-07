@@ -1,6 +1,6 @@
-const Discord = require('discord.js-light');
-require('discord-reply');
-const bot = new Discord.Client();
+const {
+  MessageEmbed
+} = require('discord.js');
 const config = require('../../config');
 const hastebin = require('hastebin');
 
@@ -11,6 +11,11 @@ module.exports = {
   usage: '<code to evaluate>',
   cooldown: 10,
   perms: "Bot Owner",
+    /**
+   * @param {Message} message
+   * @param {string[]} args
+   * @param {Client} bot
+   */
   execute(message, args, bot) {
     let start = Date.now();
 
@@ -19,12 +24,14 @@ module.exports = {
         return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
       return text;
     }
-    const noperms = new Discord.MessageEmbed()
+    const noperms = new MessageEmbed()
       .setColor(config.colours.error)
       .setDescription(config.messages.noPermissionDev)
       .setTimestamp()
       .setFooter(`Executed by ${message.author.username}#${message.author.discriminator}`, message.author.displayAvatarURL());
-    if (message.author.id !== config.ids.owner) return message.lineReply(noperms);
+    if (message.author.id !== config.ids.owner) return message.reply({
+      embeds: [noperms]
+    });
 
     const code = args.join(" ");
 
@@ -42,26 +49,30 @@ module.exports = {
 
       let end = Date.now();
 
-      const longRequestEmbed = new Discord.MessageEmbed()
+      const longRequestEmbed = new MessageEmbed()
         .setTitle('Evaluate - Result Too Long  📜')
         .setColor(config.colours.informational)
         .setDescription(`Generating Hastebin link!`)
         .setTimestamp()
         .setFooter(`Execution time: ${end - start}ms`, message.author.displayAvatarURL());
-      if (evaled.length > 1500) {
-        message.channel.send(longRequestEmbed);
+      if (evaled.length > 999) {
+        message.channel.send({
+          embeds: [longRequestEmbed]
+        });
         hastebin.createPaste(clean(evaled), {
             raw: false,
             contentType: 'text/plain',
-            server: 'https://haste.mgrif.xyz'
+            server: 'https://haste.zneix.eu/'
           })
-          .then(url => message.lineReply(`**Result:** ${url}`))
+          .then(url => message.reply({
+            content: `**Result:** ${url}`
+          }))
           .catch(e => console.error(e));
         message.react('<a:discordload:830394342082347058>');
         return;
       }
 
-      const evalEmbed = new Discord.MessageEmbed()
+      const evalEmbed = new MessageEmbed()
         .setTitle('Evaluate - Completed  ✅')
         .setColor(config.colours.success)
         .addFields({
@@ -74,13 +85,14 @@ module.exports = {
         })
         .setTimestamp()
         .setFooter(`Execution time: ${end - start}ms`, message.author.displayAvatarURL());
-      message.lineReply(evalEmbed);
+      message.reply({
+        embeds: [evalEmbed]
+      });
       message.react(`✅`);
 
 
     } catch (error) {
-      message.lineReply(`An error has occured.`);
-      const errorEmbed = new Discord.MessageEmbed()
+      const errorEmbed = new MessageEmbed()
         .setTitle('Evaluate - Error  ❌')
         .setColor(config.colours.error)
         .addFields({
@@ -93,7 +105,10 @@ module.exports = {
         })
         .setTimestamp()
         .setFooter(`Executed by ${message.author.username}#${message.author.discriminator}`, message.author.displayAvatarURL());
-      message.channel.send(errorEmbed);
+      message.reply({
+        content: `An error has occurred.`,
+        embeds: [errorEmbed]
+      })
       message.react(`❌`);
     }
   }

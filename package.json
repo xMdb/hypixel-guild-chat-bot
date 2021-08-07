@@ -6,18 +6,10 @@
   "license": "GPL-3.0",
   "dependencies": {
     "chalk": "^4.1.2",
-    "discord-reply": "^0.1.2",
-    "discord.js": "^12.5.3",
-    "discord.js-light": "^3.5.11",
+    "discord.js": "^13.0.0",
     "dotenv": "^10.0.0",
     "hastebin": "^0.2.1",
     "mineflayer": "^3.9.0",
     "node-cmd": "^5.0.0"
-  },
-  "optionalDependencies": {
-    "bufferutil": "^4.0.3",
-    "erlpack": "github:discord/erlpack",
-    "utf-8-validate": "^5.0.5",
-    "zlib-sync": "^0.1.7"
   }
 }
