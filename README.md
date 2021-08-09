@@ -6,7 +6,7 @@ Discord bot used to connect Minecraft chat to Discord and vice versa. Open sourc
 
 > This application will login to Hypixel using Mineflayer which is not a normal Minecraft client, this could result in your Minecraft account getting banned from Hypixel, so use this application at your own risk. I am not liable for any damages and no warranty is provided as outlined in GPL-3.0 License.
 
-This application is mainly for the [Hypixel Knights Discord server](https://discord.gg/kQMNpNw6s5), but you can also easily adapt the code to work in your own server, or use it in your own project.
+This application is mainly for the [Hypixel Knights Discord server](https://discord.gg/hk), but you can also easily adapt the code to work in your own server, or use it in your own project.
 
 ## Table of Contents
 
@@ -44,13 +44,13 @@ npm install
 BOT_TOKEN=Bot token from Discord Developer Portal
 MC_USER=Minecraft Account Email
 MC_PASS=Minecraft Account Password
-ERROR_WEBHOOK_URL=A webhook URL for error logging
+ERROR_WEBHOOK=A webhook URL for error logging
 ENVIRONMENT=Set this to "dev" to disable the Minecraft bot, and set this to "prod" for full functionality.
 ```
 6. Edit the [config.js](https://github.com/xMdb/hypixel-knights-gchat-bot/blob/main/config.js) to fit your own needs
-7. (RECOMMENDED) Install PM2 by using `npm install pm2 -g`
-8. (RECOMMENDED) Start the bot by using `pm2 start app.js`
-> :warning: **If you do not install and use PM2, the shutdown and restart commands will not function as intended.**
+7. (REQUIRED) Install PM2 by using `npm install pm2 -g`
+8. (REQUIRED) Start the bot by using `pm2 start app.js`
+> :warning: **If you do not install and use PM2, the shutdown and restart commands will not function as intended, and the Minecraft bot will shutdown every time it encounters an error without restarting.**
 
 ## Acknowledgements
 Parts of this project are forked from:

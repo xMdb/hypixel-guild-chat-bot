@@ -1,0 +1,9 @@
+# Must have
+node_modules/
+.env
+launcher_accounts.json
+
+# You can delete these if you want
+blacklist.js
+commands/Utility/jim.js
+events/guildMemberAdd.js
