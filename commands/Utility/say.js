@@ -53,8 +53,9 @@ module.exports = {
                `${interaction.user.username}#${interaction.user.discriminator}`,
                interaction.user.displayAvatarURL({ dynamic: true })
             )
-            .setDescription(`**Say command in **<#${destination.id}> [Click to view message](${sayMessage.url})`)
+            .setDescription(`**Say command in **<#${destination.id}> [Jump to Message](${sayMessage.url})`)
             .addField(`Message`, message)
+            .setTimestamp()
             .setFooter(`User ID: ${interaction.user.id}`);
          guildWebhook.send({ embeds: [log] });
          interaction.reply({ content: 'Done!', ephemeral: true });
