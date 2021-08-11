@@ -31,7 +31,7 @@ const rl = readline.createInterface({
    output: process.stdout,
 });
 const chalk = require('chalk');
-const { Client, Intents, WebhookClient, Collection } = require('discord.js');
+const { Client, Intents, WebhookClient, MessageEmbed, Collection } = require('discord.js');
 const bot = new Client({
    intents: [Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILDS],
 });
@@ -141,6 +141,10 @@ function spawnBot() {
 
    // ██████ Minecraft -> Discord ███████████████████████████████████████████████
 
+   const guildWebhook = new WebhookClient({
+      url: process.env.GUILD_WEBHOOK,
+   });
+
    minebot.on('guildChat', (rank, playername, grank, message) => {
       if (playername === minebot.username) return;
       if (rank == undefined) return toDiscordChat(`<a:MC:829592987616804867> **${playername}: ${message}**`);
@@ -148,19 +152,31 @@ function spawnBot() {
    });
 
    // —— Other types of messages -> Discord
-   minebot.on('joinLeave', (playername, joinleave) => {
+   minebot.on('joinLeave', (playername, joinLeave) => {
       if (playername === minebot.username) return;
-      toDiscordChat(`<:hypixel:829640659542867969> **${playername} ${joinleave}**`);
+      toDiscordChat(`<:hypixel:829640659542867969> **${playername} ${joinLeave}**`);
    });
 
    minebot.on('newMember', (rank, playername) => {
       if (rank == undefined) return toDiscordChat(`<a:join:830746278680985620> ${playername} joined the guild!`);
       toDiscordChat(`<a:join:830746278680985620> ${rank}${playername} joined the guild!`);
+      const newMember = new MessageEmbed()
+         .setColor(config.colours.success)
+         .setAuthor(`IGN: ${playername}`)
+         .setDescription(`New member joined the guild!`)
+         .setTimestamp();
+      guildWebhook.send({ embeds: [newMember] });
    });
 
    minebot.on('memberLeave', (rank, playername) => {
       if (rank == undefined) return toDiscordChat(`<a:leave:830746292186775592> ${playername} left the guild.`);
       toDiscordChat(`<a:leave:830746292186775592> ${rank}${playername} left the guild.`);
+      const memberLeave = new MessageEmbed()
+         .setColor(config.colours.error)
+         .setAuthor(`IGN: ${playername}`)
+         .setDescription(`A member left the guild.`)
+         .setTimestamp();
+      guildWebhook.send({ embeds: [memberLeave] });
    });
 
    minebot.on('memberKicked', (rank1, playername1, rank2, playername2) => {
@@ -196,25 +212,25 @@ function spawnBot() {
    // ██████ Discord -> Minecraft ███████████████████████████████████████████████
 
    bot.on('messageCreate', async (message) => {
-      if (
-         message.author.id === bot.user.id ||
-         message.channel.id !== config.ids.guildChannel ||
-         message.author.bot ||
-         message.content.startsWith(config.bot.prefix) ||
-         message.content === ' ' ||
-         message.content === ''
-      )
-         return;
-      minebot.chat(`/gc ${message.author.username} > ${message.content}`);
-      toDiscordChat(`<:discord:829596398822883368> **${message.author.username}: ${message.content}**`);
-      message.delete().catch((error) => {
-         if (error.code > 10000) {
-            console.log(error);
-            message.channel.send({
-               content: `**:warning: ${message.author}, there was an error while performing that task.**`,
-            });
-         }
-      });
+      try {
+         if (
+            message.author.id === bot.user.id ||
+            message.channel.id !== config.ids.guildChannel ||
+            message.author.bot ||
+            message.content.startsWith(config.bot.prefix) ||
+            message.content === ' ' ||
+            message.content === ''
+         )
+            return;
+         minebot.chat(`/gc ${message.author.username} > ${message.content}`);
+         toDiscordChat(`<:discord:829596398822883368> **${message.author.username}: ${message.content}**`);
+         message.delete();
+      } catch (err) {
+         console.log(error);
+         message.channel.send({
+            content: `**:warning: ${message.author}, there was an error while performing that task.**`,
+         });
+      }
       if (message.content.startsWith(`/`))
          toDiscordChat(`https://media.tenor.com/images/e6cd56fc29e429ff89fef2fd2bdfaae2/tenor.gif`);
    });

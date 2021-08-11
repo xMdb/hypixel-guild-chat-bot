@@ -45,9 +45,10 @@ BOT_TOKEN=Bot token from Discord Developer Portal
 MC_USER=Minecraft Account Email
 MC_PASS=Minecraft Account Password
 ERROR_WEBHOOK=A webhook URL for error logging
+GUILD_WEBHOOK=A webhook URL for guild join/leave 
 ENVIRONMENT=Set this to "dev" to disable the Minecraft bot, and set this to "prod" for full functionality.
 ```
-6. Edit the [config.js](https://github.com/xMdb/hypixel-knights-gchat-bot/blob/main/config.js) to fit your own needs
+6. Edit the [config.js](https://github.com/xMdb/hypixel-knights-gchat-bot/blob/main/config.js) file to fit your own needs
 7. (REQUIRED) Install PM2 by using `npm install pm2 -g`
 8. (REQUIRED) Start the bot by using `pm2 start app.js`
 > :warning: **If you do not install and use PM2, the shutdown and restart commands will not function as intended, and the Minecraft bot will shutdown every time it encounters an error without restarting.**

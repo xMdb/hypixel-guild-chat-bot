@@ -1,3 +1,4 @@
+const { MessageEmbed, WebhookClient } = require('discord.js');
 const config = require('../../config');
 const chalk = require('chalk');
 
@@ -40,11 +41,23 @@ module.exports = {
          if (destination.type !== 'GUILD_TEXT') {
             return interaction.reply({ content: `The channel provided is not a text channel.`, ephemeral: true });
          }
-         bot.channels.cache.get(destination.id).send({
+         const sayMessage = await bot.channels.cache.get(destination.id).send({
             content: message,
          });
-         console.log(chalk.grey(`[SAY] ${interaction.user.username} #${destination.name}: ${message}`));
-         interaction.reply({ content: 'Done.', ephemeral: true });
+         const guildWebhook = new WebhookClient({
+            url: process.env.GUILD_WEBHOOK,
+         });
+         const log = new MessageEmbed()
+            .setColor(config.colours.informational)
+            .setAuthor(
+               `${interaction.user.username}#${interaction.user.discriminator}`,
+               interaction.user.displayAvatarURL({ dynamic: true })
+            )
+            .setDescription(`**Say command in **<#${destination.id}> [Click to view message](${sayMessage.url})`)
+            .addField(`Message`, message)
+            .setFooter(`User ID: ${interaction.user.id}`);
+         guildWebhook.send({ embeds: [log] });
+         interaction.reply({ content: 'Done!', ephemeral: true });
       } catch (error) {
          interaction.reply({
             content: `I cannot access that channel.`,
