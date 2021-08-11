@@ -1,7 +1,7 @@
 module.exports = {
    bot: {
       prefix: 'h!', // Used to be used for commands, now used to not send a message to Minecraft in guildChannel
-      owner: 'xMdb#7897',
+      owner: 'xMdb#7897', // Set this to your Discord username
    },
 
    ids: {
@@ -10,6 +10,7 @@ module.exports = {
       server: '520948670758387722', // Prod server (has guildChannel and trustedRole)
       guildChannel: '833112550970359830', // Server to send and receive Minecraft messages
       trustedRole: '520952297694560276', // Role to access certain restricted commands (currently only "say" command at the moment)
+      moderatorRole: '762473575277133824', // Role used for access to moderator commands (currently only "slowmode" command at the moment)
    },
 
    messages: {

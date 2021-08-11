@@ -1,60 +1,104 @@
-// const { MessageEmbed, Permissions } = require('discord.js');
-// const config = require('../../config');
+const { MessageEmbed } = require('discord.js');
+const config = require('../../config');
 
-// module.exports = {
-//    name: 'slowmode',
-//    aliases: ['sm', 'setslowmode', 'delay', 'slow'],
-//    description: 'Allows a custom slowmode value to be set',
-//    usage: '<seconds>',
-//    cooldown: 5,
-//    perms: 'Moderator',
-//    /**
-//     * @param {Message} message
-//     * @param {string[]} args
-//     */
-//    async execute(message, args) {
-//       const value = args.join(' ');
-//       const noPermsUser = new MessageEmbed()
-//          .setColor(config.colours.error)
-//          .setDescription(config.messages.noPermissionNormal)
-//          .setTimestamp()
-//          .setFooter(config.messages.footer);
-//       const noPermsBot = new MessageEmbed()
-//          .setColor(config.colours.error)
-//          .setDescription(config.messages.selfNoPermissions)
-//          .setTimestamp()
-//          .setFooter(config.messages.footer);
-//       const invalidArgs = new MessageEmbed()
-//          .setColor(config.colours.error)
-//          .setDescription(`Please include a value in **seconds** that is below **6 hours**.`)
-//          .setTimestamp()
-//          .setFooter(config.messages.footer);
-//       const success = new MessageEmbed()
-//          .setColor(config.colours.success)
-//          .setDescription(`Success! The slowmode in this channel is now set to **${value}** seconds!`)
-//          .setTimestamp()
-//          .setFooter(config.messages.footer);
-//       if (!message.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES))
-//          return message.reply({
-//             embeds: [noPermsUser],
-//          });
-//       if (!value.length || isNaN(value) || value > 21600)
-//          return message.reply({
-//             embeds: [invalidArgs],
-//          });
-//       try {
-//          await message.channel.setRateLimitPerUser(
-//             value,
-//             `Executed by ${message.author.username}#${message.author.discriminator}`
-//          );
-//       } catch (error) {
-//          if (error.code === 50013)
-//             return message.reply({
-//                embeds: [noPermsBot],
-//             });
-//       }
-//       message.reply({
-//          embeds: [success],
-//       });
-//    },
-// };
+module.exports = {
+   name: 'slowmode',
+   description: 'Allows a custom slowmode value to be set',
+   cooldown: 5,
+   async execute(interaction, bot) {
+      // —— Set command options
+      const data = {
+         name: this.name,
+         description: this.description,
+         defaultPermission: false,
+         options: [
+            {
+               name: 'duration',
+               type: 'INTEGER',
+               description: 'The amount of time in seconds to set the slowmode to',
+               required: true,
+            },
+            {
+               name: 'hide',
+               type: 'BOOLEAN',
+               description: 'Set slowdown silently',
+               required: false,
+            },
+         ],
+      };
+      // —— Limit command to moderators
+      const permissions = [
+         {
+            id: config.ids.moderatorRole,
+            type: 'ROLE',
+            permission: true,
+         },
+      ];
+      // —— Set guild commands
+      const commandProd = await bot.guilds.cache.get(config.ids.server)?.commands.create(data);
+      const commandDev = await bot.guilds.cache.get(config.ids.testingServer)?.commands.create(data);
+      await commandProd.permissions.add({ permissions });
+      await commandDev.permissions.add({ permissions });
+
+      const duration = interaction.options.getInteger('duration');
+      const hide = interaction.options.getBoolean('hide');
+
+      // —— Set embeds
+      const invalidArgs = new MessageEmbed()
+         .setColor(config.colours.error)
+         .setDescription(`Please include a value in **seconds** that is below **6 hours**.`)
+         .setTimestamp()
+         .setFooter(config.messages.footer);
+      const noPermsBot = new MessageEmbed()
+         .setColor(config.colours.error)
+         .setDescription(config.messages.selfNoPermissions)
+         .setTimestamp()
+         .setFooter(config.messages.footer);
+      const success = new MessageEmbed()
+         .setColor(config.colours.success)
+         .setDescription(`Success! The slowmode in this channel is now set to **${duration}** seconds!`)
+         .setTimestamp()
+         .setFooter(config.messages.footer);
+
+      try {
+         // —— Invalid args and hide
+         if (duration > 21600 && hide) {
+            return interaction.reply({
+               embeds: [invalidArgs],
+               ephemeral: true,
+            });
+         }
+         if (duration > 21600 && !hide) {
+            return interaction.reply({
+               embeds: [invalidArgs],
+            });
+         }
+         // —— Set slowmode
+         await interaction.channel.setRateLimitPerUser(
+            duration,
+            `Executed by ${interaction.user.username}#${interaction.user.discriminator}`
+         );
+         if (hide) {
+            return interaction.reply({
+               embeds: [success],
+               ephemeral: true,
+            });
+         }
+         return interaction.reply({
+            embeds: [success],
+         });
+      } catch (error) {
+         // —— Error and hide
+         if (hide) {
+            return interaction.reply({
+               embeds: [noPermsBot],
+               ephemeral: true,
+            });
+         }
+         // —— Error
+         return interaction.reply({
+            embeds: [noPermsBot],
+         });
+      }
+   },
+};
