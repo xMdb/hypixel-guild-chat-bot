@@ -48,7 +48,7 @@ module.exports = {
             content: message,
          });
          const guildWebhook = new WebhookClient({
-            url: process.env.GUILD_WEBHOOK,
+            url: process.env.LOG_WEBHOOK,
          });
          const log = new MessageEmbed()
             .setColor(config.colours.informational)

@@ -46,6 +46,7 @@ MC_USER=Minecraft Account Email
 MC_PASS=Minecraft Account Password
 ERROR_WEBHOOK=A webhook URL for error logging
 GUILD_WEBHOOK=A webhook URL for guild join/leave 
+LOG_WEBHOOK=A webhook URL for logging actions by users (for moderators)
 ENVIRONMENT=Set this to "dev" to disable the Minecraft bot, and set this to "prod" for full functionality.
 ```
 6. Edit the [config.js](https://github.com/xMdb/hypixel-knights-gchat-bot/blob/main/config.js) file to fit your own needs
