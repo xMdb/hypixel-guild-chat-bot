@@ -126,12 +126,12 @@ module.exports = {
             .setTimestamp()
             .setFooter(`Execution time: ${end - start}ms`, interaction.user.displayAvatarURL({ dynamic: true }));
          if (hide) {
-            interaction.reply({
+            return interaction.reply({
                embeds: [evalEmbed],
                ephemeral: true,
             });
          }
-         interaction.reply({
+         return interaction.reply({
             embeds: [evalEmbed],
          });
 
@@ -154,13 +154,13 @@ module.exports = {
                interaction.user.displayAvatarURL({ dynamic: true })
             );
          if (hide) {
-            interaction.reply({
+            return interaction.reply({
                content: `An error has occurred.`,
                embeds: [errorEmbed],
                ephemeral: true,
             });
          }
-         interaction.reply({
+         return interaction.reply({
             content: `An error has occurred.`,
             embeds: [errorEmbed],
          });
