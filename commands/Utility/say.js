@@ -33,8 +33,11 @@ module.exports = {
             permission: true,
          },
       ];
-      const command = await bot.guilds.cache.get(config.ids.server)?.commands.create(data);
-      await command.permissions.add({ permissions });
+      const commandProd = await bot.guilds.cache.get(config.ids.server)?.commands.create(data);
+      const commandDev = await bot.guilds.cache.get(config.ids.testingServer)?.commands.create(data);
+      await commandProd.permissions.add({ permissions });
+      await commandDev.permissions.add({ permissions });
+      
       const message = interaction.options.getString('message');
       const destination = interaction.options.getChannel('destination');
       try {
