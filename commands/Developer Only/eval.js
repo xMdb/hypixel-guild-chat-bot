@@ -6,7 +6,6 @@ module.exports = {
    name: 'eval',
    description: 'Evaluates JavaScript code (bot owner only)',
    async execute(interaction, bot) {
-      let start = Date.now();
       // —— Set the command itself
       const data = {
          name: this.name,
@@ -52,6 +51,7 @@ module.exports = {
       const hide = interaction.options.getBoolean('hide');
 
       try {
+         let start = Date.now();
          let evaled = eval(code);
          if (typeof evaled !== 'string') evaled = require('util').inspect(evaled);
          // Prevent all token leaking
