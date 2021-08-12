@@ -5,8 +5,6 @@ const hastebin = require('hastebin');
 module.exports = {
    name: 'eval',
    description: 'Evaluates JavaScript code (bot owner only)',
-   usage: '<code to evaluate>',
-   cooldown: 10,
    async execute(interaction, bot) {
       let start = Date.now();
       // —— Set the command itself

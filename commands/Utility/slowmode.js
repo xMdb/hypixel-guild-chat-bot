@@ -4,7 +4,6 @@ const config = require('../../config');
 module.exports = {
    name: 'slowmode',
    description: 'Allows a custom slowmode value to be set',
-   cooldown: 5,
    async execute(interaction, bot) {
       // —— Set command options
       const data = {

@@ -4,7 +4,6 @@ const config = require('../../config');
 module.exports = {
    name: 'ping',
    description: 'To ping or to pong? - Displays bot ping',
-   cooldown: 1,
    async execute(interaction, bot) {
       const data = {
          name: this.name,

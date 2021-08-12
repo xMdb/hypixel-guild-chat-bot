@@ -5,7 +5,6 @@ const chalk = require('chalk');
 module.exports = {
    name: 'say',
    description: 'The bot will repeat whatever you input',
-   cooldown: 5,
    async execute(interaction, bot) {
       const data = {
          name: this.name,

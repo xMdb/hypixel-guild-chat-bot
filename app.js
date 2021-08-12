@@ -51,7 +51,6 @@ for (const file of eventFiles) {
    }
 }
 
-// bot.cooldowns = new Collection();
 bot.commands = new Collection();
 const commandFolders = fs.readdirSync('./commands');
 for (const folder of commandFolders) {
@@ -62,7 +61,6 @@ for (const folder of commandFolders) {
          name: command.name,
          category: folder,
          description: command.description,
-         cooldown: command.cooldown,
          execute: command.execute,
       });
    }
@@ -226,7 +224,7 @@ function spawnBot() {
          toDiscordChat(`<:discord:829596398822883368> **${message.author.username}: ${message.content}**`);
          message.delete();
       } catch (err) {
-         console.log(error);
+         console.log(err);
          message.channel.send({
             content: `**:warning: ${message.author}, there was an error while performing that task.**`,
          });
@@ -300,45 +298,8 @@ if (process.env.ENVIRONMENT === undefined) {
 
 // ██████ Discord Bot: Command Handler █████████████████████████████████████████
 
-// bot.on('messageCreate', async message => {
-//   const args = message.content.slice(config.bot.prefix.length).trim().split(/ +/);
-//   const commandName = args.shift().toLowerCase();
-//   if (message.author.bot || !message.content.startsWith(config.bot.prefix)) return;
-//   // —— Another token leak prevention method
-//   if (message.content.includes(process.env.BOT_TOKEN)) {
-//     message.replace(bot.token, "undefined");
-//   }
-//   const command = bot.commands.get(commandName) || bot.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
-
-//   // —— Discord command cooldowns
-//   if (!command) return;
-//   const {
-//     cooldowns
-//   } = bot;
-//   if (!cooldowns.has(command.name)) {
-//     cooldowns.set(command.name, new Collection());
-//   }
-//   const now = Date.now();
-//   const timestamps = cooldowns.get(command.name);
-//   const cooldownAmount = (command.cooldown || 3) * 1000;
-//   if (timestamps.has(message.author.id)) {
-//     const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
-//     if (now < expirationTime && message.author.id !== config.ids.owner) {
-//       const timeLeft = (expirationTime - now) / 1000;
-//       const cooldownIndex = Math.floor(Math.random() * (config.messages.cooldown.length - 1) + 1);
-//       const cooldownEmbed = new MessageEmbed()
-//         .setTitle(config.messages.cooldown[cooldownIndex])
-//         .setColor(config.colours.informational)
-//         .setDescription(`You\'ll be able to use this command again in **${timeLeft.toFixed(0)} seconds.**`);
-//       return message.channel.send({
-//         embeds: [cooldownEmbed]
-//       });
-//     }
-//   }
-//   timestamps.set(message.author.id, now);
-//   setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
-
 bot.on('interactionCreate', async (interaction) => {
+   // —— Run command
    if (!bot.commands.has(interaction.commandName) || !interaction.isCommand()) return;
    try {
       await bot.commands.get(interaction.commandName).execute(interaction, bot);

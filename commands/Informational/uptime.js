@@ -4,7 +4,6 @@ const config = require('../../config');
 module.exports = {
    name: 'uptime',
    description: 'Displays the current uptime of the bot',
-   cooldown: 5,
    async execute(interaction, bot) {
       const data = {
          name: this.name,

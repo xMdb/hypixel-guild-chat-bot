@@ -5,7 +5,6 @@ const wait = require('util').promisify(setTimeout);
 module.exports = {
    name: 'restart',
    description: 'Restarts the bot (bot owner only)',
-   cooldown: 10,
    async execute(interaction, bot) {
       // —— Set the command itself
       const data = {
