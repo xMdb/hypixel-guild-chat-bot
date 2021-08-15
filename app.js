@@ -36,6 +36,7 @@ const bot = new Client({
    intents: [Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILDS],
 });
 const mineflayer = require('mineflayer');
+const fetch = require('node-fetch');
 const config = require('./config');
 const regex = require('./handlers/regex');
 
@@ -154,24 +155,51 @@ function spawnBot() {
       if (playername === minebot.username) return;
       toDiscordChat(`<:hypixel:829640659542867969> **${playername} ${joinLeave}.**`);
    });
-
-   minebot.on('newMember', (rank, playername) => {
+  
+   minebot.on('newMember', async (rank, playername) => {
       toDiscordChat(`<a:join:830746278680985620> ${rank ?? ''}${playername} joined the guild!`);
+      const unix = Math.round(new Date() / 1000);
+      const avatar = `https://cravatar.eu/avatar/${playername}/600.png`;
+      const { links } = await fetch(`https://api.slothpixel.me/api/players/${playername}`)
+         .then((response) => response.json())
+         .catch((error) => console.error(error));
       const newMember = new MessageEmbed()
          .setColor(config.colours.success)
-         .setAuthor(`IGN: ${playername}`)
-         .setDescription(`New member joined the guild!`)
+         .setAuthor(playername, avatar)
+         .setFooter(`A new member joined the guild!`)
          .setTimestamp();
+      if (links.DISCORD === null) {
+         newMember.setDescription(`**Joined**: <t:${unix}:F> (<t:${unix}:R>)\n**Discord**: Not Set`);
+         return guildWebhook.send({ embeds: [newMember] });
+      }
+      const playerDiscord = bot.users.cache.find((user) => user.tag === links.DISCORD);
+      console.log(`${links.DISCORD} and ${playerDiscord}`);
+      newMember.setDescription(
+         `**Joined**: <t:${unix}:F> (<t:${unix}:R>)\n**Discord**: ${playerDiscord} / ${links.DISCORD}`
+      );
       guildWebhook.send({ embeds: [newMember] });
    });
 
-   minebot.on('memberLeave', (rank, playername) => {
+   minebot.on('memberLeave', async (rank, playername) => {
       toDiscordChat(`<a:leave:830746292186775592> ${rank ?? ''}${playername} left the guild.`);
+      const unix = Math.round(new Date() / 1000);
+      const avatar = `https://cravatar.eu/avatar/${playername}/600.png`;
+      const { links } = await fetch(`https://api.slothpixel.me/api/players/${playername}`)
+         .then((response) => response.json())
+         .catch((error) => console.error(error));
       const memberLeave = new MessageEmbed()
          .setColor(config.colours.error)
-         .setAuthor(`IGN: ${playername}`)
-         .setDescription(`A member left the guild.`)
+         .setAuthor(playername, avatar)
+         .setFooter(`A member has left the guild.`)
          .setTimestamp();
+      if (links.DISCORD === null) {
+         memberLeave.setDescription(`**Left At**: <t:${unix}:F> (<t:${unix}:R>)\n**Discord**: N/A`);
+         return guildWebhook.send({ embeds: [memberLeave] });
+      }
+      const playerDiscord = message.guild.members.fetch().then(bot.users.cache.find((user) => user.tag === links.DISCORD));
+      memberLeave.setDescription(
+         `**Left At**: <t:${unix}:F> (<t:${unix}:R>)\n**Discord**: ${playerDiscord} / ${links.DISCORD}`
+      );
       guildWebhook.send({ embeds: [memberLeave] });
    });
 
