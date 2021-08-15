@@ -143,7 +143,7 @@ function spawnBot() {
    minebot.on('lobbyJoin', () => {
       console.log(chalk.redBright('Lobby detected: Sending to Limbo.'));
       minebot.chat('/ac \u00a7');
-   })
+   });
 
    minebot.on('guildChat', (rank, playername, grank, message) => {
       if (playername === minebot.username) return;
@@ -155,7 +155,7 @@ function spawnBot() {
       if (playername === minebot.username) return;
       toDiscordChat(`<:hypixel:829640659542867969> **${playername} ${joinLeave}.**`);
    });
-  
+
    minebot.on('newMember', async (rank, playername) => {
       toDiscordChat(`<a:join:830746278680985620> ${rank ?? ''}${playername} joined the guild!`);
       const unix = Math.round(new Date() / 1000);
@@ -204,12 +204,16 @@ function spawnBot() {
    });
 
    minebot.on('memberKicked', (rank1, playername1, rank2, playername2) => {
-      toDiscordChat(`<a:leave:830746292186775592> ${rank1 ?? ''}${playername1} was kicked by ${rank2 ?? ''}${playername2}! RIP!`);
+      toDiscordChat(
+         `<a:leave:830746292186775592> ${rank1 ?? ''}${playername1} was kicked by ${rank2 ?? ''}${playername2}! RIP!`
+      );
    });
 
    minebot.on('promotedDemoted', (rank, playername, grankChangeType, grank1, grank2) => {
       toDiscordChat(
-         `<a:rankChange:837570909065314375> ${rank ?? ''}${playername} has been ${grankChangeType} from ${grank1} to ${grank2}.`
+         `<a:rankChange:837570909065314375> ${
+            rank ?? ''
+         }${playername} has been ${grankChangeType} from ${grank1} to ${grank2}.`
       );
    });
 
@@ -240,7 +244,9 @@ function spawnBot() {
          )
             return;
          minebot.chat(`/gc ${message.author.username} > ${message.content}`);
-         toDiscordChat(`<:discord:829596398822883368> **${message.author.username}: ${Util.escapeMarkdown(message.content)}**`);
+         toDiscordChat(
+            `<:discord:829596398822883368> **${message.author.username}: ${Util.escapeMarkdown(message.content)}**`
+         );
          await message.delete();
       } catch (err) {
          console.log(err);
