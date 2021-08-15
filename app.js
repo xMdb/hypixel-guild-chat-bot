@@ -1,21 +1,21 @@
 /*
 
 
-    __    __  __    __         ______   __    __        ________   ______   _______  
-   |  \  |  \|  \  /  \       /      \ |  \  |  \      |        \ /      \ |       \ 
+    __    __  __    __         ______   __    __        ________   ______   _______
+   |  \  |  \|  \  /  \       /      \ |  \  |  \      |        \ /      \ |       \
    | $$  | $$| $$ /  $$      |  $$$$$$\| $$\ | $$       \$$$$$$$$|  $$$$$$\| $$$$$$$\
    | $$__| $$| $$/  $$       | $$  | $$| $$$\| $$         | $$   | $$  | $$| $$__/ $$
    | $$    $$| $$  $$        | $$  | $$| $$$$\ $$         | $$   | $$  | $$| $$    $$
-   | $$$$$$$$| $$$$$\        | $$  | $$| $$\$$ $$         | $$   | $$  | $$| $$$$$$$ 
-   | $$  | $$| $$ \$$\       | $$__/ $$| $$ \$$$$         | $$   | $$__/ $$| $$      
-   | $$  | $$| $$  \$$\       \$$    $$| $$  \$$$         | $$    \$$    $$| $$      
-    \$$   \$$ \$$   \$$        \$$$$$$  \$$   \$$          \$$     \$$$$$$  \$$      
-                                                                                  
-                                                                                  
-                                                                                     
+   | $$$$$$$$| $$$$$\        | $$  | $$| $$\$$ $$         | $$   | $$  | $$| $$$$$$$
+   | $$  | $$| $$ \$$\       | $$__/ $$| $$ \$$$$         | $$   | $$__/ $$| $$
+   | $$  | $$| $$  \$$\       \$$    $$| $$  \$$$         | $$    \$$    $$| $$
+    \$$   \$$ \$$   \$$        \$$$$$$  \$$   \$$          \$$     \$$$$$$  \$$
+
+
+
    - Discord bot used to connect Minecraft chat to Discord and vice versa by xMdb!
 
-   - This is mainly for the Hypixel Knights Discord server, 
+   - This is mainly for the Hypixel Knights Discord server,
      but you can also easily adapt the code to work in your own server,
      or use it in your own project (mind the GPL-3.0 License).
 
@@ -31,7 +31,7 @@ const rl = readline.createInterface({
    output: process.stdout,
 });
 const chalk = require('chalk');
-const { Client, Intents, WebhookClient, MessageEmbed, Collection } = require('discord.js');
+const { Client, Intents, WebhookClient, MessageEmbed, Collection, Util } = require('discord.js');
 const bot = new Client({
    intents: [Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILDS],
 });
@@ -101,11 +101,6 @@ function spawnBot() {
    // —— (source: https://github.com/mew/discord-hypixel-bridge)
    minebot.on('message', async (chatMsg) => {
       console.log(chatMsg.toAnsi());
-      const msg = chatMsg.toString();
-      if (msg.endsWith(' joined the lobby!') && msg.includes('[MVP+')) {
-         console.log(chalk.redBright('Lobby detected: Sending to Limbo.'));
-         minebot.chat('/ac \u00a7');
-      }
    });
 
    rl.on('line', async (input) => {
@@ -129,6 +124,7 @@ function spawnBot() {
    minebot.chatAddPattern(regex.guildLevelUp, 'guildLevelUp');
    minebot.chatAddPattern(regex.questTierComplete, 'questTierComplete');
    minebot.chatAddPattern(regex.questComplete, 'questComplete');
+   minebot.chatAddPattern(regex.lobbyJoin, 'lobbyJoin');
 
    // —— Bot reconnection log
    minebot.on('getOnline', (numOfOnline) => {
@@ -143,21 +139,24 @@ function spawnBot() {
       url: process.env.GUILD_WEBHOOK,
    });
 
+   minebot.on('lobbyJoin', () => {
+      console.log(chalk.redBright('Lobby detected: Sending to Limbo.'));
+      minebot.chat('/ac \u00a7');
+   })
+
    minebot.on('guildChat', (rank, playername, grank, message) => {
       if (playername === minebot.username) return;
-      if (rank == undefined) return toDiscordChat(`<a:MC:829592987616804867> **${playername}: ${message}**`);
-      toDiscordChat(`<a:MC:829592987616804867> **${rank}${playername}: ${message}**`);
+      toDiscordChat(`<a:MC:829592987616804867> **${rank ?? ''}${playername}: ${message}**`);
    });
 
    // —— Other types of messages -> Discord
    minebot.on('joinLeave', (playername, joinLeave) => {
       if (playername === minebot.username) return;
-      toDiscordChat(`<:hypixel:829640659542867969> **${playername} ${joinLeave}**`);
+      toDiscordChat(`<:hypixel:829640659542867969> **${playername} ${joinLeave}.**`);
    });
 
    minebot.on('newMember', (rank, playername) => {
-      if (rank == undefined) return toDiscordChat(`<a:join:830746278680985620> ${playername} joined the guild!`);
-      toDiscordChat(`<a:join:830746278680985620> ${rank}${playername} joined the guild!`);
+      toDiscordChat(`<a:join:830746278680985620> ${rank ?? ''}${playername} joined the guild!`);
       const newMember = new MessageEmbed()
          .setColor(config.colours.success)
          .setAuthor(`IGN: ${playername}`)
@@ -167,8 +166,7 @@ function spawnBot() {
    });
 
    minebot.on('memberLeave', (rank, playername) => {
-      if (rank == undefined) return toDiscordChat(`<a:leave:830746292186775592> ${playername} left the guild.`);
-      toDiscordChat(`<a:leave:830746292186775592> ${rank}${playername} left the guild.`);
+      toDiscordChat(`<a:leave:830746292186775592> ${rank ?? ''}${playername} left the guild.`);
       const memberLeave = new MessageEmbed()
          .setColor(config.colours.error)
          .setAuthor(`IGN: ${playername}`)
@@ -178,18 +176,12 @@ function spawnBot() {
    });
 
    minebot.on('memberKicked', (rank1, playername1, rank2, playername2) => {
-      if (rank1 == undefined)
-         return toDiscordChat(`<a:leave:830746292186775592> ${playername1} was kicked by ${rank2}${playername2}! RIP!`);
-      toDiscordChat(`<a:leave:830746292186775592> ${rank1}${playername1} was kicked by ${rank2}${playername2}! RIP!`);
+      toDiscordChat(`<a:leave:830746292186775592> ${rank1 ?? ''}${playername1} was kicked by ${rank2 ?? ''}${playername2}! RIP!`);
    });
 
    minebot.on('promotedDemoted', (rank, playername, grankChangeType, grank1, grank2) => {
-      if (rank == undefined)
-         return toDiscordChat(
-            `<a:rankChange:837570909065314375> ${playername} has been ${grankChangeType} from ${grank1} to ${grank2}.`
-         );
       toDiscordChat(
-         `<a:rankChange:837570909065314375> ${rank}${playername} has been ${grankChangeType} from ${grank1} to ${grank2}.`
+         `<a:rankChange:837570909065314375> ${rank ?? ''}${playername} has been ${grankChangeType} from ${grank1} to ${grank2}.`
       );
    });
 
@@ -216,13 +208,12 @@ function spawnBot() {
             message.channel.id !== config.ids.guildChannel ||
             message.author.bot ||
             message.content.startsWith(config.bot.prefix) ||
-            message.content === ' ' ||
-            message.content === ''
+            !message.content.trim().length
          )
             return;
          minebot.chat(`/gc ${message.author.username} > ${message.content}`);
-         toDiscordChat(`<:discord:829596398822883368> **${message.author.username}: ${message.content}**`);
-         message.delete();
+         toDiscordChat(`<:discord:829596398822883368> **${message.author.username}: ${Util.escapeMarkdown(message.content)}**`);
+         await message.delete();
       } catch (err) {
          console.log(err);
          message.channel.send({
