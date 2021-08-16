@@ -11,10 +11,10 @@ module.exports = {
       };
       await bot.application?.commands.create(data);
 
-      let days = Math.floor(process.uptime() / 86400);
-      let hours = Math.floor(process.uptime() / 3600) % 24;
-      let minutes = Math.floor(process.uptime() / 60) % 60;
-      let seconds = Math.floor(process.uptime() % 60);
+      const days = Math.floor(process.uptime() / 86400);
+      const hours = Math.floor(process.uptime() / 3600) % 24;
+      const minutes = Math.floor(process.uptime() / 60) % 60;
+      const seconds = Math.floor(process.uptime() % 60);
 
       const uptimeEmbed = new MessageEmbed()
          .setTitle('Bot Uptime')

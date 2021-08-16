@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow } = require('discord.js');
+const { MessageEmbed, Util } = require('discord.js');
 const config = require('../../config');
 const hastebin = require('hastebin');
 
@@ -39,19 +39,12 @@ module.exports = {
       await commandProd.permissions.add({ permissions });
       await commandDev.permissions.add({ permissions });
 
-      // —— Clean text function
-      function clean(text) {
-         if (typeof text === 'string')
-            return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203));
-         return text;
-      }
-
       // —— Set str code and bool hide (which sets reply to ephermial)
-      const code = interaction.options.getString('code');
+      const code = Util.escapeCodeBlock(interaction.options.getString('code'));
       const hide = interaction.options.getBoolean('hide');
 
       try {
-         let start = Date.now();
+         const start = Date.now();
          let evaled = eval(code);
          if (typeof evaled !== 'string') evaled = require('util').inspect(evaled);
          // Prevent all token leaking
@@ -61,7 +54,7 @@ module.exports = {
          if (evaled.includes(process.env.BOT_TOKEN)) {
             evaled = evaled.replace(process.env.BOT_TOKEN, 'undefined');
          }
-         let end = Date.now();
+         const end = Date.now();
 
          // —— Long req
          const longRequestEmbed = new MessageEmbed()
@@ -82,7 +75,7 @@ module.exports = {
                embeds: [longRequestEmbed],
             });
             hastebin
-               .createPaste(clean(evaled), {
+               .createPaste(evaled, {
                   raw: false,
                   contentType: 'text/plain',
                   server: 'https://haste.zneix.eu/',
@@ -119,7 +112,7 @@ module.exports = {
             })
             .addFields({
                name: `Output`,
-               value: `\`\`\`yaml\n${clean(evaled)}\`\`\``,
+               value: `\`\`\`yaml\n${evaled}\`\`\``,
             })
             .setTimestamp()
             .setFooter(`Execution time: ${end - start}ms`, interaction.user.displayAvatarURL({ dynamic: true }));
@@ -144,7 +137,7 @@ module.exports = {
             })
             .addFields({
                name: `Output  📤`,
-               value: `\`\`\`fix\n${clean(error)}\`\`\``,
+               value: `\`\`\`fix\n${error}\`\`\``,
             })
             .setTimestamp()
             .setFooter(

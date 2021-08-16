@@ -1,6 +1,5 @@
 const { MessageEmbed, WebhookClient } = require('discord.js');
 const config = require('../../config');
-const chalk = require('chalk');
 
 module.exports = {
    name: 'say',
@@ -36,7 +35,7 @@ module.exports = {
       const commandDev = await bot.guilds.cache.get(config.ids.testingServer)?.commands.create(data);
       await commandProd.permissions.add({ permissions });
       await commandDev.permissions.add({ permissions });
-      
+
       const message = interaction.options.getString('message');
       const destination = interaction.options.getChannel('destination');
       try {

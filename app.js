@@ -33,6 +33,7 @@ const rl = readline.createInterface({
 const chalk = require('chalk');
 const { Client, Intents, WebhookClient, MessageEmbed, Collection, Util } = require('discord.js');
 const bot = new Client({
+   allowedMentions: { parse: ['users', 'roles'], repliedUser: true },
    intents: [Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILDS],
 });
 const mineflayer = require('mineflayer');
@@ -196,7 +197,7 @@ function spawnBot() {
          memberLeave.setDescription(`**Left At**: <t:${unix}:F> (<t:${unix}:R>)\n**Discord**: N/A`);
          return guildWebhook.send({ embeds: [memberLeave] });
       }
-      const playerDiscord = message.guild.members.fetch().then(bot.users.cache.find((user) => user.tag === links.DISCORD));
+      const playerDiscord = bot.users.cache.find((user) => user.tag === links.DISCORD);
       memberLeave.setDescription(
          `**Left At**: <t:${unix}:F> (<t:${unix}:R>)\n**Discord**: ${playerDiscord} / ${links.DISCORD}`
       );
@@ -241,8 +242,9 @@ function spawnBot() {
             message.author.bot ||
             message.content.startsWith(config.bot.prefix) ||
             !message.content.trim().length
-         )
+         ) {
             return;
+         }
          minebot.chat(`/gc ${message.author.username} > ${message.content}`);
          toDiscordChat(
             `<:discord:829596398822883368> **${message.author.username}: ${Util.escapeMarkdown(message.content)}**`
@@ -254,8 +256,9 @@ function spawnBot() {
             content: `**:warning: ${message.author}, there was an error while performing that task.**`,
          });
       }
-      if (message.content.startsWith(`/`))
+      if (message.content.startsWith(`/`)) {
          toDiscordChat(`https://media.tenor.com/images/e6cd56fc29e429ff89fef2fd2bdfaae2/tenor.gif`);
+      }
    });
 
    // ██████ Minecraft Bot: Error Handler ███████████████████████████████████████
@@ -309,7 +312,7 @@ if (process.env.ENVIRONMENT === 'dev') {
    setTimeout(() => {
       console.log(
          chalk.yellowBright(
-            "Here's where the bot should login to Hypixel.\nYou are seeing this because you have the environment set to 'dev'."
+            'This is where the bot should login to Hypixel.\nYou are seeing this because you have the environment set to dev.'
          )
       );
    }, 5000);
@@ -317,7 +320,7 @@ if (process.env.ENVIRONMENT === 'dev') {
 
 if (process.env.ENVIRONMENT === undefined) {
    throw new Error(
-      "Please set the ENVIRONMENT value in your .env file to either 'prod' or 'dev' to enable/disable the Minecraft bot."
+      'Please set the ENVIRONMENT value in your .env file to either prod or dev to enable/disable the Minecraft bot.'
    );
 }
 

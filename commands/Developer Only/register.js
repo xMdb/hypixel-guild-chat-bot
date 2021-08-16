@@ -1,7 +1,6 @@
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const config = require('../../config');
 const chalk = require('chalk');
-const wait = require('util').promisify(setTimeout);
 
 module.exports = {
    name: 'register',
