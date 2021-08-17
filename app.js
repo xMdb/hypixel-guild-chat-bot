@@ -204,10 +204,31 @@ function spawnBot() {
       guildWebhook.send({ embeds: [memberLeave] });
    });
 
-   minebot.on('memberKicked', (rank1, playername1, rank2, playername2) => {
+   minebot.on('memberKicked', async (rank1, playername1, rank2, playername2) => {
       toDiscordChat(
          `<a:leave:830746292186775592> ${rank1 ?? ''}${playername1} was kicked by ${rank2 ?? ''}${playername2}! RIP!`
       );
+      const unix = Math.round(new Date() / 1000);
+      const avatar = `https://cravatar.eu/avatar/${playername1}/600.png`;
+      const { links } = await fetch(`https://api.slothpixel.me/api/players/${playername1}`)
+         .then((response) => response.json())
+         .catch((error) => console.error(error));
+      const memberKicked = new MessageEmbed()
+         .setColor(config.colours.error)
+         .setAuthor(playername1, avatar)
+         .setFooter(`A member was kicked from the guild!`)
+         .setTimestamp();
+      if (links.DISCORD === null) {
+         memberKicked.setDescription(
+            `**Kicked At**: <t:${unix}:F> (<t:${unix}:R>)\n**Discord**: N/A\n**Kicked By**: ${playername2}`
+         );
+         return guildWebhook.send({ embeds: [memberKicked] });
+      }
+      const playerDiscord = bot.users.cache.find((user) => user.tag === links.DISCORD);
+      memberKicked.setDescription(
+         `**Left At**: <t:${unix}:F> (<t:${unix}:R>)\n**Discord**: ${playerDiscord} / ${links.DISCORD}\n**Kicked By**: ${playername2}`
+      );
+      guildWebhook.send({ embeds: [memberKicked] });
    });
 
    minebot.on('promotedDemoted', (rank, playername, grankChangeType, grank1, grank2) => {
