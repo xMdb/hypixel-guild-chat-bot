@@ -1,5 +1,5 @@
+const config = require('../../config');
 const chalk = require('chalk');
-const config = require('../config');
 
 module.exports = {
    name: 'ready',

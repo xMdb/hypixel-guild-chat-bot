@@ -6,4 +6,6 @@ launcher_accounts.json
 # You can delete these if you want
 blacklist.js
 commands/Utility/jim.js
-events/guildMemberAdd.js
+commands/Utility/report.js
+commands/Utility/panic.js
+events/discord/guildMemberAdd.js

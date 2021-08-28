@@ -2,7 +2,7 @@
 
 [![Gitmoji](https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg?style=flat-square)](http://gitmoji.dev/) [![Commit Activity](https://img.shields.io/github/commit-activity/w/xMdb/hypixel-guild-chat-bot)](https://github.com/xMdb/hypixel-guild-chat-bot/commits/main/)
 
-Discord bot used to connect Minecraft chat to Discord and vice versa. Open source, with love from xMdb ❤
+Welcome! This is a Discord bot used to connect Minecraft chat to Discord and vice versa. Open source, with love from xMdb ❤
 
 > This application will login to Hypixel using Mineflayer which is not a normal Minecraft client, this could result in your Minecraft account getting banned from Hypixel, so use this application at your own risk. I am not liable for any damages and no warranty is provided as outlined in GPL-3.0 License.
 
@@ -36,6 +36,7 @@ git clone https://github.com/xMdb/hypixel-guild-chat-bot.git
 ```
 3. Install the required packages using 
 ```
+cd hypixel-guild-chat-bot
 npm install
 ```
 4. Make a new Discord bot account on the [Discord Developer Portal](https://discord.com/developers/applications)
@@ -51,8 +52,10 @@ ENVIRONMENT=Set this to "dev" to disable the Minecraft bot, and set this to "pro
 ```
 6. Edit the [config.js](https://github.com/xMdb/hypixel-knights-gchat-bot/blob/main/config.js) file to fit your own needs
 7. (REQUIRED) Install PM2 by using `npm install pm2 -g`
-8. (REQUIRED) Start the bot by using `pm2 start app.js`
+8. Start the bot by using `npm start`
 > :warning: **If you do not install and use PM2, the shutdown and restart commands will not function as intended, and the Minecraft bot will shutdown every time it encounters an error without restarting.**
+
+> :information_source: To start *only* the Discord bot, use `npm run dev`.
 
 ## Acknowledgements
 Parts of this project are forked from:

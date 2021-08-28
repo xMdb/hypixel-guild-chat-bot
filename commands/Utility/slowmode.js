@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, WebhookClient } = require('discord.js');
 const config = require('../../config');
 
 module.exports = {
@@ -78,14 +78,29 @@ module.exports = {
             `Executed by ${interaction.user.username}#${interaction.user.discriminator}`
          );
          if (hide) {
-            return interaction.reply({
+            interaction.reply({
                embeds: [success],
                ephemeral: true,
             });
          }
-         return interaction.reply({
+         interaction.reply({
             embeds: [success],
          });
+         // —— Log
+         // const guildWebhook = new WebhookClient({
+         //    url: process.env.LOG_WEBHOOK,
+         // });
+         // const log = new MessageEmbed()
+         //    .setColor(config.colours.informational)
+         //    .setAuthor(
+         //       `${interaction.user.username}#${interaction.user.discriminator}`,
+         //       interaction.user.displayAvatarURL({ dynamic: true })
+         //    )
+         //    .setDescription(`**Slowmode command in **<#${interaction.channel.id}> [Jump to Message](${sayMessage.url})`)
+         //    .addField(`Message`, message)
+         //    .setTimestamp()
+         //    .setFooter(`User ID: ${interaction.user.id}`);
+         // guildWebhook.send({ embeds: [log] });
       } catch (error) {
          // —— Error and hide
          if (hide) {

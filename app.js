@@ -1,25 +1,19 @@
 /*
-
-
-    __    __  __    __         ______   __    __        ________   ______   _______
-   |  \  |  \|  \  /  \       /      \ |  \  |  \      |        \ /      \ |       \
-   | $$  | $$| $$ /  $$      |  $$$$$$\| $$\ | $$       \$$$$$$$$|  $$$$$$\| $$$$$$$\
-   | $$__| $$| $$/  $$       | $$  | $$| $$$\| $$         | $$   | $$  | $$| $$__/ $$
-   | $$    $$| $$  $$        | $$  | $$| $$$$\ $$         | $$   | $$  | $$| $$    $$
-   | $$$$$$$$| $$$$$\        | $$  | $$| $$\$$ $$         | $$   | $$  | $$| $$$$$$$
-   | $$  | $$| $$ \$$\       | $$__/ $$| $$ \$$$$         | $$   | $$__/ $$| $$
-   | $$  | $$| $$  \$$\       \$$    $$| $$  \$$$         | $$    \$$    $$| $$
-    \$$   \$$ \$$   \$$        \$$$$$$  \$$   \$$          \$$     \$$$$$$  \$$
-
-
-
-   - Discord bot used to connect Minecraft chat to Discord and vice versa by xMdb!
+   - Welcome! This is a Discord bot used to connect Minecraft chat to 
+     Discord and vice versa. Open source, with love from xMdb. ❤
 
    - This is mainly for the Hypixel Knights Discord server,
      but you can also easily adapt the code to work in your own server,
-     or use it in your own project (mind the GPL-3.0 License).
+     or use it in your own project.
 
-   - Read more about this bot in the README.md!                                         */
+   - Read more about this bot in the README.md!
+
+   ! WARNING
+   | This application will login to Hypixel using Mineflayer which is not a 
+   | normal Minecraft client, this could result in your Minecraft account 
+   | getting banned from Hypixel, so use this application at your own risk. 
+   | I am not liable for any damages and no warranty is provided as outlined
+   | in GPL-3.0 License.                                                      */
 
 // ██████ Integrations █████████████████████████████████████████████████████████
 
@@ -31,21 +25,20 @@ const rl = readline.createInterface({
    output: process.stdout,
 });
 const chalk = require('chalk');
-const { Client, Intents, WebhookClient, MessageEmbed, Collection, Util } = require('discord.js');
+const { Client, Intents, Collection, Util, WebhookClient } = require('discord.js');
 const bot = new Client({
    allowedMentions: { parse: ['users', 'roles'], repliedUser: true },
    intents: [Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILDS],
 });
 const mineflayer = require('mineflayer');
-const fetch = require('node-fetch');
 const config = require('./config');
-const regex = require('./handlers/regex');
+const regex = require('./func/regex');
 
 // ██████ Discord Bot: Initialization ██████████████████████████████████████████
 
-const eventFiles = fs.readdirSync('./events').filter((file) => file.endsWith('.js'));
-for (const file of eventFiles) {
-   const event = require(`./events/${file}`);
+const discordEvents = fs.readdirSync('./events/discord').filter((file) => file.endsWith('.js'));
+for (const file of discordEvents) {
+   const event = require(`./events/discord/${file}`);
    if (event.runOnce) {
       bot.once(event.name, (...args) => event.execute(...args));
    } else {
@@ -89,32 +82,12 @@ function spawnBot() {
       interval: 5000,
    });
 
+   module.exports = { minebot, toDiscordChat };
+
    // ██████ Minecraft Bot: Handler ██████████████████████████████████████████████
-   // —— Send to Limbo on login (source: https://github.com/mew/discord-hypixel-bridge)
-   minebot.on('login', async () => {
-      setTimeout(() => {
-         console.log(chalk.greenBright('Logged in.'));
-         minebot.chat('/ac \u00a7');
-      }, 5000);
-      console.log(chalk.greenBright('Successfully joined Hypixel.'));
-   });
-
-   // ██████ Console -> Minecraft ███████████████████████████████████████████████
-   // —— (source: https://github.com/mew/discord-hypixel-bridge)
-   minebot.on('message', async (chatMsg) => {
-      console.log(chatMsg.toAnsi());
-   });
-
    rl.on('line', async (input) => {
       minebot.chat(input);
    });
-
-   // —— Bot reconnection message
-   setTimeout(() => {
-      minebot.chat('/g online');
-   }, 10000);
-
-   // ██████ Minecraft Bot: Chat Patterns ███████████████████████████████████████
 
    minebot.chatAddPattern(regex.guildChat, 'guildChat');
    minebot.chatAddPattern(regex.joinLeave, 'joinLeave');
@@ -128,133 +101,23 @@ function spawnBot() {
    minebot.chatAddPattern(regex.questComplete, 'questComplete');
    minebot.chatAddPattern(regex.lobbyJoin, 'lobbyJoin');
 
-   // —— Bot reconnection log
-   minebot.on('getOnline', (numOfOnline) => {
-      toDiscordChat(
-         `:information_source: Bot has reconnected to Hypixel. There are **${numOfOnline - 1}** other members online.`
-      );
-   });
+   const chatEvents = fs.readdirSync('./events/minecraft/chat').filter((file) => file.endsWith('.js'));
+   const handleEvents = fs.readdirSync('./events/minecraft/handler').filter((file) => file.endsWith('.js'));
+   for (const file of chatEvents) {
+      const event = require(`./events/minecraft/chat/${file}`);
+      minebot.on(event.name, (...args) => event.execute(...args));
+   }
+   for (const file of handleEvents) {
+      const event = require(`./events/minecraft/handler/${file}`);
+      minebot.on(event.name, (...args) => event.execute(...args));
+   }
 
-   // ██████ Minecraft -> Discord ███████████████████████████████████████████████
-
-   const guildWebhook = new WebhookClient({
-      url: process.env.GUILD_WEBHOOK,
-   });
-
-   minebot.on('lobbyJoin', () => {
-      console.log(chalk.redBright('Lobby detected: Sending to Limbo.'));
-      minebot.chat('/ac \u00a7');
-   });
-
-   minebot.on('guildChat', (rank, playername, grank, message) => {
-      if (playername === minebot.username) return;
-      toDiscordChat(`<a:MC:829592987616804867> **${rank ?? ''}${playername}: ${message}**`);
-   });
-
-   // —— Other types of messages -> Discord
-   minebot.on('joinLeave', (playername, joinLeave) => {
-      if (playername === minebot.username) return;
-      toDiscordChat(`<:hypixel:829640659542867969> **${playername} ${joinLeave}.**`);
-   });
-
-   minebot.on('newMember', async (rank, playername) => {
-      toDiscordChat(`<a:join:830746278680985620> ${rank ?? ''}${playername} joined the guild!`);
-      const unix = Math.round(new Date() / 1000);
-      const avatar = `https://cravatar.eu/avatar/${playername}/600.png`;
-      const { links } = await fetch(`https://api.slothpixel.me/api/players/${playername}`)
-         .then((response) => response.json())
-         .catch((error) => console.error(error));
-      const newMember = new MessageEmbed()
-         .setColor(config.colours.success)
-         .setAuthor(playername, avatar)
-         .setFooter(`A new member joined the guild!`)
-         .setTimestamp();
-      if (links.DISCORD === null) {
-         newMember.setDescription(`**Joined**: <t:${unix}:F> (<t:${unix}:R>)\n**Discord**: Not Set`);
-         return guildWebhook.send({ embeds: [newMember] });
-      }
-      const playerDiscord = bot.users.cache.find((user) => user.tag === links.DISCORD);
-      console.log(`${links.DISCORD} and ${playerDiscord}`);
-      newMember.setDescription(
-         `**Joined**: <t:${unix}:F> (<t:${unix}:R>)\n**Discord**: ${playerDiscord} / ${links.DISCORD}`
-      );
-      guildWebhook.send({ embeds: [newMember] });
-   });
-
-   minebot.on('memberLeave', async (rank, playername) => {
-      toDiscordChat(`<a:leave:830746292186775592> ${rank ?? ''}${playername} left the guild.`);
-      const unix = Math.round(new Date() / 1000);
-      const avatar = `https://cravatar.eu/avatar/${playername}/600.png`;
-      const { links } = await fetch(`https://api.slothpixel.me/api/players/${playername}`)
-         .then((response) => response.json())
-         .catch((error) => console.error(error));
-      const memberLeave = new MessageEmbed()
-         .setColor(config.colours.error)
-         .setAuthor(playername, avatar)
-         .setFooter(`A member has left the guild.`)
-         .setTimestamp();
-      if (links.DISCORD === null) {
-         memberLeave.setDescription(`**Left At**: <t:${unix}:F> (<t:${unix}:R>)\n**Discord**: N/A`);
-         return guildWebhook.send({ embeds: [memberLeave] });
-      }
-      const playerDiscord = bot.users.cache.find((user) => user.tag === links.DISCORD);
-      memberLeave.setDescription(
-         `**Left At**: <t:${unix}:F> (<t:${unix}:R>)\n**Discord**: ${playerDiscord} / ${links.DISCORD}`
-      );
-      guildWebhook.send({ embeds: [memberLeave] });
-   });
-
-   minebot.on('memberKicked', async (rank1, playername1, rank2, playername2) => {
-      toDiscordChat(
-         `<a:leave:830746292186775592> ${rank1 ?? ''}${playername1} was kicked by ${rank2 ?? ''}${playername2}! RIP!`
-      );
-      const unix = Math.round(new Date() / 1000);
-      const avatar = `https://cravatar.eu/avatar/${playername1}/600.png`;
-      const { links } = await fetch(`https://api.slothpixel.me/api/players/${playername1}`)
-         .then((response) => response.json())
-         .catch((error) => console.error(error));
-      const memberKicked = new MessageEmbed()
-         .setColor(config.colours.error)
-         .setAuthor(playername1, avatar)
-         .setFooter(`A member was kicked from the guild!`)
-         .setTimestamp();
-      if (links.DISCORD === null) {
-         memberKicked.setDescription(
-            `**Kicked At**: <t:${unix}:F> (<t:${unix}:R>)\n**Discord**: N/A\n**Kicked By**: ${playername2}`
-         );
-         return guildWebhook.send({ embeds: [memberKicked] });
-      }
-      const playerDiscord = bot.users.cache.find((user) => user.tag === links.DISCORD);
-      memberKicked.setDescription(
-         `**Left At**: <t:${unix}:F> (<t:${unix}:R>)\n**Discord**: ${playerDiscord} / ${links.DISCORD}\n**Kicked By**: ${playername2}`
-      );
-      guildWebhook.send({ embeds: [memberKicked] });
-   });
-
-   minebot.on('promotedDemoted', (rank, playername, grankChangeType, grank1, grank2) => {
-      toDiscordChat(
-         `<a:rankChange:837570909065314375> ${
-            rank ?? ''
-         }${playername} has been ${grankChangeType} from ${grank1} to ${grank2}.`
-      );
-   });
-
-   minebot.on('guildLevelUp', (level) => {
-      toDiscordChat(`<a:join:830746278680985620> **Yay!** The guild has leveled up to **Level ${level}**!`);
-   });
-
-   minebot.on('questTierComplete', (tier) => {
-      toDiscordChat(
-         `<a:join:830746278680985620> **Yay!** The guild has completed **Tier ${tier}** of **this week's Guild Quest**!`
-      );
-   });
-
-   minebot.on('questComplete', () => {
-      toDiscordChat(`<a:join:830746278680985620> **Yay!** The guild has completed **this week's Guild Quest**!`);
-   });
+   // —— Bot reconnection message
+   setTimeout(() => {
+      minebot.chat('/g online');
+   }, 10000);
 
    // ██████ Discord -> Minecraft ███████████████████████████████████████████████
-
    bot.on('messageCreate', async (message) => {
       try {
          if (
@@ -281,48 +144,8 @@ function spawnBot() {
          toDiscordChat(`https://media.tenor.com/images/e6cd56fc29e429ff89fef2fd2bdfaae2/tenor.gif`);
       }
    });
-
-   // ██████ Minecraft Bot: Error Handler ███████████████████████████████████████
-
-   const webhook = new WebhookClient({
-      url: process.env.ERROR_WEBHOOK,
-   });
-
-   minebot.on('error', (error) => {
-      console.log(chalk.redBright('Error event fired.'));
-      console.error(error);
-      webhook.send(`**Minebot: Error** \`\`\`${error}\`\`\``);
-      console.log(chalk.redBright('Restarting in 10 seconds.'));
-      toDiscordChat(`<:nah:829640042334257202> The bot has encountered an unknown error and will restart shortly.`);
-      setTimeout(() => {
-         process.exit(1);
-      }, 10 * 1000);
-   });
-
-   minebot.on('end', (error) => {
-      console.log(chalk.redBright('End event fired.'));
-      console.error(error);
-      console.log(chalk.redBright('Restarting in 15 seconds.'));
-      setTimeout(() => {
-         process.exit(1);
-      }, 15 * 1000);
-   });
-
-   minebot.on('kicked', (reason) => {
-      console.log(chalk.redBright('The bot was kicked.'));
-      console.error(reason);
-      webhook.send(`**The bot was kicked. Reason:** \`\`\`${reason}\`\`\``);
-      console.log(chalk.redBright('Restarting in 10 seconds.'));
-      toDiscordChat(
-         `<:nah:829640042334257202> The bot was kicked from the server and will reconnect shortly. Reason: \`\`\`${reason}\`\`\``
-      );
-      setTimeout(() => {
-         process.exit(1);
-      }, 10 * 1000);
-   });
 }
 
-// —— Login the Minecraft bot
 if (process.env.ENVIRONMENT === 'prod') {
    setTimeout(() => {
       spawnBot();
@@ -333,7 +156,7 @@ if (process.env.ENVIRONMENT === 'dev') {
    setTimeout(() => {
       console.log(
          chalk.yellowBright(
-            'This is where the bot should login to Hypixel.\nYou are seeing this because you have the environment set to dev.'
+            'This is where the bot should login to Hypixel.\nYou are seeing this because you have the environment value in .env set to dev.'
          )
       );
    }, 5000);

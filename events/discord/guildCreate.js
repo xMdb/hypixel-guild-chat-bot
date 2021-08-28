@@ -2,7 +2,7 @@ const chalk = require('chalk');
 
 module.exports = {
    name: 'guildCreate',
-   runOnce: true,
+   runOnce: false,
    async execute(guild) {
       console.log(
          chalk.greenBright(

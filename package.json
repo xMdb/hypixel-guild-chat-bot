@@ -1,6 +1,6 @@
 {
    "name": "hypixel-guild-chat-bot",
-   "version": "2.0.0",
+   "version": "3.0.0",
    "description": "Discord bot used to connect Minecraft chat to Discord and vice versa. Open source, with love from xMdb ❤",
    "author": "xMdb",
    "license": "GPL-3.0",
@@ -9,8 +9,8 @@
       "url": "https://github.com/xMdb/hypixel-guild-chat-bot/issues"
    },
    "scripts": {
-      "dev": "node .",
       "start": "pm2 start app.js",
+      "dev": "node .",
       "lint": "npx eslint ."
    },
    "dependencies": {
@@ -19,7 +19,7 @@
       "discord.js": "^13.1.0",
       "dotenv": "^10.0.0",
       "hastebin": "^0.2.1",
-      "mineflayer": "^3.9.0",
+      "mineflayer": "^3.11.0",
       "node-cmd": "^5.0.0",
       "node-fetch": "^2.6.1"
    },

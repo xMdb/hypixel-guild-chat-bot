@@ -59,7 +59,7 @@ module.exports = {
             .setTimestamp()
             .setFooter(`User ID: ${interaction.user.id}`);
          guildWebhook.send({ embeds: [log] });
-         interaction.reply({ content: 'Done!', ephemeral: true });
+         interaction.reply({ content: `Done! [Click to view message](${sayMessage.url})`, ephemeral: true });
       } catch (error) {
          interaction.reply({
             content: `I cannot access that channel.`,
