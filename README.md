@@ -55,7 +55,7 @@ ENVIRONMENT=Set this to "dev" to disable the Minecraft bot, and set this to "pro
 8. Start the bot by using `npm start`
 > :warning: **If you do not install and use PM2, the shutdown and restart commands will not function as intended, and the Minecraft bot will shutdown every time it encounters an error without restarting.**
 
-> :information_source: To start *only* the Discord bot, use `npm run dev`.
+> :information_source: **To start *only* the Discord bot, use `npm run dev`.**
 
 ## Acknowledgements
 Parts of this project are forked from:
