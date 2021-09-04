@@ -82,7 +82,7 @@ function spawnBot() {
       interval: 5000,
    });
 
-   module.exports = { minebot, toDiscordChat };
+   module.exports = { minebot, toDiscordChat, bot };
 
    // ██████ Minecraft Bot: Handler ██████████████████████████████████████████████
    rl.on('line', async (input) => {

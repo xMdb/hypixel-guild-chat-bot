@@ -1,13 +1,12 @@
 require('dotenv').config();
 const { WebhookClient, MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
-const { toDiscordChat } = require('../../../app');
+const { toDiscordChat, bot } = require('../../../app');
 const config = require('../../../config');
 
 module.exports = {
    name: 'memberKicked',
-   async execute(rank1, playername1, rank2, playername2, bot) {
-      if (playername1 === 'Guild') return console.log('memberKicked debug: Success.');
+   async execute(rank1, playername1, rank2, playername2) {
       const guildWebhook = new WebhookClient({
          url: process.env.GUILD_WEBHOOK,
       });
@@ -24,6 +23,7 @@ module.exports = {
          .setAuthor(playername1, avatar)
          .setFooter(`A member was kicked from the guild!`)
          .setTimestamp();
+      if (playername1 === 'Guild') return console.log('memberKicked debug: Success.');
       if (links.DISCORD === null) {
          memberKicked.setDescription(
             `**Kicked At**: <t:${unix}:F> (<t:${unix}:R>)\n**Discord**: N/A\n**Kicked By**: ${playername2}`

@@ -1,13 +1,12 @@
 require('dotenv').config();
 const { WebhookClient, MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
-const { toDiscordChat } = require('../../../app');
+const { toDiscordChat, bot } = require('../../../app');
 const config = require('../../../config');
 
 module.exports = {
    name: 'newMember',
-   async execute(rank, playername, bot) {
-      if (playername === 'Guild') return console.log('newMember debug: Success.');
+   async execute(rank, playername) {
       const guildWebhook = new WebhookClient({
          url: process.env.GUILD_WEBHOOK,
       });
@@ -22,8 +21,9 @@ module.exports = {
          .setAuthor(playername, avatar)
          .setFooter(`A new member joined the guild!`)
          .setTimestamp();
+      if (playername === 'Guild') return console.log('newMember debug: Success.');
       if (links.DISCORD === null) {
-         newMember.setDescription(`**Joined**: <t:${unix}:F> (<t:${unix}:R>)\n**Discord**: Not Set`);
+         newMember.setDescription(`**Joined**: <t:${unix}:F> (<t:${unix}:R>)\n**Discord**: N/A`);
          return guildWebhook.send({ embeds: [newMember] });
       }
       const playerDiscord = bot.users.cache.find((user) => user.tag === links.DISCORD);
