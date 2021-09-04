@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { WebhookClient, MessageEmbed } = require('discord.js');
-const fetch = require('node-fetch');
+const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args)); // eslint-disable-line
 const { toDiscordChat, bot } = require('../../../app');
 const config = require('../../../config');
 
