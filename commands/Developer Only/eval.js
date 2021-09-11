@@ -1,30 +1,16 @@
-const { MessageEmbed, Util } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const config = require('../../config');
 const hastebin = require('hastebin');
 
 module.exports = {
-   name: 'eval',
+   name: 'Evaluate Content',
    description: 'Evaluates JavaScript code (bot owner only)',
    async execute(interaction, bot) {
-      // —— Set the command itself
-      const data = {
-         name: this.name,
-         description: this.description,
+      // —— Context menu
+      const context = {
+         name: 'Evaluate Content',
          defaultPermission: false,
-         options: [
-            {
-               name: 'code',
-               type: 'STRING',
-               description: 'The code to evaluate',
-               required: true,
-            },
-            {
-               name: 'hide',
-               type: 'BOOLEAN',
-               description: 'Hide the embed from other users',
-               required: false,
-            },
-         ],
+         type: 'MESSAGE',
       };
       // —— Set command permissions
       const permissions = [
@@ -34,15 +20,18 @@ module.exports = {
             permission: true,
          },
       ];
-      const commandProd = await bot.guilds.cache.get(config.ids.server)?.commands.create(data);
-      const commandDev = await bot.guilds.cache.get(config.ids.testingServer)?.commands.create(data);
-      await commandProd.permissions.add({ permissions });
-      await commandDev.permissions.add({ permissions });
+      const contextProd = await bot.guilds.cache.get(config.ids.server)?.commands.create(context);
+      const contextDev = await bot.guilds.cache.get(config.ids.testingServer)?.commands.create(context);
+      await contextProd.permissions.add({ permissions });
+      await contextDev.permissions.add({ permissions });
 
-      // —— Set str code and bool hide (which sets reply to ephermial)
-      const code = Util.escapeCodeBlock(interaction.options.getString('code'));
-      const hide = interaction.options.getBoolean('hide');
-
+      const getMessage = interaction.options.getMessage('message');
+      let code = getMessage.content;
+      for (let i = 0; i < 5; i++) {
+         code = code.replace('```', '');
+         code = code.replace('js', '');
+      }
+      await interaction.deferReply();
       try {
          const start = Date.now();
          let evaled = eval(code);
@@ -65,13 +54,7 @@ module.exports = {
             .setFooter(`Execution time: ${end - start}ms`, interaction.user.displayAvatarURL({ dynamic: true }));
 
          if (evaled.length > 999) {
-            if (hide) {
-               interaction.reply({
-                  embeds: [longRequestEmbed],
-                  ephemeral: true,
-               });
-            }
-            interaction.reply({
+            interaction.editReply({
                embeds: [longRequestEmbed],
             });
             hastebin
@@ -116,13 +99,7 @@ module.exports = {
             })
             .setTimestamp()
             .setFooter(`Execution time: ${end - start}ms`, interaction.user.displayAvatarURL({ dynamic: true }));
-         if (hide) {
-            return interaction.reply({
-               embeds: [evalEmbed],
-               ephemeral: true,
-            });
-         }
-         return interaction.reply({
+         return interaction.editReply({
             embeds: [evalEmbed],
          });
 
@@ -144,14 +121,7 @@ module.exports = {
                `Executed by ${interaction.user.username}#${interaction.user.discriminator}`,
                interaction.user.displayAvatarURL({ dynamic: true })
             );
-         if (hide) {
-            return interaction.reply({
-               content: `An error has occurred.`,
-               embeds: [errorEmbed],
-               ephemeral: true,
-            });
-         }
-         return interaction.reply({
+         return interaction.editReply({
             content: `An error has occurred.`,
             embeds: [errorEmbed],
          });
