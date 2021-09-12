@@ -29,7 +29,6 @@ module.exports = {
       let code = getMessage.content;
       for (let i = 0; i < 5; i++) {
          code = code.replace('```', '');
-         code = code.replace('js', '');
       }
       await interaction.deferReply();
       try {
