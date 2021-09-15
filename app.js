@@ -89,23 +89,12 @@ function spawnBot() {
       minebot.chat(input);
    });
 
-   minebot.chatAddPattern(regex.guildChat, 'guildChat');
-   minebot.chatAddPattern(regex.joinLeave, 'joinLeave');
-   minebot.chatAddPattern(regex.getOnline, 'getOnline');
-   minebot.chatAddPattern(regex.newMember, 'newMember');
-   minebot.chatAddPattern(regex.memberLeave, 'memberLeave');
-   minebot.chatAddPattern(regex.memberKicked, 'memberKicked');
-   minebot.chatAddPattern(regex.promotedDemoted, 'promotedDemoted');
-   minebot.chatAddPattern(regex.guildLevelUp, 'guildLevelUp');
-   minebot.chatAddPattern(regex.questTierComplete, 'questTierComplete');
-   minebot.chatAddPattern(regex.questComplete, 'questComplete');
-   minebot.chatAddPattern(regex.lobbyJoin, 'lobbyJoin');
-
    const chatEvents = fs.readdirSync('./events/minecraft/chat').filter((file) => file.endsWith('.js'));
    const handleEvents = fs.readdirSync('./events/minecraft/handler').filter((file) => file.endsWith('.js'));
    for (const file of chatEvents) {
       const event = require(`./events/minecraft/chat/${file}`);
       minebot.on(event.name, (...args) => event.execute(...args));
+      minebot.chatAddPattern(regex[event.name], `${event.name}`);
    }
    for (const file of handleEvents) {
       const event = require(`./events/minecraft/handler/${file}`);
