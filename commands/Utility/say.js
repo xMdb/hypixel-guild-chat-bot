@@ -45,7 +45,7 @@ module.exports = {
       let destination = interaction.options.getChannel('destination');
       if (!destination) destination = interaction.channel;
       try {
-         if (destination.type !== 'GUILD_TEXT') {
+         if (destination.type === 'GUILD_VOICE' || destination.type === 'GUILD_STAGE_VOICE') {
             return interaction.reply({ content: `The channel provided is not a text channel.`, ephemeral: true });
          }
          const sayMessage = await bot.channels.cache.get(destination.id).send({
