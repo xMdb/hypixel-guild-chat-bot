@@ -34,8 +34,13 @@ const mineflayer = require('mineflayer');
 const config = require('./config');
 const regex = require('./func/regex');
 
-// ██████ Discord Bot: Initialization ██████████████████████████████████████████
+async function toDiscordChat(msg) {
+   return bot.guilds.cache.get(config.ids.server).channels.cache.get(config.ids.guildChannel).send({
+      content: msg,
+   });
+}
 
+// ██████ Discord Bot: Events Init ██████████████████████████████████████████
 const discordEvents = fs.readdirSync('./events/discord').filter((file) => file.endsWith('.js'));
 for (const file of discordEvents) {
    const event = require(`./events/discord/${file}`);
@@ -44,27 +49,6 @@ for (const file of discordEvents) {
    } else {
       bot.on(event.name, (...args) => event.execute(...args));
    }
-}
-
-bot.commands = new Collection();
-const commandFolders = fs.readdirSync('./commands');
-for (const folder of commandFolders) {
-   const commandFiles = fs.readdirSync(`./commands/${folder}`).filter((file) => file.endsWith('.js'));
-   for (const file of commandFiles) {
-      const command = require(`./commands/${folder}/${file}`);
-      bot.commands.set(command.name, {
-         name: command.name,
-         category: folder,
-         description: command.description,
-         execute: command.execute,
-      });
-   }
-}
-
-async function toDiscordChat(msg) {
-   return bot.guilds.cache.get(config.ids.server).channels.cache.get(config.ids.guildChannel).send({
-      content: msg,
-   });
 }
 
 // ██████ Minecraft Bot: Initialization ████████████████████████████████████████
@@ -83,6 +67,22 @@ function spawnBot() {
    });
 
    module.exports = { minebot, toDiscordChat, bot };
+
+   // ██████ Discord Bot: Command Init ██████████████████████████████████████████
+   bot.commands = new Collection();
+   const commandFolders = fs.readdirSync('./commands');
+   for (const folder of commandFolders) {
+      const commandFiles = fs.readdirSync(`./commands/${folder}`).filter((file) => file.endsWith('.js'));
+      for (const file of commandFiles) {
+         const command = require(`./commands/${folder}/${file}`);
+         bot.commands.set(command.name, {
+            name: command.name,
+            category: folder,
+            description: command.description,
+            execute: command.execute,
+         });
+      }
+   }
 
    // ██████ Minecraft Bot: Handler ██████████████████████████████████████████████
    rl.on('line', async (input) => {

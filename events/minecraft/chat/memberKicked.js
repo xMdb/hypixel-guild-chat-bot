@@ -13,14 +13,14 @@ module.exports = {
       });
       const unix = getCurrentUnix();
       const avatar = getAvatar(playername1);
-      const discordTag = getPlayerDiscord(playername1);
+      const discordTag = await getPlayerDiscord(playername1);
 
       toDiscordChat(
          `<a:leave:830746292186775592> ${rank1 ?? ''}${playername1} was kicked by ${rank2 ?? ''}${playername2}! RIP!`
       );
       if (playername1 === 'Guild') return console.log('memberKicked debug: Success.');
 
-      const discordObject = bot.users.cache.find((user) => user.tag === discordTag) ?? '';
+      const discordObject = bot.users.cache.find((user) => user.tag === discordTag) ?? 'Not Found';
       const memberKicked = new MessageEmbed()
          .setColor('#F18002')
          .setAuthor(playername1, avatar)

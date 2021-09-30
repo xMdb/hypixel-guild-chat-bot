@@ -1,4 +1,4 @@
-const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args)); // eslint-disable-line
+const fetch = require('node-fetch');
 
 module.exports = async function getPlayerDiscord(name) {
    const { links } = await fetch(`https://api.slothpixel.me/api/players/${name}`)

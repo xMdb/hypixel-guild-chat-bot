@@ -14,12 +14,12 @@ module.exports = {
       });
       const unix = getCurrentUnix();
       const avatar = getAvatar(playername);
-      const discordTag = getPlayerDiscord(playername);
+      const discordTag = await getPlayerDiscord(playername);
 
       toDiscordChat(`<a:leave:830746292186775592> ${rank ?? ''}${playername} left the guild.`);
       if (playername === 'Guild') return console.log('memberLeave debug: Success.');
 
-      const discordObject = bot.users.cache.find((user) => user.tag === discordTag) ?? '';
+      const discordObject = bot.users.cache.find((user) => user.tag === discordTag) ?? 'Not Found';
       const memberLeave = new MessageEmbed()
          .setColor(config.colours.error)
          .setAuthor(playername, avatar)
