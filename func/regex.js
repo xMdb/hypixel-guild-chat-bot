@@ -31,6 +31,6 @@ regexStrings.questTierComplete = /^\s{4}The guild has completed Tier (\d*) of th
 regexStrings.questComplete = /^\s{11}The guild has completed this week's Guild Quest!$/;
 
 // On lobby join message
-regexStrings.lobbyJoin = /^(?:\s>>>\s)?\[.*]\s[\w]{2,17} joined the lobby!(?:\s<<<)?$/;
+regexStrings.lobbyJoin = /^(?:\s>>>\s)?\[.*]\s[\w]{2,17} (?:joined the lobby!|spooked into the lobby!)(?:\s<<<)?$/;
 
 module.exports = regexStrings;
