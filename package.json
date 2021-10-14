@@ -11,6 +11,7 @@
    "scripts": {
       "start": "pm2 start app.js",
       "dev": "node .",
+      "test": "jest --watchAll --verbose",
       "lint": "npx eslint ."
    },
    "dependencies": {
@@ -24,6 +25,10 @@
       "node-fetch": "~2.6.1"
    },
    "devDependencies": {
-      "eslint": "^7.32.0"
+      "@types/jest": "^27.0.2",
+      "eslint": "^7.32.0",
+      "event-promise": "^1.0.0",
+      "flying-squid": "^1.4.0",
+      "jest": "^27.2.4"
    }
 }
