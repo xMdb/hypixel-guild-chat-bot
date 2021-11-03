@@ -29,6 +29,6 @@
       "eslint": "^8.1.0",
       "event-promise": "^1.0.0",
       "flying-squid": "^1.4.0",
-      "jest": "^27.2.5"
+      "jest": "^27.3.1"
    }
 }
