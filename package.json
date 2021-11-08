@@ -22,7 +22,7 @@
       "hastebin": "^0.2.1",
       "mineflayer": "^3.11.2",
       "node-cmd": "^5.0.0",
-      "node-fetch": "~2.6.1"
+      "node-fetch": "~3.1.0"
    },
    "devDependencies": {
       "@types/jest": "^27.0.2",
