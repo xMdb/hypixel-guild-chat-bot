@@ -9,6 +9,10 @@ module.exports = {
          console.log(chalk.greenBright('Successfully joined Hypixel.'));
          console.log(chalk.greenBright('Logged in.'));
          minebot.chat('/ac \u00a7');
+         minebot.chat('/tip all');
       }, 5000);
+      setInterval(() => {
+         minebot.chat('/tip all');
+      }, 1000 * 60 * 60 * 2);
    },
 };
