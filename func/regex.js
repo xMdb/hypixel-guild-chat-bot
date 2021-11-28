@@ -25,10 +25,10 @@ regexStrings.promotedDemoted = /^(\[.*]\s*)?([\w]{2,17}).*? was (promoted|demote
 regexStrings.guildLevelUp = /^\s{19}The Guild has reached Level (\d*)!$/;
 
 // —— On guild quest tier complete
-regexStrings.questTierComplete = /^\s{4}The guild has completed Tier (\d*) of this week's Guild Quest!$/;
+regexStrings.questTierComplete = /^\s{17}GUILD QUEST TIER (\d*) COMPLETED!$/;
 
 // —— On guild quest complete
-regexStrings.questComplete = /^\s{11}The guild has completed this week's Guild Quest!$/;
+regexStrings.questComplete = /^\s{17}GUILD QUEST COMPLETED!$/;
 
 // On lobby join message
 regexStrings.lobbyJoin = /^(?:\s>>>\s)?\[.*]\s[\w]{2,17} (?:joined the lobby!|spooked into the lobby!)(?:\s<<<)?$/;
