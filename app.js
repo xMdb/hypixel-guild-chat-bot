@@ -118,7 +118,8 @@ function spawnBot() {
          ) {
             return;
          }
-         minebot.chat(`/gc ${message.author.username} > ${message.content}`);
+         const newCleanMessage = message.content.replace(/\r?\n|\r/g, ' ');
+         minebot.chat(`/gc ${message.author.username} > ${newCleanMessage}`);
          toDiscordChat(
             `<:discord:829596398822883368> **${message.author.username}: ${Util.escapeMarkdown(message.content)}**`
          );
