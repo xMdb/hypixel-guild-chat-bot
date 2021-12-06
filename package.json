@@ -26,7 +26,7 @@
    },
    "devDependencies": {
       "@types/jest": "^27.0.2",
-      "eslint": "^8.3.0",
+      "eslint": "^8.4.0",
       "event-promise": "^1.0.0",
       "flying-squid": "^1.4.0",
       "jest": "^27.3.1"
