@@ -16,7 +16,7 @@ module.exports = {
       const avatar = getAvatar(playername);
       const discordTag = await getPlayerDiscord(playername);
       
-      toDiscordChat(`<a:join:830746278680985620> ${rank ?? ''}${playername} joined the guild!`);
+      toDiscordChat(`${config.emotes.newMember} ${rank ?? ''}${playername} joined the guild!`);
       if (playername === 'Guild') return console.log('newMember debug: Success.');
 
       const discordObject = bot.users.cache.find((user) => user.tag === discordTag) ?? 'Not Found';

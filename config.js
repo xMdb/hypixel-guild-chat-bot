@@ -1,6 +1,6 @@
 module.exports = {
    bot: {
-      prefix: 'h!', // Used to be used for commands, now used to not send a message to Minecraft in guildChannel
+      prefix: 'h!', // Deprecated. It can still be used in a guild channel to prevent the message from being sent.
       owner: 'xMdb#7897', // Set this to your Discord username
    },
 
@@ -10,16 +10,19 @@ module.exports = {
       server: '520948670758387722', // Prod server (has guildChannel and trustedRole)
       guildChannel: '833112550970359830', // Server to send and receive Minecraft messages
       trustedRole: '520952297694560276', // Role to access certain restricted commands (currently only "say" command at the moment)
-      moderatorRole: '762473575277133824', // Role used for access to moderator commands (currently only "slowmode" command at the moment)
+      moderatorRole: '762473575277133824', // Role used for access to moderator commands
    },
 
+   // These messages are pre-set messages for when things go wrong.
    messages: {
       errorDev: 'There was an error while trying to execute that command! Check the console log for more details.',
       errorUserFriendly: 'There was an error while trying to perform that task!',
       noPermissionNormal: 'You do not have the correct permissions to use this command.',
       noPermissionDev: "You shouldn't be using this command.",
       selfNoPermissions: 'Sorry, I do not have the correct permissions to perform that task.',
+      // The footer which will be at the bottom of every embed sent by the bot.
       footer: 'Bot by xMdb#7897',
+      // An array of all the possible statuses that might be used. It cycles through these at random.
       statuses: [
          'Horus Goes Shopping on Spotify',
          'Hypixel Knights Talent Show Album on repeat',
@@ -36,6 +39,24 @@ module.exports = {
       ],
    },
 
+   // These emotes will be used for each corresponding message. These emotes are currently set to custom emotes, and you can get the ID and name of your own by adding a \ before it and sending it. Then, copy and paste the result below.
+   emotes: {
+      fromDiscord: '<:discord:829596398822883368>',
+      getOnline: ':information_source:',
+      guildChat: '<a:MC:829592987616804867>',
+      guildLevelUp: '<a:join:830746278680985620>',
+      joinLeave: '<:hypixel:829640659542867969>',
+      memberKicked: '<a:leave:830746292186775592>',
+      memberLeave: '<a:leave:830746292186775592>',
+      newMember: '<a:join:830746278680985620>',
+      promotedDemoted: '<a:rankChange:837570909065314375>',
+      questComplete: '<a:join:830746278680985620>',
+      questTierComplete: '<a:join:830746278680985620>',
+      error: '<:nah:829640042334257202>',
+      kicked: '<:nah:829640042334257202>',
+   },
+
+   // These are the colours used in embeds.
    colours: {
       error: '#E74C3C',
       success: '#3A783F',

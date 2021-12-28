@@ -4,6 +4,7 @@ const { toDiscordChat, bot } = require('../../../app');
 const getCurrentUnix = require('../../../func/getCurrentUnix');
 const getAvatar = require('../../../func/getAvatar');
 const getPlayerDiscord = require('../../../func/getPlayerDiscord');
+const config = require('../../../config');
 
 module.exports = {
    name: 'memberKicked',
@@ -16,7 +17,7 @@ module.exports = {
       const discordTag = await getPlayerDiscord(playername1);
 
       toDiscordChat(
-         `<a:leave:830746292186775592> ${rank1 ?? ''}${playername1} was kicked by ${rank2 ?? ''}${playername2}! RIP!`
+         `${config.emotes.memberKicked} ${rank1 ?? ''}${playername1} was kicked by ${rank2 ?? ''}${playername2}! RIP!`
       );
       if (playername1 === 'Guild') return console.log('memberKicked debug: Success.');
 

@@ -1,8 +1,9 @@
 const { toDiscordChat } = require('../../../app');
+const config = require('../../../config');
 
 module.exports = {
    name: 'guildLevelUp',
    async execute(level) {
-      toDiscordChat(`<a:join:830746278680985620> **Yay!** The guild has leveled up to **Level ${level}**!`);
+      toDiscordChat(`${config.emotes.guildLevelUp} **Yay!** The guild has leveled up to **Level ${level}**!`);
    },
 };

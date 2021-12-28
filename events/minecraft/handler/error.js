@@ -5,6 +5,7 @@ const webhook = new WebhookClient({
    url: process.env.ERROR_WEBHOOK,
 });
 const { toDiscordChat } = require('../../../app');
+const config = require('../../../config');
 
 module.exports = {
    name: 'error',
@@ -13,7 +14,7 @@ module.exports = {
       console.error(error);
       webhook.send(`**Minebot: Error** \`\`\`${error}\`\`\``);
       console.log(chalk.redBright('Restarting in 10 seconds.'));
-      toDiscordChat(`<:nah:829640042334257202> The bot has encountered an unknown error and will restart shortly.`);
+      toDiscordChat(`${config.emotes.error} The bot has encountered an unknown error and will restart shortly.`);
       setTimeout(() => {
          process.exit(1);
       }, 10 * 1000);

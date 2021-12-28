@@ -121,11 +121,11 @@ function spawnBot() {
          const newCleanMessage = message.content.replace(/\r?\n|\r/g, ' ');
          minebot.chat(`/gc ${message.author.username} > ${newCleanMessage}`);
          toDiscordChat(
-            `<:discord:829596398822883368> **${message.author.username}: ${Util.escapeMarkdown(message.content)}**`
+            `${config.emotes.fromDiscord} **${message.author.username}: ${Util.escapeMarkdown(message.content)}**`
          );
          await message.delete();
       } catch (err) {
-         console.log(err);
+         console.error(err);
          message.channel.send({
             content: `**:warning: ${message.author}, there was an error while performing that task.**`,
          });
