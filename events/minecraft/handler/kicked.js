@@ -5,6 +5,7 @@ const webhook = new WebhookClient({
    url: process.env.ERROR_WEBHOOK,
 });
 const { toDiscordChat } = require('../../../app');
+const config = require('../../../config');
 
 module.exports = {
    name: 'kicked',
@@ -14,7 +15,7 @@ module.exports = {
       webhook.send(`**The bot was kicked. Reason:** \`\`\`${reason}\`\`\``);
       console.log(chalk.redBright('Restarting in 10 seconds.'));
       toDiscordChat(
-         `<:nah:829640042334257202> The bot was kicked from the server and will reconnect shortly. Reason: \`\`\`${reason}\`\`\``
+         `${config.emotes.kicked} The bot was kicked from the server and will reconnect shortly. Reason: \`\`\`${reason}\`\`\``
       );
       setTimeout(() => {
          process.exit(1);
