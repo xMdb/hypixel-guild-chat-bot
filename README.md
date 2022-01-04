@@ -48,7 +48,7 @@
 
 # How Does It Work?
 
-The bot is a self-hosted application that runs both a Discord bot and a Minecraft bot, which interconnect with each other. This is done using Discord.js and [Mineflayer](https://github.com/prismarine), two awesome Node.js libraries.
+The bot is a self-hosted application that runs both a Discord bot and a Minecraft bot, which interconnect with each other. This is done using [Discord.js](https://discord.js.org/) and [Mineflayer](https://github.com/PrismarineJS/mineflayer/), two awesome Node.js libraries.
 
 # Who's it for?
 
