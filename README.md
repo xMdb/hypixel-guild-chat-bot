@@ -1,7 +1,7 @@
 <br />
 <p align="center">
   <a href="https://discord.gg/hk">
-    <img src="https://github.com/xMdb/hypixel-guild-chat-bot/raw/main/.github/assets/img/render.png" alt="Hypixel Guild Chat Bot" width="80" height="40">
+    <img src="https://raw.githubusercontent.com/xMdb/hypixel-guild-chat-bot/main/.github/assets/img/gc.png" alt="Hypixel Guild Chat Bot" width="80" height="40">
   </a>
 </p>
   <h1 align="center">Hypixel Guild Chat Bot</h1>
@@ -36,9 +36,11 @@
 
 # Features
 
+> <img src="https://raw.githubusercontent.com/xMdb/hypixel-guild-chat-bot/main/.github/assets/img/discord.png" alt="Hypixel Guild Chat Bot Discord Example">
+
 - Bridges a Discord channel to Hypixel guild chat.
 - Sends all guild related messages to the Discord channel (when I mean all, I mean **all**).
-- Logs guild joins and leaves through a webhook.
+- Logs guild joins and leaves through a webhook (/g leave, /g join).
 - Automatic restart and reconnections, making for zero down-time.
 - Contains commands that can be used to control the bot's state, such as powering on and off, and sending chat messages through Discord (bot owner only).
 - Slowmode and "say" commands (send messages as the Discord bot) for trusted users.
