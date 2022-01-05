@@ -1,6 +1,6 @@
+const { setTimeout: wait } = require("node:timers/promises");
 const { MessageEmbed } = require('discord.js');
 const config = require('../../config');
-const wait = require('util').promisify(setTimeout);
 
 module.exports = {
    name: 'restart',
@@ -29,10 +29,10 @@ module.exports = {
          .setColor(config.colours.informational)
          .setDescription('Process ended. Restarting...')
          .setTimestamp()
-         .setFooter(config.messages.footer);
+         .setFooter({ text: config.messages.footer });
       await interaction.deferReply();
       await wait(1000);
-      interaction
+      await interaction
          .editReply({
             embeds: [success],
          })

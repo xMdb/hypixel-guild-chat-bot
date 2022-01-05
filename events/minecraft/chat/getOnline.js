@@ -5,7 +5,7 @@ module.exports = {
    name: 'getOnline',
    async execute(numOfOnline) {
       // —— Bot reconnection log
-      toDiscordChat(
+      await toDiscordChat(
          `${config.emotes.getOnline} Bot has reconnected to Hypixel. There are **${numOfOnline - 1}** other members online.`
       );
    },

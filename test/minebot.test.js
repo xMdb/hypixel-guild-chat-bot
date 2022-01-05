@@ -4,9 +4,9 @@ const squid = require('flying-squid');
 const mineflayer = require('mineflayer');
 const regex = require('../func/regex');
 function once(emitter, event, options = {}) {
-   return new Promise(function (resolve, reject) {
+   return new Promise(function(resolve, reject) {
       if (options.array) {
-         emitter.once(event, function (...args) {
+         emitter.once(event, function(...args) {
             resolve(args);
          });
       } else {
