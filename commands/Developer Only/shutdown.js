@@ -1,7 +1,7 @@
+const { setTimeout: wait } = require("node:timers/promises");
 const { MessageEmbed } = require('discord.js');
 const nc = require('node-cmd');
 const config = require('../../config');
-const wait = require('util').promisify(setTimeout);
 
 module.exports = {
    name: 'shutdown',
