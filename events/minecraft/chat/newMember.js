@@ -22,8 +22,8 @@ module.exports = {
       const discordObject = bot.users.cache.find((user) => user.tag === discordTag) ?? 'Not Found';
       const newMember = new MessageEmbed()
          .setColor(config.colours.success)
-         .setAuthor(playername, avatar)
-         .setFooter(`A new member joined the guild!`)
+         .setAuthor({ name: playername, iconURL: avatar })
+         .setFooter({ text:`A new member joined the guild!` })
          .setDescription(`**Joined**: <t:${unix}:F> (<t:${unix}:R>)\n**Discord**: ${discordObject} / ${discordTag}`)
          .setTimestamp();
       guildWebhook.send({ embeds: [newMember] });

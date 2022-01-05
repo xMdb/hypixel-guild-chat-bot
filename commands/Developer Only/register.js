@@ -66,7 +66,7 @@ module.exports = {
          .setColor(config.colours.error)
          .setDescription(`You are going to register a new **${commandType}** command called **${commandToReg}**.`)
          .setTimestamp()
-         .setFooter('Note: Global commands will be cached for up to one hour!');
+         .setFooter({ text: 'Note: Global commands will be cached for up to one hour!' });
       await interaction.reply({
          embeds: [confirmDenyEmbed],
          components: [confirmDenyButtons],
@@ -78,18 +78,18 @@ module.exports = {
          .setColor(config.colours.success)
          .setDescription(`Successfully registered new ${commandType} command **${commandToReg}**.`)
          .setTimestamp()
-         .setFooter(
-            `Executed by ${interaction.user.username}#${interaction.user.discriminator}`,
-            interaction.user.displayAvatarURL({ dynamic: true })
-         );
+         .setFooter({
+            text: `Executed by ${interaction.user.username}#${interaction.user.discriminator}`,
+            iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+         });
       const cancelled = new MessageEmbed()
          .setColor(config.colours.error)
          .setDescription(`**Cancelled!** No commands were registered!`)
          .setTimestamp()
-         .setFooter(
-            `Executed by ${interaction.user.username}#${interaction.user.discriminator}`,
-            interaction.user.displayAvatarURL({ dynamic: true })
-         );
+         .setFooter({
+            text: `Executed by ${interaction.user.username}#${interaction.user.discriminator}`,
+            iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+         });
 
       collector.on('collect', async (buttonPressed) => {
          if (buttonPressed.customId === 'confirm') {

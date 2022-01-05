@@ -30,7 +30,7 @@ module.exports = {
          .setColor(config.colours.informational)
          .setDescription('Process ended. Please restart the bot manually.')
          .setTimestamp()
-         .setFooter(config.messages.footer);
+         .setFooter({ text: config.messages.footer });
       await interaction.deferReply();
       await wait(1000);
       interaction

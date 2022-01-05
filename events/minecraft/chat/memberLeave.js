@@ -22,8 +22,8 @@ module.exports = {
       const discordObject = bot.users.cache.find((user) => user.tag === discordTag) ?? 'Not Found';
       const memberLeave = new MessageEmbed()
          .setColor(config.colours.error)
-         .setAuthor(playername, avatar)
-         .setFooter(`A member has left the guild.`)
+         .setAuthor({ name: playername, iconURL: avatar })
+         .setFooter({ text: `A member has left the guild.` })
          .setDescription(`**Left At**: <t:${unix}:F> (<t:${unix}:R>)\n**Discord**: ${discordObject} / ${discordTag}`)
          .setTimestamp();
       guildWebhook.send({ embeds: [memberLeave] });

@@ -22,10 +22,10 @@ module.exports = {
                }ms`
             )
             .setTimestamp()
-            .setFooter(config.messages.footer);
          interaction.reply({
             embeds: [pingCmd],
          });
+         .setFooter({ text: config.messages.footer });
       });
    },
 };

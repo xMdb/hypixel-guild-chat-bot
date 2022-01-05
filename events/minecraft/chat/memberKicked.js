@@ -24,8 +24,8 @@ module.exports = {
       const discordObject = bot.users.cache.find((user) => user.tag === discordTag) ?? 'Not Found';
       const memberKicked = new MessageEmbed()
          .setColor('#F18002')
-         .setAuthor(playername1, avatar)
-         .setFooter(`A member was kicked from the guild!`)
+         .setAuthor({ name: playername1, iconURL: avatar })
+         .setFooter({ text: `A member was kicked from the guild!` })
          .setDescription(
             `**Left At**: <t:${unix}:F> (<t:${unix}:R>)\n**Discord**: ${discordObject} (${discordTag})\n**Kicked By**: ${playername2}`
          )

@@ -42,7 +42,7 @@ module.exports = {
             .setDescription(`Command sent!`)
             .setImage(image)
             .setTimestamp()
-            .setFooter(config.messages.footer);
+            .setFooter({ text: config.messages.footer });
          minebot.chat(`/${msg}`);
          interaction.reply({
             embeds: [success],

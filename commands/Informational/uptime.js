@@ -23,8 +23,8 @@ module.exports = {
             `Time since last restart:\n\n**${days}** day(s)\n**${hours}** hour(s)\n**${minutes}** minute(s)\n**${seconds}** second(s)`
          )
          .setTimestamp()
-         .setFooter(config.messages.footer);
       interaction.reply({
+         .setFooter({ text: config.messages.footer });
          embeds: [uptimeEmbed],
       });
    },
