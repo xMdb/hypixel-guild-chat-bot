@@ -15,7 +15,7 @@ module.exports = {
             type: 'LISTENING',
          });
       }, 60 * 1000);
-      bot.guilds.cache.get(config.ids.server).channels.cache.get(config.ids.guildChannel).send({
+      await bot.guilds.cache.get(config.ids.server).channels.cache.get(config.ids.guildChannel).send({
          content: `<:yes:829640052531134464> Bot has reconnected to Discord.`,
       });
    },

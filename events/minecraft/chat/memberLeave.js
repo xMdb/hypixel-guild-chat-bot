@@ -16,7 +16,7 @@ module.exports = {
       const avatar = getAvatar(playername);
       const discordTag = await getPlayerDiscord(playername);
 
-      toDiscordChat(`${config.emotes.memberLeave} ${rank ?? ''}${playername} left the guild.`);
+      await toDiscordChat(`${config.emotes.memberLeave} ${rank ?? ''}${playername} left the guild.`);
       if (playername === 'Guild') return console.log('memberLeave debug: Success.');
 
       const discordObject = bot.users.cache.find((user) => user.tag === discordTag) ?? 'Not Found';
@@ -26,6 +26,6 @@ module.exports = {
          .setFooter({ text: `A member has left the guild.` })
          .setDescription(`**Left At**: <t:${unix}:F> (<t:${unix}:R>)\n**Discord**: ${discordObject} / ${discordTag}`)
          .setTimestamp();
-      guildWebhook.send({ embeds: [memberLeave] });
+      await guildWebhook.send({ embeds: [memberLeave] });
    },
 };

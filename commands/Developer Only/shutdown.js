@@ -33,7 +33,7 @@ module.exports = {
          .setFooter({ text: config.messages.footer });
       await interaction.deferReply();
       await wait(1000);
-      interaction
+      await interaction
          .editReply({
             embeds: [success],
          })

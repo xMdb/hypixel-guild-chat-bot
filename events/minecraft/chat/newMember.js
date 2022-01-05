@@ -15,8 +15,8 @@ module.exports = {
       const unix = getCurrentUnix();
       const avatar = getAvatar(playername);
       const discordTag = await getPlayerDiscord(playername);
-      
-      toDiscordChat(`${config.emotes.newMember} ${rank ?? ''}${playername} joined the guild!`);
+
+      await toDiscordChat(`${config.emotes.newMember} ${rank ?? ''}${playername} joined the guild!`);
       if (playername === 'Guild') return console.log('newMember debug: Success.');
 
       const discordObject = bot.users.cache.find((user) => user.tag === discordTag) ?? 'Not Found';
@@ -26,6 +26,6 @@ module.exports = {
          .setFooter({ text:`A new member joined the guild!` })
          .setDescription(`**Joined**: <t:${unix}:F> (<t:${unix}:R>)\n**Discord**: ${discordObject} / ${discordTag}`)
          .setTimestamp();
-      guildWebhook.send({ embeds: [newMember] });
+      await guildWebhook.send({ embeds: [newMember] });
    },
 };

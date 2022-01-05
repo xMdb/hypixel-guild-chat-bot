@@ -12,9 +12,9 @@ module.exports = {
    async execute(reason) {
       console.log(chalk.redBright('The bot was kicked.'));
       console.error(reason);
-      webhook.send(`**The bot was kicked. Reason:** \`\`\`${reason}\`\`\``);
+      await webhook.send(`**The bot was kicked. Reason:** \`\`\`${reason}\`\`\``);
       console.log(chalk.redBright('Restarting in 10 seconds.'));
-      toDiscordChat(
+      await toDiscordChat(
          `${config.emotes.kicked} The bot was kicked from the server and will reconnect shortly. Reason: \`\`\`${reason}\`\`\``
       );
       setTimeout(() => {

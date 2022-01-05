@@ -46,7 +46,7 @@ module.exports = {
       if (!destination) destination = interaction.channel;
       try {
          if (destination.type === 'GUILD_VOICE' || destination.type === 'GUILD_STAGE_VOICE') {
-            return interaction.reply({ content: `The channel provided is not a text channel.`, ephemeral: true });
+            return await interaction.reply({ content: `The channel provided is not a text channel.`, ephemeral: true });
          }
          const sayMessage = await bot.channels.cache.get(destination.id).send({
             content: message,
@@ -63,11 +63,11 @@ module.exports = {
             .setDescription(`**Say command in **<#${destination.id}> [Jump to Message](${sayMessage.url})`)
             .addFields({ name: `Message`, value: message })
             .setTimestamp()
-         guildWebhook.send({ embeds: [log] });
-         interaction.reply({ content: `Done! [Click to view message](${sayMessage.url})`, ephemeral: true });
             .setFooter({ text: `User ID: ${interaction.user.id}` });
+         await guildWebhook.send({ embeds: [log] });
+         await interaction.reply({ content: `Done! [Click to view message](${sayMessage.url})`, ephemeral: true });
       } catch (error) {
-         interaction.reply({
+         await interaction.reply({
             content: `I cannot access that channel.`,
             ephemeral: true,
          });

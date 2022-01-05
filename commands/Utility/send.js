@@ -44,7 +44,7 @@ module.exports = {
             .setTimestamp()
             .setFooter({ text: config.messages.footer });
          minebot.chat(`/${msg}`);
-         interaction.reply({
+         await interaction.reply({
             embeds: [success],
          });
       } catch (err) {

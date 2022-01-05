@@ -11,21 +11,20 @@ module.exports = {
       };
       await bot.application?.commands.create(data);
 
-      interaction.channel.send(':ping_pong:').then(async (msg) => {
-         msg.delete();
-         const pingCmd = new MessageEmbed()
-            .setTitle('Pong!')
-            .setColor(config.colours.success)
-            .setDescription(
-               `:heartbeat: **Websocket Heartbeat**: ${bot.ws.ping}ms\n:bullettrain_front: **Roundtrip Latency**: ${
-                  msg.createdTimestamp - interaction.createdTimestamp
-               }ms`
-            )
-            .setTimestamp()
-         interaction.reply({
-            embeds: [pingCmd],
-         });
+      const msg = await interaction.channel.send(':ping_pong:');
+      await msg.delete();
+      const pingCmd = new MessageEmbed()
+         .setTitle('Pong!')
+         .setColor(config.colours.success)
+         .setDescription(
+            `:heartbeat: **Websocket Heartbeat**: ${bot.ws.ping}ms\n:bullettrain_front: **Roundtrip Latency**: ${
+               msg.createdTimestamp - interaction.createdTimestamp
+            }ms`
+         )
+         .setTimestamp()
          .setFooter({ text: config.messages.footer });
+      await interaction.reply({
+         embeds: [pingCmd],
       });
    },
 };
