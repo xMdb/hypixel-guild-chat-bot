@@ -27,12 +27,21 @@
 
 > :warning: This application will login to Hypixel using Mineflayer which is not a normal Minecraft client, this could result in your Minecraft account getting banned from Hypixel, so use this application at your own risk. I am not liable for any damages and no warranty is provided as outlined in GPL-3.0 License.
 
+- [❌ Deprecation Notice!](#-deprecation-notice)
 - [Installation](#installation)
   - [Prerequisites](#prerequisites)
   - [Initial Setup](#initial-setup)
   - [Running in the Background](#running-in-the-background)
 - [Acknowledgements](#acknowledgements)
 - [License](#license)
+
+# ❌ Deprecation Notice!
+
+**Please note that this application will not receive any more feature updates.** This is in favour of the newer version, [Hypixel Guild Chat Bot (TS)](https://github.com/xMdb/hypixel-guild-chat-ts). As it is being re-written in TypeScript, new bugs may be found and will be retroactively applied to this version. If you find any bugs, report them in [this repositories' issues section](https://github.com/xMdb/hypixel-guild-chat-bot/issues). If you would like to request new features, please do so in the [new version's issues section](https://github.com/xMdb/hypixel-guild-chat-ts/issues), as I will likely add it. At this stage, new PRs will still be reviewed. **Once the new version is fully released, this application will no longer be maintained, and no new changes will be accepted.**
+
+The new version of this application will feature a dashboard, easier customization, and allow bot management through a Discord bot. It will become SaaS (Software as a Service) for those people who do not wish to create their own personal server. **If you are just finding this repository now, please consider waiting for the new version to release, as it will be much more stable and feature-complete.** Updates will be provided on the website (coming soon) and via [my Twitter](https://twitter.com/xMdbMatt).
+
+> Hypixel Guild Chat Bot (TS) is currently in early alpha stage and in active development. It currently is non-functional and not recommended for use.
 
 # Features
 
@@ -52,7 +61,7 @@ The bot is a self-hosted application that runs both a Discord bot and a Minecraf
 
 # Who's it for?
 
-This application is for people who are into self-hosting their own applications on server infrastructures or on their own PC. Please note that a very [user friendly version is currently in development](https://github.com/xMdb/hypixel-guild-chat-ts). It will only take a couple clicks to start running your own guild chat bot. If you are not comfortable about setting up something like this, then please wait until it is finished. For updates, [follow me on Twitter](https://twitter.com/xMdbMatt) :)
+This application is for people who are into self-hosting their own applications on server infrastructures or on their own PC.
 
 # Installation
 
