@@ -61,7 +61,7 @@ The bot is a self-hosted application that runs both a Discord bot and a Minecraf
 
 # Who's it for?
 
-This application is for people who are into self-hosting their own applications on server infrastructures or on their own PC.
+This application is for people who are into self-hosting their own applications on server infrastructures or on their own PC. If you don't know how to, don't worry! In the [new version](https://github.com/xMdb/hypixel-guild-chat-ts), you will be able to host your own fully-featured guild chat bot in just a couple of clicks! Updates will be provided on the website (coming soon) and via [my Twitter](https://twitter.com/xMdbMatt).
 
 # Installation
 
