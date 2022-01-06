@@ -16,20 +16,22 @@ module.exports = {
       const avatar = getAvatar(playername1);
       const discordTag = await getPlayerDiscord(playername1);
 
-      toDiscordChat(
-         `${config.emotes.memberKicked} ${rank1 ?? ''}${Util.escapeMarkdown(playername1)} was kicked by ${rank2 ?? ''}${Util.escapeMarkdown(playername2)}! RIP!`
+      await toDiscordChat(
+         `${config.emotes.memberKicked} ${rank1 ?? ''}${Util.escapeMarkdown(playername1)} was kicked by ${
+            rank2 ?? ''
+         }${Util.escapeMarkdown(playername2)}! RIP!`
       );
       if (playername1 === 'Guild') return console.log('memberKicked debug: Success.');
 
       const discordObject = bot.users.cache.find((user) => user.tag === discordTag) ?? 'Not Found';
       const memberKicked = new MessageEmbed()
          .setColor('#F18002')
-         .setAuthor(playername1, avatar)
-         .setFooter(`A member was kicked from the guild!`)
+         .setAuthor({ name: playername1, iconURL: avatar })
+         .setFooter({ text: `A member was kicked from the guild!` })
          .setDescription(
             `**Left At**: <t:${unix}:F> (<t:${unix}:R>)\n**Discord**: ${discordObject} (${discordTag})\n**Kicked By**: ${playername2}`
          )
          .setTimestamp();
-      guildWebhook.send({ embeds: [memberKicked] });
+      await guildWebhook.send({ embeds: [memberKicked] });
    },
 };

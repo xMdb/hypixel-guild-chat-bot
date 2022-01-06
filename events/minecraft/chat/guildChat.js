@@ -6,6 +6,8 @@ module.exports = {
    name: 'guildChat',
    async execute(rank, playername, grank, message) {
       if (playername === minebot.username) return;
-      toDiscordChat(`${config.emotes.guildChat} **${rank ?? ''}${Util.escapeMarkdown(playername)}: ${Util.escapeMarkdown(message)}**`);
+      await toDiscordChat(
+         `${config.emotes.guildChat} **${rank ?? ''}${Util.escapeMarkdown(playername)}: ${Util.escapeMarkdown(message)}**`
+      );
    },
 };

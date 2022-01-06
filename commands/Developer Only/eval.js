@@ -50,10 +50,10 @@ module.exports = {
             .setColor(config.colours.informational)
             .setDescription(`Generating Hastebin link. Please wait... :hourglass:`)
             .setTimestamp()
-            .setFooter(`Execution time: ${end - start}ms`, interaction.user.displayAvatarURL({ dynamic: true }));
+            .setFooter({ text:`Execution time: ${end - start}ms`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
          if (evaled.length > 999) {
-            interaction.editReply({
+            await interaction.editReply({
                embeds: [longRequestEmbed],
             });
             hastebin
@@ -62,7 +62,7 @@ module.exports = {
                   contentType: 'text/plain',
                   server: 'https://haste.zneix.eu/',
                })
-               .then((url) => {
+               .then(async (url) => {
                   const resultEmbed = new MessageEmbed()
                      .setTitle('Evaluate - Result Too Long  📜')
                      .setColor(config.colours.informational)
@@ -75,8 +75,8 @@ module.exports = {
                         value: `[Click to view result!](${url})`,
                      })
                      .setTimestamp()
-                     .setFooter(`Execution time: ${end - start}ms`, interaction.user.displayAvatarURL({ dynamic: true }));
-                  return interaction.editReply({
+                     .setFooter({ text: `Execution time: ${end - start}ms`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+                  return await interaction.editReply({
                      embeds: [resultEmbed],
                   });
                })
@@ -97,8 +97,8 @@ module.exports = {
                value: `\`\`\`yaml\n${evaled}\`\`\``,
             })
             .setTimestamp()
-            .setFooter(`Execution time: ${end - start}ms`, interaction.user.displayAvatarURL({ dynamic: true }));
-         return interaction.editReply({
+            .setFooter({ text: `Execution time: ${end - start}ms`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+         return await interaction.editReply({
             embeds: [evalEmbed],
          });
 
@@ -116,11 +116,11 @@ module.exports = {
                value: `\`\`\`fix\n${error}\`\`\``,
             })
             .setTimestamp()
-            .setFooter(
-               `Executed by ${interaction.user.username}#${interaction.user.discriminator}`,
-               interaction.user.displayAvatarURL({ dynamic: true })
-            );
-         return interaction.editReply({
+            .setFooter({
+               text: `Executed by ${interaction.user.username}#${interaction.user.discriminator}`,
+               iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+            });
+         return await interaction.editReply({
             content: `An error has occurred.`,
             embeds: [errorEmbed],
          });
