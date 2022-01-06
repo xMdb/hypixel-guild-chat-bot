@@ -1,5 +1,6 @@
 const { toDiscordChat } = require('../../../app');
 const config = require('../../../config');
+const { Util } = require('discord.js');
 
 module.exports = {
    name: 'promotedDemoted',
@@ -8,7 +9,7 @@ module.exports = {
       toDiscordChat(
          `${config.emotes.promotedDemoted} ${
             rank ?? ''
-         }${playername} has been ${grankChangeType} from ${grank1} to ${grank2}.`
+         }${Util.escapeMarkdown(playername)} has been ${grankChangeType} from ${grank1} to ${grank2}.`
       );
    },
 };

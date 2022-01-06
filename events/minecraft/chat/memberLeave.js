@@ -1,11 +1,10 @@
 require('dotenv').config();
-const { WebhookClient, MessageEmbed } = require('discord.js');
+const { WebhookClient, MessageEmbed, Util } = require('discord.js');
 const { toDiscordChat, bot } = require('../../../app');
 const getCurrentUnix = require('../../../func/getCurrentUnix');
 const getAvatar = require('../../../func/getAvatar');
 const getPlayerDiscord = require('../../../func/getPlayerDiscord');
 const config = require('../../../config');
-
 module.exports = {
    name: 'memberLeave',
    async execute(rank, playername) {
@@ -16,7 +15,7 @@ module.exports = {
       const avatar = getAvatar(playername);
       const discordTag = await getPlayerDiscord(playername);
 
-      toDiscordChat(`${config.emotes.memberLeave} ${rank ?? ''}${playername} left the guild.`);
+      toDiscordChat(`${config.emotes.memberLeave} ${rank ?? ''}${Util.escapeMarkdown(playername)} left the guild.`);
       if (playername === 'Guild') return console.log('memberLeave debug: Success.');
 
       const discordObject = bot.users.cache.find((user) => user.tag === discordTag) ?? 'Not Found';

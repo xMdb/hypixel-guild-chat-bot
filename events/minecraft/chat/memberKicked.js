@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { WebhookClient, MessageEmbed } = require('discord.js');
+const { WebhookClient, MessageEmbed, Util } = require('discord.js');
 const { toDiscordChat, bot } = require('../../../app');
 const getCurrentUnix = require('../../../func/getCurrentUnix');
 const getAvatar = require('../../../func/getAvatar');
@@ -17,7 +17,7 @@ module.exports = {
       const discordTag = await getPlayerDiscord(playername1);
 
       toDiscordChat(
-         `${config.emotes.memberKicked} ${rank1 ?? ''}${playername1} was kicked by ${rank2 ?? ''}${playername2}! RIP!`
+         `${config.emotes.memberKicked} ${rank1 ?? ''}${Util.escapeMarkdown(playername1)} was kicked by ${rank2 ?? ''}${Util.escapeMarkdown(playername2)}! RIP!`
       );
       if (playername1 === 'Guild') return console.log('memberKicked debug: Success.');
 
