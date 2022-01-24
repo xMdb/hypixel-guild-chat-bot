@@ -60,8 +60,6 @@ function spawnBot() {
       host: 'hypixel.net',
       version: '1.16.4',
       auth: 'microsoft',
-      logErrors: true,
-      hideErrors: false,
       defaultChatPatterns: false,
       checkTimeoutInterval: 30000,
       interval: 5000,
