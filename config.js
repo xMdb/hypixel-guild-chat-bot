@@ -39,7 +39,10 @@ module.exports = {
       ],
    },
 
-   // These emotes will be used for each corresponding message. These emotes are currently set to custom emotes, and you can get the ID and name of your own by adding a \ before it and sending it. Then, copy and paste the result below.
+   // These emotes will be used for each corresponding message.
+   // These emotes are currently set to custom emotes, and you can
+   // get the ID and name of your own by adding a \ before it and
+   // sending it. Then, copy and paste the result below.
    emotes: {
       fromDiscord: '<:discord:829596398822883368>',
       getOnline: ':information_source:',
