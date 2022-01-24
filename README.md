@@ -89,7 +89,7 @@ $ npm install
 7. Edit the `config.js` file to your liking. Ensure you have valid IDs and such otherwise the bot will not work.
 8. Test the bot.
 ```bash
-$ node .
+$ node app.js
 ```
 
 **If the bot logs into Hypixel, and you can send and receive messages through Discord, proceed to the next steps!** If you are having trouble getting it working, [open an issue](https://github.com/xMdb/hypixel-guild-chat-bot/issues) or [contact me through Discord](https://discord.com/users/253699775377965056).
