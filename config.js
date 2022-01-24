@@ -8,7 +8,7 @@ module.exports = {
       owner: '253699775377965056', // Bot owner (to enable dev commands)
       testingServer: '558901518808383488', // Server to test slash commands in (registers in both prod and testing server by default)
       server: '520948670758387722', // Prod server (has guildChannel and trustedRole)
-      guildChannel: '833112550970359830', // Server to send and receive Minecraft messages
+      guildChannel: '833112550970359830', // Channel to send and receive Minecraft messages
       trustedRole: '520952297694560276', // Role to access certain restricted commands (currently only "say" command at the moment)
       moderatorRole: '762473575277133824', // Role used for access to moderator commands
    },
