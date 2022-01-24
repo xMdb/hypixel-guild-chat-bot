@@ -73,7 +73,7 @@ This application is for people who are into self-hosting their own applications 
 
 ## Initial Setup
 
-1. Fork and star this repo.
+1. ⭐ Star this repo!
 2. Clone the repo into your own directory.
 ```bash
 $ git clone https://github.com/xMdb/hypixel-guild-chat-bot.git
