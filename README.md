@@ -27,13 +27,13 @@
 
 > :warning: This application will login to Hypixel using Mineflayer which is not a normal Minecraft client, this could result in your Minecraft account getting banned from Hypixel, so use this application at your own risk. I am not liable for any damages and no warranty is provided as outlined in GPL-3.0 License.
 
-- [❌ Deprecation Notice!](#-deprecation-notice)
-- [Installation](#installation)
-  - [Prerequisites](#prerequisites)
-  - [Initial Setup](#initial-setup)
-  - [Running in the Background](#running-in-the-background)
-- [Acknowledgements](#acknowledgements)
-- [License](#license)
+-  [❌ Deprecation Notice!](#-deprecation-notice)
+-  [Installation](#installation)
+   -  [Prerequisites](#prerequisites)
+   -  [Initial Setup](#initial-setup)
+   -  [Running in the Background](#running-in-the-background)
+-  [Acknowledgements](#acknowledgements)
+-  [License](#license)
 
 # ❌ Deprecation Notice!
 
@@ -47,13 +47,13 @@ The new version of this application will feature a dashboard, easier customizati
 
 > <img src="https://raw.githubusercontent.com/xMdb/hypixel-guild-chat-bot/main/.github/assets/img/discord.png" alt="Hypixel Guild Chat Bot Discord Example">
 
-- Bridges a Discord channel to Hypixel guild chat.
-- Sends all guild related messages to the Discord channel (when I mean all, I mean **all**).
-- Logs guild joins and leaves through a webhook (/g leave, /g join).
-- Automatic restart and reconnections, making for zero down-time.
-- Contains commands that can be used to control the bot's state, such as powering on and off, and sending chat messages through Discord (bot owner only).
-- Slowmode and "say" commands (send messages as the Discord bot) for trusted users.
-- Log slowmode and "say" command usage through an additional logging webhook.
+-  Bridges a Discord channel to Hypixel guild chat.
+-  Sends all guild related messages to the Discord channel (when I mean all, I mean **all**).
+-  Logs guild joins and leaves through a webhook (/g leave, /g join).
+-  Automatic restart and reconnections, making for zero down-time.
+-  Contains commands that can be used to control the bot's state, such as powering on and off, and sending chat messages through Discord (bot owner only).
+-  Slowmode and "say" commands (send messages as the Discord bot) for trusted users.
+-  Log slowmode and "say" command usage through an additional logging webhook.
 
 # How Does It Work?
 
@@ -67,27 +67,33 @@ This application is for people who are into self-hosting their own applications 
 
 ## Prerequisites
 
-- [Git](https://git-scm.com/downloads).
-- [NodeJS](https://nodejs.org/en/).
-- A full access premium Minecraft account that you can use to connect to Hypixel.
+-  [Git](https://git-scm.com/downloads).
+-  [NodeJS](https://nodejs.org/en/).
+-  A full access premium Minecraft account that you can use to connect to Hypixel.
 
 ## Initial Setup
 
 1. ⭐ Star this repo!
 2. Clone the repo into your own directory.
+
 ```bash
 $ git clone https://github.com/xMdb/hypixel-guild-chat-bot.git
 ```
+
 3. Enter the new directory and install the NPM packages.
+
 ```bash
 $ cd hypixel-guild-chat-bot
 $ npm install
 ```
+
 4. Make a new Discord bot account on the [Discord Developer Portal](https://discord.com/developers/applications) and get the bot token.
 5. Grant the **Message Intent** for the bot.
-6. Re-name the `.env.example` file to `.env` and edit the values as instructed.
-7. Edit the `config.js` file to your liking. Ensure you have valid IDs and such otherwise the bot will not work.
-8. Test the bot.
+6. Generate an OAuth2 URL by going to OAuth2 on the left side of the application dashboard and clicking the URL generator. Add the `bot` and `application.commands` scopes and open the link to invite it.
+7. Re-name the `.env.example` file to `.env` and edit the values as instructed.
+8. Edit the `config.js` file to your liking. Ensure you have valid IDs and such otherwise the bot will not work.
+9. Test the bot.
+
 ```bash
 $ node app.js
 ```
@@ -97,18 +103,23 @@ $ node app.js
 ## Running in the Background
 
 1. Install PM2 using `npm`.
+
 ```bash
 $ npm install -g pm2
 ```
+
 2. Use the npm `start` script to start with PM2.
+
 ```bash
 $ npm start
 ```
+
 3. Verify that everything works as expected.
 
 Refer to the [PM2 documentation](https://pm2.keymetrics.io/docs/usage/quick-start/) for more information about PM2.
 
 # Acknowledgements
+
 Parts of this project are forked from:
 
 [mew/discord-hypixel-bridge](https://github.com/mew/discord-hypixel-bridge) under GPL-3.0 License.
