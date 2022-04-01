@@ -11,24 +11,19 @@
    "scripts": {
       "start": "pm2 start app.js",
       "dev": "node .",
-      "test": "jest --watchAll --verbose",
       "lint": "npx eslint ."
    },
    "dependencies": {
-      "chalk": "^4.1.2",
-      "dayjs": "^1.10.7",
+      "chalk": "^5.0.1",
+      "dayjs": "^1.11.0",
       "discord.js": "^13.6.0",
-      "dotenv": "^10.0.0",
+      "dotenv": "^16.0.0",
       "hastebin": "^0.2.1",
-      "mineflayer": "^3.14.1",
+      "mineflayer": "^4.2.0",
       "node-cmd": "^5.0.0",
-      "node-fetch": "~2.6.1"
+      "node-fetch": "^3.2.3"
    },
    "devDependencies": {
-      "@types/jest": "^27.0.2",
-      "eslint": "^8.3.0",
-      "event-promise": "^1.0.0",
-      "flying-squid": "^1.4.0",
-      "jest": "^27.3.1"
+      "eslint": "^8.12.0"
    }
 }
